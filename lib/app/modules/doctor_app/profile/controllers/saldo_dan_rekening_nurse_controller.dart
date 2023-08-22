@@ -109,7 +109,7 @@ class SaldoDanRekeningNurseController extends GetxController {
     try {
       loading(true);
       final result = await RestClient()
-          .request('${MainUrl.urlApi}nurse/withdraw/${Get.find<LoginController>().idLogin}', Method.GET, params);
+          .request('${MainUrl.urlApi}nurse/withdraw/4', Method.GET, params);
       final listWithDraw = json.decode(result.toString());
       listDataWithDrawNurse.value = listWithDraw['data'];
 
@@ -117,7 +117,8 @@ class SaldoDanRekeningNurseController extends GetxController {
       loading(false);
     } on Exception catch (e) {
       // ignore: avoid_print
-      print(e.toString());
+      // print('zzezezeez ' + e.toString());
+      log('qwerty');
     }
   }
 

@@ -86,6 +86,25 @@ class PenarikanSaldo extends StatelessWidget {
                                         nurseBankId: 1,
                                         amount: controllerDoctor
                                             .saldoTarikCurren.value);
+                                             controllerDoctor.nominalSaldoTarikController
+                                        .clear();
+                                    final snackBar = SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      duration: const Duration(seconds: 1),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 24),
+                                      content: const Text(
+                                          'Berhasil Mengirim Permintaan Penarikan Saldo'),
+                                      backgroundColor: (Colors.green),
+                                      action: SnackBarAction(
+                                        label: '',
+                                        onPressed: () {},
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    Get.back();
+                                    Get.back();
                                   } else {
                                     await controllerDoctor.sendWithDrawDoctor(
                                         date: formatter
