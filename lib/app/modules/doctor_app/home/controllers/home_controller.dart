@@ -204,22 +204,26 @@ class HomeController extends GetxController {
     };
 
     try {
-      final result = await RestClient()
-          .request('${MainUrl.urlApi}doctor/${Get.find<LoginController>().idLogin}', Method.GET, params);
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}doctor/${Get.find<LoginController>().idLogin}',
+          Method.GET,
+          params);
       final detailDoctor = json.decode(result.toString());
       pendapatan.value = detailDoctor['data']['balance'];
       // ignore: empty_catches, unused_catch_clause
     } on Exception catch (e) {}
   }
-  
+
   Future<dynamic> getDetailNurse() async {
     final params = <String, dynamic>{
       // "serviceId": serviceId,
     };
 
     try {
-      final result = await RestClient()
-          .request('${MainUrl.urlApi}nurse/detail/${Get.find<LoginController>().idLogin}', Method.GET, params);
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}nurse/detail/${Get.find<LoginController>().idLogin}',
+          Method.GET,
+          params);
       final detailDoctor = json.decode(result.toString());
       pendapatan.value = detailDoctor['data']['balance'] ?? 0;
 
@@ -270,13 +274,12 @@ class HomeController extends GetxController {
           Method.GET,
           params);
       final order = json.decode(result.toString());
-      if(order['code'] == 200){
-      statusCode.value = order['code'];
-      nurseReceiveStatus.value = order['data']['nurse_receive_status'];
-      dataReminderNurse.value = order['data'];
-      log('zeen $order');
-
-      }else{
+      if (order['code'] == 200) {
+        statusCode.value = order['code'];
+        nurseReceiveStatus.value = order['data']['nurse_receive_status'];
+        dataReminderNurse.value = order['data'];
+        log('zeen $order');
+      } else {
         // dataReminderNurse.clear();
       }
 
@@ -310,9 +313,9 @@ class HomeController extends GetxController {
     }
   }
 
-  trimUpdateStatus(){
-    Timer.periodic(const Duration(seconds: 60), (timer) async{
-    await automaticUpdateStatus();
+  trimUpdateStatus() {
+    Timer.periodic(const Duration(seconds: 60), (timer) async {
+      await automaticUpdateStatus();
     });
   }
 
@@ -320,14 +323,15 @@ class HomeController extends GetxController {
     if (timePeriodic.value == false) {
       Timer.periodic(const Duration(seconds: 3), (timer) async {
         if (Get.find<LoginController>().role.value == 'nurse') {
-        await  Get.find<LayananHomeController>().listOrderNurse();
-        if(reminderNurse.isFalse){
-         await reminderOrderNurse();
-          if (dataReminderNurse['nurse_receive_status'] == 0 && reminderNurse.isFalse) {
-            notifPesananMasukNurse();
-            Get.toNamed(Routes.PESANAN_MASUK_PERAWAT);
+          await Get.find<LayananHomeController>().listOrderNurse();
+          if (reminderNurse.isFalse) {
+            await reminderOrderNurse();
+            if (dataReminderNurse['nurse_receive_status'] == 0 &&
+                reminderNurse.isFalse) {
+              notifPesananMasukNurse();
+              Get.toNamed(Routes.PESANAN_MASUK_PERAWAT);
+            }
           }
-        }
           getDetailNurse();
         } else {
           await Get.find<LayananHomeController>().addOrder();
@@ -823,8 +827,8 @@ class HomeController extends GetxController {
         // ignore: prefer_interpolation_to_compose_strings
       }
       timePeriodic.value = false;
-      await realtimeApi();
-      await trimUpdateStatus();
+      // await realtimeApi();
+      // await trimUpdateStatus();
     });
   }
 

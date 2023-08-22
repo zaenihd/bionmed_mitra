@@ -127,7 +127,7 @@ class LoginController extends GetxController {
 
           if (setuju == true) {
             if (donors['data']['doctor']['verifiedStatus'] == 0) {
-              Get.to(() => const MenungguKonfirmasi());
+              Get.to(() => MenungguKonfirmasi());
             } else {
               box.write('phone', phoneNumber);
               Get.toNamed(Routes.BOTTOM_NAVIGATION);
@@ -137,7 +137,7 @@ class LoginController extends GetxController {
             }
           } else {
             if (donors['data']['doctor']['verifiedStatus'] == 0) {
-              Get.to(() => const MenungguKonfirmasi());
+              Get.to(() => MenungguKonfirmasi());
             } else if (donors['data']['doctor']['verifiedStatus'] == 1) {
               box.write('phone', phoneNumber);
               Get.to(() => Disclamer());
@@ -146,7 +146,7 @@ class LoginController extends GetxController {
                 lengkapiProfil(Get.context!);
               }
             } else {
-              Get.to(() => const Ditolak());
+              Get.to(() => Ditolak());
             }
           }
         }
@@ -221,19 +221,19 @@ class LoginController extends GetxController {
 
         if (setuju == true) {
           if (dataNurse['data']['nurse']['verifiedStatus'] == 0) {
-            Get.to(() => const MenungguKonfirmasi());
+            Get.to(() => MenungguKonfirmasi());
           } else {
             box.write('phone', phoneNumber);
             Get.toNamed(Routes.BOTTOM_NAVIGATION);
           }
         } else {
           if (dataNurse['data']['nurse']['verifiedStatus'] == 0) {
-            Get.to(() => const MenungguKonfirmasi());
+            Get.to(() => MenungguKonfirmasi());
           } else if (dataNurse['data']['nurse']['verifiedStatus'] == 1) {
             box.write('phone', phoneNumber);
             Get.to(() => Disclamer());
           } else {
-            Get.to(() => const Ditolak());
+            Get.to(() => Ditolak());
           }
         }
         if (dataNurse['data']['nurse']['nurse_educations'].toString() == "[]" &&
@@ -266,10 +266,8 @@ class LoginController extends GetxController {
               }
             });
       }
-
     }
   }
-
 
   //------------------------------------------LOGIN APP HOSPITAL -------------------------------------------
   // RxInt isVerifikasiNurse = 0.obs;
@@ -307,19 +305,19 @@ class LoginController extends GetxController {
 
         if (setuju == true) {
           if (dataHospital['data']['hospital']['verifiedStatus'] == 0) {
-            Get.to(() => const MenungguKonfirmasi());
+            Get.to(() => MenungguKonfirmasi());
           } else {
             box.write('phone', phoneNumber);
             Get.toNamed(Routes.BOTTOM_NAVIGATION);
           }
         } else {
           if (dataHospital['data']['hospital']['verifiedStatus'] == 0) {
-            Get.to(() => const MenungguKonfirmasi());
+            Get.to(() => MenungguKonfirmasi());
           } else if (dataHospital['data']['hospital']['verifiedStatus'] == 1) {
             box.write('phone', phoneNumber);
             Get.to(() => Disclamer());
           } else {
-            Get.to(() => const Ditolak());
+            Get.to(() => Ditolak());
           }
         }
         // if (dataHospital['data']['hospital']['hospital_educations'].toString() == "[]" &&
@@ -353,7 +351,6 @@ class LoginController extends GetxController {
               // }
             });
       }
-
     }
   }
 

@@ -33,117 +33,156 @@ class PenarikanSaldo extends StatelessWidget {
         child: ButtomGradient(
             label: 'Tarik Sekarang',
             onTap: () {
-              showModalBottomSheet(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30))),
-                  context: context,
-                  builder: (context) {
-                    return SizedBox(
-                      height: 290,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 18, top: 14),
-                            width: Get.width / 1.9,
-                            height: 10,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: const Color(0xffEDEDED)),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            'Apakah anda yakin untuk melakukan\npenarikan saldo anda ?',
-                            style: subtitleTextStyle,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(
-                            height: 46,
-                          ),
-                          ButtomGradient(
-                              label: 'Konfirmasi',
-                              onTap: () async {
-                                if (Get.find<HomeController>()
-                                        .pendapatan
-                                        .value <
-                                    controllerDoctor.saldoTarikCurren.value) {
-                                  showPopUp(
-                                      onTap: () {
-                                        Get.back();
-                                      },
-                                      imageAction: 'assets/json/eror.json',
-                                      description: "Saldo Anda\nTidak Cukup");
-                                } else {
-                                  if (loginC.role.value == "nurse") {
-                                    await controllerNurse.sendWithDrawNurse(
-                                        date: formatter
-                                            .format(now.toLocal())
-                                            .toString(),
-                                        nurseBankId: 1,
-                                        amount: controllerDoctor
-                                            .saldoTarikCurren.value);
-                                             controllerDoctor.nominalSaldoTarikController
-                                        .clear();
-                                    final snackBar = SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-                                      duration: const Duration(seconds: 1),
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 24),
-                                      content: const Text(
-                                          'Berhasil Mengirim Permintaan Penarikan Saldo'),
-                                      backgroundColor: (Colors.green),
-                                      action: SnackBarAction(
-                                        label: '',
-                                        onPressed: () {},
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                    Get.back();
-                                    Get.back();
+              if (controllerDoctor.nominalSaldoTarikController.text == "") {
+                final snackBar = SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(seconds: 1),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 100, horizontal: 24),
+                  content: const Text('Mohon masukkan nominal saldo!'),
+                  backgroundColor: (Colors.red),
+                  action: SnackBarAction(
+                    label: '',
+                    onPressed: () {},
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (controllerDoctor.saldoTarikCurren.value > 100000) {
+                final snackBar = SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(seconds: 1),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 100, horizontal: 24),
+                  content: const Text('Melewati batas maximal penarikan!'),
+                  backgroundColor: (Colors.red),
+                  action: SnackBarAction(
+                    label: '',
+                    onPressed: () {},
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else {
+                showModalBottomSheet(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
+                    context: context,
+                    builder: (context) {
+                      return SizedBox(
+                        height: 290,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(bottom: 18, top: 14),
+                              width: Get.width / 1.9,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xffEDEDED)),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              'Apakah anda yakin untuk melakukan\npenarikan saldo anda ?',
+                              style: subtitleTextStyle,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 46,
+                            ),
+                            ButtomGradient(
+                                label: 'Konfirmasi',
+                                onTap: () async {
+                                  if (Get.find<HomeController>()
+                                          .pendapatan
+                                          .value <
+                                      controllerDoctor.saldoTarikCurren.value) {
+                                    showPopUp(
+                                        onTap: () {
+                                          Get.back();
+                                        },
+                                        imageAction: 'assets/json/eror.json',
+                                        description: "Saldo Anda\nTidak Cukup");
                                   } else {
-                                    await controllerDoctor.sendWithDrawDoctor(
-                                        date: formatter
-                                            .format(now.toLocal())
-                                            .toString(),
-                                        doctorBankId: 1,
-                                        amount: controllerDoctor
-                                            .saldoTarikCurren.value);
-                                    print(formatter.format(now.toLocal()));
-                                    controllerDoctor.nominalSaldoTarikController
-                                        .clear();
-                                    final snackBar = SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-                                      duration: const Duration(seconds: 1),
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 24),
-                                      content: const Text(
-                                          'Berhasil Mengirim Permintaan Penarikan Saldo'),
-                                      backgroundColor: (Colors.green),
-                                      action: SnackBarAction(
-                                        label: '',
-                                        onPressed: () {},
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                    Get.back();
-                                    Get.back();
+                                    if (loginC.role.value == "nurse") {
+                                      await controllerNurse.sendWithDrawNurse(
+                                          date: formatter
+                                              .format(now.toLocal())
+                                              .toString(),
+                                          nurseBankId:
+                                              controllerDoctor.bankId.value,
+                                          amount: controllerDoctor
+                                              .saldoTarikCurren.value);
+                                      controllerDoctor
+                                          .nominalSaldoTarikController
+                                          .clear();
+                                      final snackBar = SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        duration: const Duration(seconds: 1),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 24),
+                                        content: const Text(
+                                            'Berhasil Mengirim Permintaan Penarikan Saldo'),
+                                        backgroundColor: (Colors.green),
+                                        action: SnackBarAction(
+                                          label: '',
+                                          onPressed: () {},
+                                        ),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                      Get.back();
+                                      Get.back();
+                                    } else {
+                                      await controllerDoctor.sendWithDrawDoctor(
+                                          date: formatter
+                                              .format(now.toLocal())
+                                              .toString(),
+                                          doctorBankId:
+                                              controllerDoctor.bankId.value,
+                                          amount: controllerDoctor
+                                              .saldoTarikCurren.value);
+                                      print(formatter.format(now.toLocal()));
+                                      controllerDoctor
+                                          .nominalSaldoTarikController
+                                          .clear();
+                                      final snackBar = SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        duration: const Duration(seconds: 1),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 24),
+                                        content: const Text(
+                                            'Berhasil Mengirim Permintaan Penarikan Saldo'),
+                                        backgroundColor: (Colors.green),
+                                        action: SnackBarAction(
+                                          label: '',
+                                          onPressed: () {},
+                                        ),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                      Get.back();
+                                      Get.back();
+                                    }
                                   }
-                                }
-                              }),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          ButtonPrimary(title: "Batal", onPressed: () {})
-                        ],
-                      ),
-                    );
-                  });
+                                }),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            ButtonPrimary(
+                                title: "Batal",
+                                onPressed: () {
+                                  Get.back();
+                                })
+                          ],
+                        ),
+                      );
+                    });
+              }
             }),
       ),
       body: Padding(
