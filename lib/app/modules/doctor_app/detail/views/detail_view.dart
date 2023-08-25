@@ -550,10 +550,13 @@ class DetailView extends GetView<DetailController> {
                                   ['nurse_work_scope']['icon'],
                               height: 20,
                             ),
-                            Txt(
-                                text: Get.find<LayananHomeController>()
-                                        .packageNurseSops[index]
-                                    ['nurse_work_scope']['name'])
+                            Cntr(
+                              width: Get.width/1.7,
+                              child: Txt(
+                                  text: Get.find<LayananHomeController>()
+                                          .packageNurseSops[index]
+                                      ['nurse_work_scope']['name']),
+                            )
                           ],
                         ),
                       ),

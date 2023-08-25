@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
@@ -203,13 +205,15 @@ class PendapatanView extends GetView<ProfileController> {
                                         loginC.role.value == 'nurse'
                                             ? controllerNurse
                                                     .listDataBankNurse[index]
-                                                ['bankId']
+                                                ['id']
                                             : controllerDoctor
                                                     .listDataBankDoctor[index]
-                                                ['bankId'];
+                                                ['id'];
                                     controllerDoctor.selected.value = index;
 
-                                    print(controllerDoctor.bankId.value
+                                    log("zwee" + controllerDoctor
+                                                    .listDataBankDoctor[index]
+                                                
                                         .toString());
                                   },
                                   trailing: Container(
@@ -287,10 +291,10 @@ class PendapatanView extends GetView<ProfileController> {
                                                 'nurse'
                                             ? controllerNurse
                                                     .listDataBankNurse[index]
-                                                ['bankId']
+                                                ['id']
                                             : controllerDoctor
                                                     .listDataBankDoctor[index]
-                                                ['bankId'];
+                                                ['id'];
                                         controllerDoctor.selected.value = index;
 
                                         print(controllerDoctor.bankId.value

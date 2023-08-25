@@ -1,5 +1,5 @@
 name: bionmed
-version: 1.1.8+18
+version: 1.1.9+19
 publish_to: none
 description: A new Flutter project.
 environment: 
@@ -50,7 +50,8 @@ dependencies:
   flutter_email_sender: ^6.0.1
   flutter: 
     sdk: flutter
-  # firebase_core: ^2.15.1
+  firebase_core: ^2.15.1
+  firebase_messaging: ^14.6.6
 
 dev_dependencies: 
   flutter_lints: 2.0.1

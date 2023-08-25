@@ -38,6 +38,7 @@ class SaldoDanRekeningNurseController extends GetxController {
       // ignore: unused_local_variable
       final withDraw = json.decode(result.toString());
       dataAddWithDrawNurse.value = withDraw['data'];
+      log("saldo =====" + dataAddWithDrawNurse.toString());
 
       // }
       loading(false);
@@ -109,9 +110,10 @@ class SaldoDanRekeningNurseController extends GetxController {
     try {
       loading(true);
       final result = await RestClient()
-          .request('${MainUrl.urlApi}nurse/withdraw/4', Method.GET, params);
+          .request('${MainUrl.urlApi}nurse/withdraw/${Get.find<LoginController>().idLogin}', Method.GET, params);
       final listWithDraw = json.decode(result.toString());
       listDataWithDrawNurse.value = listWithDraw['data'];
+      log('saldooo===== . ' + listDataWithDrawNurse.toString());
 
 
       loading(false);

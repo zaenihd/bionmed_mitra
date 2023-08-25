@@ -13,6 +13,9 @@ import 'package:bionmed/app/modules/hospital_app/paket_hospital_dan_ambulance/vi
 import 'package:bionmed/app/modules/hospital_app/register_hospital/views/register_hospital_view.dart';
 import 'package:bionmed/app/modules/hospital_app/tambah_tenaga_medis/views/tambah_tenaga_medis_view.dart';
 import 'package:bionmed/app/modules/hospital_app/tambah_tenaga_medis_atau_ambulance_in_profile/views/tambah_tenaga_medis_atau_ambulance_in_profile_view.dart';
+import 'package:bionmed/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +36,39 @@ import 'certificate_api.dart';
 AndroidNotificationChannel? channel;
 
 FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  print('Got a message whilst in the foreground!');
+  print('Message data: ${message.data}');
+
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
+});
   AwesomeNotifications().initialize(
       null,
       [
@@ -51,7 +85,6 @@ void main() async {
   await GetStorage.init();
   // ignore: unnecessary_new
   HttpOverrides.global = new MyHttpOverrides();
-  WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await initializeDateFormatting('id_ID', null);

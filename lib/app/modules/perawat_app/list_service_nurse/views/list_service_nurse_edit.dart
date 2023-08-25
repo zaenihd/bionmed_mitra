@@ -3,6 +3,7 @@ import 'package:bionmed/app/constant/styles.dart';
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
+import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,12 +39,22 @@ class ListServiceNurseViewEdit extends GetView<ListServiceNurseController> {
                         Get.put(PaketLayananNurseController())
                             .serviceIdNurse
                             .value = controller.listServiceNurseData[index]['id'];
-
+                            // if( Get.put(PaketLayananNurseController())
+                            // .serviceIdNurse
+                            // .value !=4){
+                            //   showPopUp(
+                            //   onTap: () {},
+                            //   imageAction: 'assets/json/eror.json',
+                            //   description: "Sedang dalam proses\npengembangan");
+                            // }else{
+                              
+                            // }
                              Get.put(PaketLayananNurseController()).getNursePket();
                         // print(  Get.put(PaketLayananNurseController()).serviceIdNurse.value.toString());
                         // controller.serviceId.value = controller.listServiceData[index]['id'];
                         // Get.to(() => LengkapiJamPraktek());
-                          Get.toNamed(Routes.PAKET_LAYANAN_NURSE);},
+                          Get.toNamed(Routes.PAKET_LAYANAN_NURSE);
+                          },
                       child: Container(
                         margin: const EdgeInsets.only(top: 10),
                         alignment: Alignment.center,

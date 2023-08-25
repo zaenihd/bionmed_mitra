@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/controllers/saldo_dan_rekening_doctor_controller.dart';
@@ -117,6 +119,8 @@ class PenarikanSaldo extends StatelessWidget {
                                               controllerDoctor.bankId.value,
                                           amount: controllerDoctor
                                               .saldoTarikCurren.value);
+                                              log('====> ' + controllerDoctor.bankId.value.toString() + "saldooo " +  controllerDoctor
+                                              .saldoTarikCurren.value.toString() );
                                       controllerDoctor
                                           .nominalSaldoTarikController
                                           .clear();

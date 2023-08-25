@@ -16,9 +16,11 @@ class StatusPenarikanSaldo extends StatelessWidget {
     required this.norek,
     required this.penerina,
     required this.status,
+    required this.bank
+
   });
 
-  String tanggal, namaBank, penerina, norek = "";
+  String tanggal, namaBank, penerina, norek, bank = "";
   int tarikSaldo, status = 0;
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                               weight: normal,
                             ),
                             Txt(
-                              text: 'INV/20229876/FL/82761',
+                              text: 'INV/$norek/$bank',
                               size: 14,
                               weight: normal,
                             ),

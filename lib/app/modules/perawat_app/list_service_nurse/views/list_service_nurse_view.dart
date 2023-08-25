@@ -3,6 +3,7 @@ import 'package:bionmed/app/constant/styles.dart';
 import 'package:bionmed/app/modules/doctor_app/jadwal_saya/views/list_jadwal.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
+import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -18,18 +19,14 @@ class ListServiceNurseView extends GetView<ListServiceNurseController> {
     controller.listServiceNurse();
     return Scaffold(
         bottomSheet: Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
-          child:ButtomGradient(
-              label:  'Lanjutkan',
-              onTap: () {
-                Get.to(()=> ListJadwalCompleteProfil());
-              })
-        ),
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: ButtomGradient(
+                label: 'Lanjutkan',
+                onTap: () {
+                  Get.to(() => ListJadwalCompleteProfil());
+                })),
         appBar: AppBar(
-          title: InkWell(
-            onTap: () {
-            },
-            child: const Text( 'Nurse Service')),
+          title: InkWell(onTap: () {}, child: const Text('Nurse Service')),
           elevation: 0.0,
           centerTitle: false,
           flexibleSpace: Container(
@@ -40,24 +37,32 @@ class ListServiceNurseView extends GetView<ListServiceNurseController> {
         ),
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 26),
-            child:
-             Obx(() => controller.listServiceNurseData.isEmpty
+            child: Obx(() => controller.listServiceNurseData.isEmpty
                 ? const Center(child: CircularProgressIndicator())
-                : 
-                ListView.builder(
+                : ListView.builder(
                     itemCount: controller.listServiceNurseData.length,
                     itemBuilder: (context, index) => InkWell(
-                      onTap: () async{
-
+                      onTap: () async {
                         Get.put(PaketLayananNurseController())
-                            .serviceIdNurse
-                            .value = controller.listServiceNurseData[index]['id'];
+                                .serviceIdNurse
+                                .value =
+                            controller.listServiceNurseData[index]['id'];
+                        // if (Get.put(PaketLayananNurseController())
+                        //         .serviceIdNurse
+                        //         .value !=
+                        //     4) {
+                        //   showPopUp(
+                        //       onTap: () {},
+                        //       imageAction: 'assets/json/eror.json',
+                        //       description: "Sedang dalam proses\npengembangan");
+                        // } else {
+                        // }
+                          Get.toNamed(Routes.PAKET_LAYANAN_NURSE);
                         // await Get.put(PaketLayananNurseController()).getNursePket();
                         // print(  Get.put(PaketLayananNurseController()).serviceIdNurse.value.toString());
                         // controller.serviceId.value = controller.listServiceData[index]['id'];
                         // Get.to(() => LengkapiJamPraktek());
-                          Get.toNamed(Routes.PAKET_LAYANAN_NURSE);
-                          },
+                      },
                       child: Container(
                         margin: const EdgeInsets.only(top: 10),
                         alignment: Alignment.center,
@@ -116,4 +121,3 @@ class ListServiceNurseView extends GetView<ListServiceNurseController> {
                   ))));
   }
 }
-

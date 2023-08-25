@@ -44,6 +44,8 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
                         //           .listDataWithDrawDoctor[index]['doctor_bank']['date'].toString());
                         if (loginC.role.value == 'nurse') {
                           Get.to(() => StatusPenarikanSaldo(
+                            bank:   controllerNurse.listDataWithDrawNurse[index]
+                                        ['nurse_bank']['bank']['bank'],
                                 tarikSaldo: controllerNurse
                                     .listDataWithDrawNurse[index]['amount'],
                                 namaBank:
@@ -62,6 +64,8 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
                               ));
                         } else {
                           Get.to(() => StatusPenarikanSaldo(
+                               bank:   controllerDoctor.listDataWithDrawDoctor[index]
+                                        ['doctor_bank']['bank']['bank'],
                                 tarikSaldo: controllerDoctor
                                     .listDataWithDrawDoctor[index]['amount'],
                                 namaBank: controllerDoctor

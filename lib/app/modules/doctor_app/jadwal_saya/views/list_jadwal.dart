@@ -6,6 +6,7 @@ import 'package:bionmed/app/modules/doctor_app/profile/views/edit%20profile/edit
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
 import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
+import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,6 +36,14 @@ class ListJadwal extends StatelessWidget {
               } else {
                 myC.serviceId.value = myC.service[index]['service']['id'];
               }
+              // if(myC.serviceId.value != 4){
+              //   showPopUp(
+              //                 onTap: () {},
+              //                 imageAction: 'assets/json/eror.json',
+              //                 description: "Sedang dalam proses\npengembangan");
+              // }else{
+
+              // }
               Get.to(() => const EditJadwal());
               // }
             },
