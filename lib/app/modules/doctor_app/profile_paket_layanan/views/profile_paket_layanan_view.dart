@@ -10,7 +10,6 @@ import 'package:bionmed/theme.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -121,9 +120,6 @@ class ProfilePaketLayananView extends GetView<ProfilePaketLayananController> {
                                                           .hargaHome.text
                                                           .replaceAll(".", ""))
                                                       .toString();
-                                              print(controller
-                                                  .hargaCurrens.value
-                                                  .toString());
                                               // String _formatNumber(String s) =>
                                               //     NumberFormat.decimalPattern('en')
                                               //         .format(int.parse(s));
@@ -361,8 +357,6 @@ class ProfilePaketLayananView extends GetView<ProfilePaketLayananController> {
                                                 int.parse(controller.harga.text
                                                         .replaceAll(".", ""))
                                                     .toString();
-                                            print(controller.hargaCurrens.value
-                                                .toString());
                                             // String _formatNumber(String s) =>
                                             //     NumberFormat.decimalPattern('en')
                                             //         .format(int.parse(s));
@@ -1127,7 +1121,7 @@ class ProfilePaketLayananView extends GetView<ProfilePaketLayananController> {
                           height: 16,
                         ),
                         Text(
-                          'anda yakin ingin Menyimpan ini?',
+                          'Anda yakin ingin Menyimpan ini?',
                           style: blackTextStyle.copyWith(fontWeight: medium),
                         ),
                         const SizedBox(

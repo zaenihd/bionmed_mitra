@@ -122,7 +122,7 @@ class JadwalSayaController extends GetxController {
         // spesialist.value = donors['data']['nurse']['specialist']['id'];
         // jadwal.value = donors['data']['nurse']['nurse_schedules'];
         service.value = donors['data']['nurse']['nurse_services'];
-        spesialis.value = donors['data']['nurse']['nurse_services'][0]['service']['name'];
+        spesialis.value = donors['data']['nurse']['nurse_services'][0]['service']['name'] ?? "";
         // isVerifi.value = donors['isVerification'];
         
         // if(isVerifi.value == false){

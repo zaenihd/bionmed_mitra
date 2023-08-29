@@ -47,17 +47,17 @@ class ListServiceNurseView extends GetView<ListServiceNurseController> {
                                 .serviceIdNurse
                                 .value =
                             controller.listServiceNurseData[index]['id'];
-                        // if (Get.put(PaketLayananNurseController())
-                        //         .serviceIdNurse
-                        //         .value !=
-                        //     4) {
-                        //   showPopUp(
-                        //       onTap: () {},
-                        //       imageAction: 'assets/json/eror.json',
-                        //       description: "Sedang dalam proses\npengembangan");
-                        // } else {
-                        // }
+                        if (Get.put(PaketLayananNurseController())
+                                .serviceIdNurse
+                                .value !=
+                            4) {
+                          showPopUp(
+                              onTap: () {},
+                              imageAction: 'assets/json/eror.json',
+                              description: "Sedang dalam proses\npengembangan");
+                        } else {
                           Get.toNamed(Routes.PAKET_LAYANAN_NURSE);
+                        }
                         // await Get.put(PaketLayananNurseController()).getNursePket();
                         // print(  Get.put(PaketLayananNurseController()).serviceIdNurse.value.toString());
                         // controller.serviceId.value = controller.listServiceData[index]['id'];

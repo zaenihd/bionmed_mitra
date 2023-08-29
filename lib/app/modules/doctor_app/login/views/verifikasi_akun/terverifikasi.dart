@@ -2,8 +2,6 @@ import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class Terverifikasi extends StatelessWidget {

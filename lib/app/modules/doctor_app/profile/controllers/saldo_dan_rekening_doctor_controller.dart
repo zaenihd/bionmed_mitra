@@ -52,7 +52,6 @@ class SaldoDanRekeningDoctorController extends GetxController {
       // ignore: unused_local_variable
       final withDraw = json.decode(result.toString());
       dataAddWithDrawDoctor.value = withDraw['data'];
-      print(dataAddWithDrawDoctor.toString());
 
       // }
       loading(false);
@@ -129,7 +128,6 @@ class SaldoDanRekeningDoctorController extends GetxController {
           .request('${MainUrl.urlApi}doctor/withdraw/${Get.find<LoginController>().idLogin}', Method.GET, params);
       final listWithDraw = json.decode(result.toString());
       listDataWithDrawDoctor.value = listWithDraw['data'];
-      print(listWithDraw.toString());
       log(Get.find<LoginController>().idLogin.toString());
 
 

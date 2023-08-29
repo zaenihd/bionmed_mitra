@@ -216,7 +216,7 @@ class LoginController extends GetxController {
         lat.value = dataNurse['data']['nurse']['lat'].toString();
         long.value = dataNurse['data']['nurse']['long'].toString();
         nurseEducation.value = dataNurse['data']['nurse']['nurse_educations'];
-        rating = dataNurse['data']['nurse']['rating'];
+        rating = dataNurse['data']['nurse']['rating'] ?? 0;
         var setuju = await box.read('rememberme');
 
         if (setuju == true) {

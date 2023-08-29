@@ -1,5 +1,6 @@
 import 'package:bionmed/app/constant/colors.dart';
 import 'package:bionmed/app/modules/doctor_app/pilih_spesialis/views/pilih_spesialis_view.dart';
+// ignore: unused_import
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/container/container.dart';
@@ -41,7 +42,7 @@ class TambahTenagaMedisAtauAmbulanceInProfileView
             ),
             InkWell(
               onTap: () {
-                Get.to(() => TambahPerawat());
+                Get.to(() => const TambahPerawat());
                 // popUpActionTambahTenagaMedis(context);
               },
               child: Container(
@@ -79,7 +80,7 @@ class TambahTenagaMedisAtauAmbulanceInProfileView
 
   Cntr namaPerawat() {
     return Cntr(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       radius: BorderRadius.circular(10),
       width: Get.width,
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 26),
@@ -113,7 +114,7 @@ class TambahTenagaMedisAtauAmbulanceInProfileView
                         width: 6.0,
                       ),
                       Cntr(
-                        margin: EdgeInsets.only(right: 10),
+                        margin: const EdgeInsets.only(right: 10),
                         height: 20,
                         width: 20,
                         color: Colors.white,
@@ -208,7 +209,7 @@ class TambahPerawat extends StatelessWidget {
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -349,7 +350,7 @@ class TambahPerawat extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 20),
           child: ButtomGradient(
               margin: 20, label: 'Tambahkan', onTap: () async {
-                Get.to(TambahAMbulance());
+                Get.to(const TambahAMbulance());
               })),
     );
   }
@@ -370,7 +371,7 @@ class TambahAMbulance extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: const BoxDecoration(
             color: Colors.white,

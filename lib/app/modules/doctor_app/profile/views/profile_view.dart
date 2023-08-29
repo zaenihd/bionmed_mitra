@@ -44,7 +44,7 @@ class ProfileView extends GetView<ProfileController> {
     //   Get.put(JadwalSayaController()).loginData(phoneNumber: phone);
     // }
     return 
-    loginC.name.isEmpty ? ProfilLoginRequired() :
+    loginC.name.isEmpty ? const ProfilLoginRequired() :
     Scaffold(
         backgroundColor: backgroundColorC,
         body: SingleChildScrollView(
@@ -57,7 +57,7 @@ class ProfileView extends GetView<ProfileController> {
                 Container(
                   width: Get.width,
                   height: 250,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/icon/Ellipse 179.png'),
                           fit: BoxFit.cover)),
@@ -313,7 +313,7 @@ class ProfileView extends GetView<ProfileController> {
                                             height: 16,
                                           ),
                                           Text(
-                                            'anda yakin ingin keluar sekarang?',
+                                            'Anda yakin ingin keluar sekarang?',
                                             style: blackTextStyle.copyWith(
                                                 fontWeight: medium),
                                           ),

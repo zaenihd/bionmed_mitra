@@ -38,7 +38,7 @@ class SaldoDanRekeningNurseController extends GetxController {
       // ignore: unused_local_variable
       final withDraw = json.decode(result.toString());
       dataAddWithDrawNurse.value = withDraw['data'];
-      log("saldo =====" + dataAddWithDrawNurse.toString());
+      log("saldo =====$dataAddWithDrawNurse");
 
       // }
       loading(false);
@@ -92,7 +92,7 @@ class SaldoDanRekeningNurseController extends GetxController {
           .request('${MainUrl.urlApi}nurse/bank/${Get.find<LoginController>().idLogin}', Method.GET, params);
       final listBank = json.decode(result.toString());
       listDataBankNurse.value = listBank['data'];
-      log("list   " + listDataBankNurse.toString());
+      log("list   $listDataBankNurse");
 
 
       loading(false);
@@ -113,10 +113,11 @@ class SaldoDanRekeningNurseController extends GetxController {
           .request('${MainUrl.urlApi}nurse/withdraw/${Get.find<LoginController>().idLogin}', Method.GET, params);
       final listWithDraw = json.decode(result.toString());
       listDataWithDrawNurse.value = listWithDraw['data'];
-      log('saldooo===== . ' + listDataWithDrawNurse.toString());
+      log('saldooo===== . $listDataWithDrawNurse');
 
 
       loading(false);
+    // ignore: unused_catch_clause
     } on Exception catch (e) {
       // ignore: avoid_print
       // print('zzezezeez ' + e.toString());

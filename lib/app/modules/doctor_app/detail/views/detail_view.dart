@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:bionmed/app/constant/colors.dart';
 import 'package:bionmed/app/modules/doctor_app/detail/views/detail_resep.dart';
@@ -88,6 +87,7 @@ class DetailView extends GetView<DetailController> {
   Widget statusOrderImage;
   Widget statusPembayaran;
   Widget iconPembayaran;
+  // ignore: prefer_typing_uninitialized_variables
   var dataDetail;
 
   DateTime now = DateTime.now();
@@ -180,16 +180,16 @@ class DetailView extends GetView<DetailController> {
     return Column(
       children: [
         Cntr(
-            margin: EdgeInsets.symmetric(horizontal: 25),
+            margin: const EdgeInsets.symmetric(horizontal: 25),
             radius: BorderRadius.circular(10),
-            padding: EdgeInsets.symmetric(horizontal: 26, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
             gradient: gradient1,
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Tanggal Pemesanan',
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
@@ -209,12 +209,12 @@ class DetailView extends GetView<DetailController> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           'Mulai Order',
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 10.0,
                         ),
                         Text(
@@ -265,10 +265,10 @@ class DetailView extends GetView<DetailController> {
         ),
         Cntr(
           width: Get.width,
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.grey)
             ],
-            padding: EdgeInsets.only(top: 30, bottom: 20),
+            padding: const EdgeInsets.only(top: 30, bottom: 20),
             color: Colors.white,
             child: dataDetail['status'] == 4
                 ? Column(
@@ -481,7 +481,7 @@ class DetailView extends GetView<DetailController> {
       },
       title: "Laporkan?",
       color: Colors.red,
-      backgroundColor: Color(0xffFFE4E4),
+      backgroundColor: const Color(0xffFFE4E4),
     );
   }
 
@@ -490,7 +490,7 @@ class DetailView extends GetView<DetailController> {
       margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
-      color: Color(0xffF4F4F4),
+      color: const Color(0xffF4F4F4),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
           title: Txt(
@@ -499,7 +499,7 @@ class DetailView extends GetView<DetailController> {
           ),
           children: [
             Cntr(
-              color: Color(0xffF4F4F4),
+              color: const Color(0xffF4F4F4),
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               radius: BorderRadius.circular(10),
               width: Get.width,
@@ -536,8 +536,8 @@ class DetailView extends GetView<DetailController> {
                           .length,
                       itemBuilder: (context, index) => Cntr(
                         radius: BorderRadius.circular(10),
-                        margin: EdgeInsets.only(bottom: 10),
-                        padding: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.symmetric(
                           vertical: 10,
                           horizontal: 16,
                         ),
@@ -574,7 +574,7 @@ class DetailView extends GetView<DetailController> {
       margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
-      color: Color(0xffF4F4F4),
+      color: const Color(0xffF4F4F4),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
           title: Txt(
@@ -583,7 +583,7 @@ class DetailView extends GetView<DetailController> {
           ),
           children: [
             Cntr(
-              color: Color(0xffF4F4F4),
+              color: const Color(0xffF4F4F4),
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               radius: BorderRadius.circular(10),
               width: Get.width,
@@ -710,7 +710,7 @@ class DetailView extends GetView<DetailController> {
       margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
-      color: Color(0xffF4F4F4),
+      color: const Color(0xffF4F4F4),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
           title: Txt(
@@ -719,7 +719,7 @@ class DetailView extends GetView<DetailController> {
           ),
           children: [
             Cntr(
-              color: Color(0xffF4F4F4),
+              color: const Color(0xffF4F4F4),
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               radius: BorderRadius.circular(10),
               width: Get.width,
@@ -787,10 +787,10 @@ class DetailView extends GetView<DetailController> {
                     height: 5.0,
                   ),
                   Cntr(
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     height: 80,
                     width: Get.width,
-                    border: Border.all(color: Color(0xffE2E2E2)),
+                    border: Border.all(color: const Color(0xffE2E2E2)),
                     radius: BorderRadius.circular(10),
                     child: Txt(
                       text: dataDetail['description'],

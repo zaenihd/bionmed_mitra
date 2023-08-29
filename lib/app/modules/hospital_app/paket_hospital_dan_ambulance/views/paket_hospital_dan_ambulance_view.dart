@@ -1,5 +1,4 @@
 import 'package:bionmed/app/constant/colors.dart';
-import 'package:bionmed/app/modules/hospital_app/tambah_tenaga_medis_atau_ambulance_in_profile/views/tambah_tenaga_medis_atau_ambulance_in_profile_view.dart';
 import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
@@ -269,7 +268,7 @@ class PaketHospitalDanAmbulanceView
             ),
             InkWell(
               onTap: () {
-                Get.to(() => TambahPaketAmbulance());
+                Get.to(() => const TambahPaketAmbulance());
                 // popUptambahPaket();
 
                 // popUpActionTambahTenagaMedis(context);
@@ -763,7 +762,7 @@ class TambahPaketAmbulance extends StatelessWidget {
               InputPrimary(
                   suffixIcon: Cntr(
                       color: Colors.transparent,
-                      margin: EdgeInsets.symmetric(vertical: 15),
+                      margin: const EdgeInsets.symmetric(vertical: 15),
                       child: Txt(text: '/1 km')),
                   inputFormatters: [
                     // FilteringTextInputFormatter.allow(

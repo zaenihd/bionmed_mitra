@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../../widget/button/button_gradien.dart';
 import '../../../../../widget/textform/input_primary1.dart';
@@ -448,7 +447,7 @@ class _EditProfileState extends State<EditProfile> {
                               height: 16,
                             ),
                             Text(
-                              'anda yakin ingin mengubah biodata ini ?',
+                              'Anda yakin ingin mengubah biodata ini ?',
                               style:
                                   blackTextStyle.copyWith(fontWeight: medium),
                             ),

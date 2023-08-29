@@ -10,15 +10,14 @@ import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../../doctor_app/pilih_spesialis/views/pilih_spesialis_view.dart';
-import '../../../perawat_app/paket_layanan_nurse/views/paket_layanan_nurse_view.dart';
 import '../controllers/tambah_tenaga_medis_controller.dart';
 
 class TambahTenagaMedisView extends GetView<TambahTenagaMedisController> {
    TambahTenagaMedisView({Key? key}) : super(key: key);
 
+  // ignore: annotate_overrides
   final controller = Get.put(TambahTenagaMedisController());
   @override
   Widget build(BuildContext context) {
@@ -497,7 +496,7 @@ class TambahTenagaMedisView extends GetView<TambahTenagaMedisController> {
                         width: 6.0,
                       ),
                       Cntr(
-                        margin: EdgeInsets.only(right: 10),
+                        margin: const EdgeInsets.only(right: 10),
                         height: 20,
                         width: 20,
                         color: Colors.white,

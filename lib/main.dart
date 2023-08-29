@@ -4,15 +4,8 @@
 
 import 'dart:io';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:bionmed/app/modules/doctor_app/register/views/register_hospital_view.dart';
 import 'package:bionmed/app/modules/doctor_app/splash_screen/views/disclamer.dart';
 import 'package:bionmed/app/modules/doctor_app/splash_screen/views/splash_screen_view.dart';
-import 'package:bionmed/app/modules/hospital_app/detail_order_hospital/views/detail_order_hospital_view.dart';
-import 'package:bionmed/app/modules/hospital_app/edit_profile_hospital/views/edit_profile_hospital_view.dart';
-import 'package:bionmed/app/modules/hospital_app/paket_hospital_dan_ambulance/views/paket_hospital_dan_ambulance_view.dart';
-import 'package:bionmed/app/modules/hospital_app/register_hospital/views/register_hospital_view.dart';
-import 'package:bionmed/app/modules/hospital_app/tambah_tenaga_medis/views/tambah_tenaga_medis_view.dart';
-import 'package:bionmed/app/modules/hospital_app/tambah_tenaga_medis_atau_ambulance_in_profile/views/tambah_tenaga_medis_atau_ambulance_in_profile_view.dart';
 import 'package:bionmed/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -36,6 +29,7 @@ import 'certificate_api.dart';
 AndroidNotificationChannel? channel;
 
 FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
+// ignore: unused_element
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
@@ -52,6 +46,7 @@ void main() async {
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
+  // ignore: unused_local_variable
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     announcement: false,

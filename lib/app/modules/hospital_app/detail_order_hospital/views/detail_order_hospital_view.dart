@@ -84,7 +84,7 @@ class DetailOrderHospitalView extends GetView<DetailOrderHospitalController> {
   Cntr tujuanAmbulance() {
     return Cntr(
       width: Get.width,
-      padding: EdgeInsets.all(25),
+      padding: const EdgeInsets.all(25),
       color: Colors.grey[300],
       radius: BorderRadius.circular(10),
       child: Column(
@@ -99,7 +99,7 @@ class DetailOrderHospitalView extends GetView<DetailOrderHospitalController> {
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.location_on,
                 color: Colors.green,
               ),
@@ -126,7 +126,7 @@ class DetailOrderHospitalView extends GetView<DetailOrderHospitalController> {
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.location_on,
                 color: Colors.green,
               ),
@@ -262,7 +262,7 @@ class DetailOrderHospitalView extends GetView<DetailOrderHospitalController> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                Divider(
+                const Divider(
                   thickness: 2,
                 ),
                 Row(
@@ -1431,6 +1431,7 @@ class DetailOrderHospitalView extends GetView<DetailOrderHospitalController> {
   }
 }
 
+// ignore: must_be_immutable
 class Rating extends StatelessWidget {
   Rating({Key? key, this.rating}) : super(key: key);
 
@@ -1476,7 +1477,7 @@ class Rating extends StatelessWidget {
         Center(
           child: RatingBar.builder(
             ignoreGestures: true,
-            initialRating: double.parse(rating.toString() ?? "5"),
+            initialRating: double.parse(rating.toString()),
             minRating: 1,
             direction: Axis.horizontal,
             allowHalfRating: false,
@@ -1521,7 +1522,7 @@ class Rating extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        Align(alignment: Alignment.centerLeft, child: const Text('Deskripsi')),
+        const Align(alignment: Alignment.centerLeft, child: Text('Deskripsi')),
         const SizedBox(
           height: 10,
         ),
@@ -1531,8 +1532,8 @@ class Rating extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 17),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey!)),
-            child: Text("deskripsiRating.value"))
+                border: Border.all(color: Colors.grey)),
+            child: const Text("deskripsiRating.value"))
         // ),
       ],
     );

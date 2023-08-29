@@ -1,10 +1,6 @@
 import 'dart:developer';
 
 import 'package:bionmed/app/modules/doctor_app/account/widget/skpengguna_widget.dart';
-import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/ditolak.dart';
-import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/menunggu_konfirmasi.dart';
-import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/terverifikasi.dart';
-import 'package:bionmed/app/modules/doctor_app/pilih_spesialis/views/pilih_spesialis_view.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/txt/text.dart';

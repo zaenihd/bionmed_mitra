@@ -2,13 +2,11 @@ import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed/app/constant/colors.dart';
-import 'package:bionmed/app/modules/doctor_app/account/views/account_view.dart';
 import 'package:bionmed/app/modules/doctor_app/chat/views/chat_dokter.dart';
 import 'package:bionmed/app/modules/doctor_app/connection/views/call/voice_screen.dart';
 import 'package:bionmed/app/modules/doctor_app/detail/controllers/detail_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/detail/views/detail_view.dart';
 import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
-import 'package:bionmed/app/modules/doctor_app/home/views/home_view.dart';
 import 'package:bionmed/app/modules/doctor_app/kirim_resep/kirim_resep.dart';
 import 'package:bionmed/app/modules/doctor_app/layanan/views/layanan_view.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
@@ -2367,6 +2365,7 @@ class DetailPesan extends StatelessWidget {
   String orderId;
   Widget button;
   Widget rating;
+  // ignore: prefer_typing_uninitialized_variables
   var dataPesan;
 
   // final controller = Get.put(PesanController());
@@ -2428,7 +2427,7 @@ class DetailPesan extends StatelessWidget {
           //   ),
           // ),
           Cntr(
-            margin: EdgeInsets.symmetric(horizontal: 25),
+            margin: const EdgeInsets.symmetric(horizontal: 25),
             radius: BorderRadius.circular(10),
             color: const Color(0xffEFEFEF),
             padding: const EdgeInsets.all(10),
@@ -2628,7 +2627,7 @@ class DetailPesan extends StatelessWidget {
             alignment: Alignment.centerLeft,
             // padding: EdgeInsets.symmetric(horizontal: 20),
             width: Get.width,
-            border: Border.all(color: Color(0xffE2E2E2)),
+            border: Border.all(color: const Color(0xffE2E2E2)),
             radius: BorderRadius.circular(10),
             child: ExpansionTile(
               title: Row(
@@ -2676,7 +2675,7 @@ class DetailPesan extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 15),
             alignment: Alignment.centerLeft,
             width: Get.width,
-            border: Border.all(color: Color(0xffE2E2E2)),
+            border: Border.all(color: const Color(0xffE2E2E2)),
             radius: BorderRadius.circular(10),
             child: ExpansionTile(
               title: Row(
@@ -2793,7 +2792,7 @@ class DetailPesan extends StatelessWidget {
           alignment: Alignment.centerLeft,
           // padding: EdgeInsets.symmetric(horizontal: 20),
           width: Get.width,
-          border: Border.all(color: Color(0xffE2E2E2)),
+          border: Border.all(color: const Color(0xffE2E2E2)),
           radius: BorderRadius.circular(10),
           child: ExpansionTile(
             title: Row(
@@ -2839,7 +2838,7 @@ class DetailPesan extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 15),
           alignment: Alignment.centerLeft,
           width: Get.width,
-          border: Border.all(color: Color(0xffE2E2E2)),
+          border: Border.all(color: const Color(0xffE2E2E2)),
           radius: BorderRadius.circular(10),
           child: ExpansionTile(
             title: Row(
@@ -2936,7 +2935,7 @@ class DetailPesan extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 15),
           alignment: Alignment.centerLeft,
           width: Get.width,
-          border: Border.all(color: Color(0xffE2E2E2)),
+          border: Border.all(color: const Color(0xffE2E2E2)),
           radius: BorderRadius.circular(10),
           child: ExpansionTile(
             title: Row(
@@ -2990,9 +2989,9 @@ class DetailPesan extends StatelessWidget {
 
   Cntr cardPerawat(String title, String subtitle, String image) {
     return Cntr(
-      border: Border.all(color: Color(0xffE2E2E2)),
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.symmetric(horizontal: 25),
+      border: Border.all(color: const Color(0xffE2E2E2)),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 25),
       radius: BorderRadius.circular(10),
       child: Row(
         children: [
@@ -3059,7 +3058,7 @@ class DetailPesan extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
-      border: Border.all(color: Color(0xffE2E2E2)),
+      border: Border.all(color: const Color(0xffE2E2E2)),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
           title: Row(
@@ -3131,7 +3130,7 @@ class DetailPesan extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.check_circle,
                         color: Colors.green,
                         size: 14,

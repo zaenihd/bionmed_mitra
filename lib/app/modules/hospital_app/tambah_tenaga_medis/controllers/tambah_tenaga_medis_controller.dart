@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 class TambahTenagaMedisController extends GetxController {
   final ImagePicker _picker = ImagePicker();
   RxString imageUrl = "".obs;
+  // ignore: prefer_typing_uninitialized_variables
   var files;
 
   

@@ -3,8 +3,6 @@ import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -194,7 +192,7 @@ class MenungguKonfirmasi extends StatelessWidget {
         },
         title: "Hubungi CS Bionmed?",
         color: Colors.red,
-        backgroundColor: Color(0xffFFE4E4),
+        backgroundColor: const Color(0xffFFE4E4),
       ),
     );
   }

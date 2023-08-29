@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/layanan_home/controllers/layanan_home_controller.dart';

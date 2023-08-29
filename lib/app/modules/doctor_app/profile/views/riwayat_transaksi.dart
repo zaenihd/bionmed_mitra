@@ -23,10 +23,10 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
   Widget build(BuildContext context) {
     if (loginC.role.value == 'nurse') {
       controllerNurse.listWithDrawnurse();
-      log('qwerty ' + controllerNurse.listDataWithDrawNurse.length.toString());
+      log('qwerty ${controllerNurse.listDataWithDrawNurse.length}');
     } else {
       controllerDoctor.listWithDrawDoctor();
-      log("CEEK" + controllerDoctor.listDataWithDrawDoctor.toString());
+      log("CEEK${controllerDoctor.listDataWithDrawDoctor}");
     }
     return Scaffold(
         appBar: appbarGradient('Riwayat Transaksi'),

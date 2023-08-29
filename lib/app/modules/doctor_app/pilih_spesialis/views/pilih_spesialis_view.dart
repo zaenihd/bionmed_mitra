@@ -1,5 +1,4 @@
 import 'package:bionmed/app/modules/doctor_app/layanan/controllers/layanan_controller.dart';
-import 'package:bionmed/app/modules/doctor_app/layanan/views/layanan_succes.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/controllers/register_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';

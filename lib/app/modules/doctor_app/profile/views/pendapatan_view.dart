@@ -41,7 +41,7 @@ class PendapatanView extends GetView<ProfileController> {
               onPressed: () {
                 Get.to(() => RiwayatPenarikanSaldo());
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.history,
                 color: Colors.black,
               ))
@@ -211,21 +211,20 @@ class PendapatanView extends GetView<ProfileController> {
                                                 ['id'];
                                     controllerDoctor.selected.value = index;
 
-                                    log("zwee" + controllerDoctor
-                                                    .listDataBankDoctor[index]
-                                                
-                                        .toString());
+                                    log("zwee${controllerDoctor
+                                                    .listDataBankDoctor[index]}");
                                   },
                                   trailing: Container(
                                     height: 20,
                                     width: 20,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
+                                          // ignore: unrelated_type_equality_checks
                                           image: controllerDoctor.selected ==
                                                   index
                                               ? const AssetImage(
                                                   'assets/icon/checkboxon.png')
-                                              : AssetImage(
+                                              : const AssetImage(
                                                   'assets/icon/checkboxoff.png')),
                                     ),
                                   ),
@@ -297,20 +296,19 @@ class PendapatanView extends GetView<ProfileController> {
                                                 ['id'];
                                         controllerDoctor.selected.value = index;
 
-                                        print(controllerDoctor.bankId.value
-                                            .toString());
                                       },
                                       trailing: Container(
                                         height: 20,
                                         width: 20,
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
+                                              // ignore: unrelated_type_equality_checks
                                               image: controllerDoctor
                                                           .selected ==
                                                       index
                                                   ? const AssetImage(
                                                       'assets/icon/checkboxon.png')
-                                                  : AssetImage(
+                                                  : const AssetImage(
                                                       'assets/icon/checkboxoff.png')),
                                         ),
                                       ),

@@ -274,7 +274,8 @@ class LayananHomeController extends GetxController {
       final order = json.decode(result.toString());
       if (order['code'] == 200) {
         dataListOrder.value = order['data'];
-        log('object ' + dataListOrder.value.toString() );
+        // ignore: invalid_use_of_protected_member
+        log('object ${dataListOrder.value}' );
         // statusOrder.value = order['data']['order']['statusOrder'];
       } else {
         // dataListOrder.clear();

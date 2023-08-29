@@ -1440,10 +1440,10 @@ class _TambahScopeOfWorkState extends State<TambahScopeOfWork> {
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {
+  // ignore: annotate_overrides
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.selection.baseOffset == 0) {
-      print(true);
       return newValue;
     }
 
@@ -1455,6 +1455,6 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
     return newValue.copyWith(
         text: newText,
-        selection: new TextSelection.collapsed(offset: newText.length));
+        selection: TextSelection.collapsed(offset: newText.length));
   }
 }

@@ -4,9 +4,8 @@ import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
+// ignore: must_be_immutable
 class StatusPenarikanSaldo extends StatelessWidget {
   StatusPenarikanSaldo({
     super.key,
@@ -27,7 +26,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
     return Scaffold(
       appBar: appbarGradient('Transaksi Anda'),
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 36, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 24),
         child: Center(
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,7 +100,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                 radius: BorderRadius.circular(10),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                color: Color.fromARGB(255, 229, 224, 224),
+                color: const Color.fromARGB(255, 229, 224, 224),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -114,7 +113,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                       children: [
                         Txt(
                           text: 'Tarik Saldo',
-                          color: Color(0xff7C7C7C),
+                          color: const Color(0xff7C7C7C),
                         ),
                         Txt(
                           text: CurrencyFormat.convertToIdr(tarikSaldo, 0),
@@ -130,7 +129,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                       children: [
                         Txt(
                           text: 'Tanggal',
-                          color: Color(0xff7C7C7C),
+                          color: const Color(0xff7C7C7C),
                         ),
                         Txt(
                           text: tanggal,
@@ -146,7 +145,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                       children: [
                         Txt(
                           text: 'Waktu',
-                          color: Color(0xff7C7C7C),
+                          color: const Color(0xff7C7C7C),
                         ),
                         Txt(
                           text: tanggal,
@@ -162,7 +161,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                       children: [
                         Txt(
                           text: 'Nama Bank',
-                          color: Color(0xff7C7C7C),
+                          color: const Color(0xff7C7C7C),
                         ),
                         Txt(
                           text: namaBank,
@@ -178,7 +177,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                       children: [
                         Txt(
                           text: 'Penerima',
-                          color: Color(0xff7C7C7C),
+                          color: const Color(0xff7C7C7C),
                         ),
                         Txt(
                           text: penerina,
@@ -194,7 +193,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                       children: [
                         Txt(
                           text: "Nomer Rekening",
-                          color: Color(0xff7C7C7C),
+                          color: const Color(0xff7C7C7C),
                         ),
                         Txt(
                           text: norek,
@@ -206,8 +205,8 @@ class StatusPenarikanSaldo extends StatelessWidget {
                       height: 20.0,
                     ),
                     Cntr(
-                      padding: EdgeInsets.all(15),
-                      color: Color.fromARGB(61, 0, 221, 37),
+                      padding: const EdgeInsets.all(15),
+                      color: const Color.fromARGB(61, 0, 221, 37),
                       radius: BorderRadius.circular(10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -215,7 +214,7 @@ class StatusPenarikanSaldo extends StatelessWidget {
                           Txt(text: "Total"),
                           Txt(
                             text: CurrencyFormat.convertToIdr(tarikSaldo, 0),
-                            color: Color(0xff0B9444),
+                            color: const Color(0xff0B9444),
                             weight: bold,
                             size: 16,
                           ),

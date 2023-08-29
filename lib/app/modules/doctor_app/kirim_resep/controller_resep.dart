@@ -1,6 +1,5 @@
 
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:bionmed/app/constant/string.dart';
@@ -25,8 +24,6 @@ class ControllerResep extends GetxController{
     // ignore: unused_local_variable
     final respStr = await res.stream.bytesToString();
     isLoading(false);
-    log('cek masuk == '+ respStr.toString());
-    log('cek masuk == '+ res.toString());
 
     if (res.statusCode == 200) {
       //  await Get.find<LayananHomeController>().updateStatusTimer(

@@ -148,12 +148,9 @@ class PaketLayananNurseController extends GetxController {
 
     if (response.statusCode == 200) {
       // PUT request was successful
-      print('PUT request successful');
       log('Response: ${response.body}');
     } else {
       // Error occurred during PUT request
-      print('Error: ${response.statusCode}');
-      print('Response: ${response.body}');
     }
   }
 

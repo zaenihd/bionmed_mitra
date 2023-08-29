@@ -1,18 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:bionmed/app/modules/doctor_app/layanan/views/layanan_succes.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/controllers/register_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/views/maps.dart';
 import 'package:bionmed/app/modules/hospital_app/register_hospital/controllers/register_hospital_controller.dart';
-import 'package:bionmed/app/modules/perawat_app/register_perawat/controllers/register_perawat_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
-import 'package:bionmed/app/widget/container/container.dart';
-import 'package:bionmed/app/widget/header/header_layanan.dart';
 import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
@@ -21,11 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../constant/colors.dart';
-import '../../../../constant/styles.dart';
 import '../../../../widget/textform/input_primary1.dart';
 
 // ignore: must_be_immutable

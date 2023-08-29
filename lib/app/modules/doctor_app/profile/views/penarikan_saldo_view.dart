@@ -119,6 +119,7 @@ class PenarikanSaldo extends StatelessWidget {
                                               controllerDoctor.bankId.value,
                                           amount: controllerDoctor
                                               .saldoTarikCurren.value);
+                                              // ignore: prefer_interpolation_to_compose_strings
                                               log('====> ' + controllerDoctor.bankId.value.toString() + "saldooo " +  controllerDoctor
                                               .saldoTarikCurren.value.toString() );
                                       controllerDoctor
@@ -137,6 +138,7 @@ class PenarikanSaldo extends StatelessWidget {
                                           onPressed: () {},
                                         ),
                                       );
+                                      // ignore: use_build_context_synchronously
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
                                       Get.back();
@@ -150,6 +152,7 @@ class PenarikanSaldo extends StatelessWidget {
                                               controllerDoctor.bankId.value,
                                           amount: controllerDoctor
                                               .saldoTarikCurren.value);
+                                      // ignore: avoid_print
                                       print(formatter.format(now.toLocal()));
                                       controllerDoctor
                                           .nominalSaldoTarikController
@@ -167,6 +170,7 @@ class PenarikanSaldo extends StatelessWidget {
                                           onPressed: () {},
                                         ),
                                       );
+                                      // ignore: use_build_context_synchronously
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
                                       Get.back();

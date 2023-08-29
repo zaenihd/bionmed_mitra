@@ -95,9 +95,9 @@ class HomeView extends GetView<HomeController> {
                                             Get.toNamed(Routes.ACCOUNT);
                                           },
                                           child: Cntr(
-                                            padding: EdgeInsets.all(15),
+                                            padding: const EdgeInsets.all(15),
                                             radius: BorderRadius.circular(6),
-                                            color: Color(0XffFFBC26),
+                                            color: const Color(0XffFFBC26),
                                             child: Txt(
                                               text: 'Login/Daftar',
                                               color: whiteColor,

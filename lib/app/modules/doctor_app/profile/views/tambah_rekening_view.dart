@@ -1,11 +1,9 @@
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
-import 'package:bionmed/app/modules/doctor_app/profile/controllers/profile_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/controllers/saldo_dan_rekening_doctor_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/controllers/saldo_dan_rekening_nurse_controller.dart';
 import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/textform/input_primary1.dart';
-import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -61,7 +59,7 @@ class _TambahRekeningState extends State<TambahRekening> {
               onChange: (p0) {
                 controllerDoctor.noRekening.value =
                     controllerDoctor.nomerRekeningController.text;
-                ;
+                
               },
               controller: controllerDoctor.nomerRekeningController,
               onTap: () {},
@@ -259,6 +257,7 @@ class _TambahRekeningState extends State<TambahRekening> {
                         onPressed: () {},
                       ),
                     );
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     Get.back();
                   },

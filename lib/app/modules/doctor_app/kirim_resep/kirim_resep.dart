@@ -8,7 +8,6 @@ import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class KirimResep extends StatefulWidget {
   const KirimResep({super.key});

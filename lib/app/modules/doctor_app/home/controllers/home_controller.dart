@@ -518,28 +518,28 @@ class HomeController extends GetxController {
                         // case Event.ACTION_DID_UPDATE_DEVICE_PUSH_TOKEN_VOIP:
                         //   break;
                         case Event.actionDidUpdateDevicePushTokenVoip:
-                          // TODO: Handle this case.
+                          
                           break;
                         case Event.actionCallCallback:
-                          // TODO: Handle this case.
+                          
                           break;
                         case Event.actionCallToggleHold:
-                          // TODO: Handle this case.
+                          
                           break;
                         case Event.actionCallToggleMute:
-                          // TODO: Handle this case.
+                          
                           break;
                         case Event.actionCallToggleDmtf:
-                          // TODO: Handle this case.
+                          
                           break;
                         case Event.actionCallToggleGroup:
-                          // TODO: Handle this case.
+                          
                           break;
                         case Event.actionCallToggleAudioSession:
-                          // TODO: Handle this case.
+                          
                           break;
                         case Event.actionCallCustom:
-                          // TODO: Handle this case.
+                          
                           break;
                       }
                     }));
@@ -642,28 +642,20 @@ class HomeController extends GetxController {
                         // case Event.ACTION_DID_UPDATE_DEVICE_PUSH_TOKEN_VOIP:
                         //   break;
                         case Event.actionDidUpdateDevicePushTokenVoip:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallCallback:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleHold:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleMute:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleDmtf:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleGroup:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleAudioSession:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallCustom:
-                          // TODO: Handle this case.
                           break;
                       }
                     }));
@@ -766,28 +758,20 @@ class HomeController extends GetxController {
                         // case Event.ACTION_DID_UPDATE_DEVICE_PUSH_TOKEN_VOIP:
                         //   break;
                         case Event.actionDidUpdateDevicePushTokenVoip:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallCallback:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleHold:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleMute:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleDmtf:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleGroup:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallToggleAudioSession:
-                          // TODO: Handle this case.
                           break;
                         case Event.actionCallCustom:
-                          // TODO: Handle this case.
                           break;
                       }
                     }));
@@ -827,8 +811,8 @@ class HomeController extends GetxController {
         // ignore: prefer_interpolation_to_compose_strings
       }
       timePeriodic.value = false;
-      await realtimeApi();
-      await trimUpdateStatus();
+      // await realtimeApi();
+      // await trimUpdateStatus();
     });
   }
 
