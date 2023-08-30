@@ -72,6 +72,7 @@ class PesanView extends GetView<PesanController> {
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
                         onTap: () async {
+                          // log('xxxx');
                           // controller.orderCode.value =
                           //     controller.dataPesan[index]['order']['code'];
                           // controller.jamMulai.value = controller
@@ -277,7 +278,8 @@ class PesanView extends GetView<PesanController> {
                                       ));
                                 });
                           } else if (controller.dataPesan[index]['title'] ==
-                              "Terjadwalkan") {
+                              "Terjadwalkan" || controller.dataPesan[index]['title'] ==
+                              "Layanan anda Akan dimulai") {
                             showModalBottomSheet(
                                 shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
@@ -291,7 +293,7 @@ class PesanView extends GetView<PesanController> {
                                         .toString(),
                                     rating: const SizedBox(),
                                     imageUrl: 'assets/icon/icon_pesan2.png',
-                                    title: 'Jadwalkan',
+                                    title: 'Terjadwalkan',
                                     subtitle: 'Pesanan Anda sudah terjadwalkan',
                                     time:
                                         "${controller.dataPesan[index]['date']}",
@@ -824,6 +826,7 @@ class PesanView extends GetView<PesanController> {
                                         ? ButtonCostum(
                                             title: "Hapus",
                                             onPressed: () async {
+                                              
                                               if (Get.find<LoginController>()
                                                       .role
                                                       .value ==
@@ -2446,24 +2449,25 @@ class DetailPesan extends StatelessWidget {
             height: 15,
           ),
           cardPerawat(
-              'Pasien :',
+              'Pasien :', 
               dataPesan['order'] == null
-                  ? dataPesan['nurse_order']['customer']['name']
-                  : dataPesan['order']['customer']['name'],
+                  ? dataPesan['nurse_order']['customer']['name'] ?? "null"
+                  : dataPesan['order']['customer']['name'] ?? "null",
               dataPesan['order'] == null
-                  ? dataPesan['nurse_order']['customer']['image']
-                  : dataPesan['order']['customer']['image']),
+                  ? dataPesan['nurse_order']['customer']['image'] ??"null"
+                  : dataPesan['order']['customer']['image'] ??"null"
+                  ),
           const SizedBox(
             height: 20.0,
           ),
           cardPerawat(
               'Layanan :',
               dataPesan['order'] == null
-                  ? dataPesan['nurse_order']['service']['name']
-                  : dataPesan['order']['service']['name'],
+                  ? dataPesan['nurse_order']['service']['name'] ?? "null"
+                  : dataPesan['order']['service']['name'] ?? "null",
               dataPesan['order'] == null
-                  ? dataPesan['nurse_order']['service']['image']
-                  : dataPesan['order']['service']['image']),
+                  ? dataPesan['nurse_order']['service']['image'] ?? "null"
+                  : dataPesan['order']['service']['image'] ?? "null"),
           const SizedBox(
             height: 20.0,
           ),

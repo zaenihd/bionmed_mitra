@@ -127,9 +127,15 @@ class PengaturanAkun extends StatelessWidget {
                 subtitle:
                     'Buat pengalaman praktek Anda untuk lebih\nprofesional',
                 onTap: () async {
-                 await loginC.loginDataNurse(
-                      phoneNumber:
-                          Get.find<LoginController>().phoneNumberUser.value);
+                  if (Get.find<LoginController>().role.value == "nurse") {
+                    await loginC.loginDataNurse(
+                        phoneNumber:
+                            Get.find<LoginController>().phoneNumberUser.value);
+                  } else {
+                    loginC.loginData(
+                        phoneNumber:
+                            Get.find<LoginController>().phoneNumberUser.value);
+                  }
                   Get.to(() => const EditPengalaman());
                 },
               ),
@@ -140,10 +146,16 @@ class PengaturanAkun extends StatelessWidget {
                 imageUrl: Image.asset('assets/icon/icon_edit_pendidikan.png'),
                 title: 'Edit Pendidikan',
                 subtitle: 'Ubah/Tambahkan pendidikan universitas\nAnda',
-                onTap: ()async {
-                   await loginC.loginDataNurse(
-                      phoneNumber:
-                          Get.find<LoginController>().phoneNumberUser.value);
+                onTap: () async {
+                 if (Get.find<LoginController>().role.value == "nurse") {
+                    await loginC.loginDataNurse(
+                        phoneNumber:
+                            Get.find<LoginController>().phoneNumberUser.value);
+                  } else {
+                    loginC.loginData(
+                        phoneNumber:
+                            Get.find<LoginController>().phoneNumberUser.value);
+                  }
                   Get.to(() => EditPendidikan());
                 },
               ),

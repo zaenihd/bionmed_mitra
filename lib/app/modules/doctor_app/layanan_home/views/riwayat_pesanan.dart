@@ -85,18 +85,19 @@ class RiwayatPesanan extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.only(right: 20.0),
-              child: Row(
+              child: 
+              Row(
                 children: const [
-                  Icon(
-                    Icons.delete_forever,
-                    size: 20,
-                  ),
-                  SizedBox(
-                    width: 5.0,
-                  ),
-                  Text(
-                    'Delete All',
-                  )
+                  // Icon(
+                  //   Icons.delete_forever,
+                  //   size: 20,
+                  // ),
+                  // SizedBox(
+                  //   width: 5.0,
+                  // ),
+                  // Text(
+                  //   'Delete All',
+                  // )
                 ],
               ),
             ),

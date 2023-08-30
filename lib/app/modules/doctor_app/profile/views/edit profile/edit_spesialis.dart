@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/layanan/controllers/layanan_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
@@ -35,6 +37,7 @@ class _PilihSpesialisViewState extends State<EditSpesialis> {
   final loginCV2 = Get.put(JadwalSayaController());
 
   int? selected;
+  RxInt terpilih = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +86,8 @@ class _PilihSpesialisViewState extends State<EditSpesialis> {
                                 // color: blueColor,
                                 child: ListTile(
                                     onTap: () {
+                                      myC.selectedIndex.value == index;
+                                      log('message ' + index.toString());
                                       myC.toggle11(index);
                                       controller.selectedInt =
                                           controller.spesialisData[index]['id'];
@@ -106,35 +111,35 @@ class _PilihSpesialisViewState extends State<EditSpesialis> {
                                     ),
                                     trailing: 
                                     // loginCV2.spesialis.value 
-                                    Obx(() => myC.selectedIndex.value == 0
-                                    ?Container(
+                                    Obx(() => 
+                                    Container(
                                           height: 20,
                                           width: 20,
                                           decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: 
-                                                  loginCV2.spesialis.value ==
-                                                          controller.spesialisData[index]['name']
+                                                 myC.selectedIndex.value == index
                                                       ? const AssetImage(
                                                           'assets/icon/checkboxon.png')
                                                       : const AssetImage(
                                                           'assets/icon/checkboxoff.png'))),
                                         )
 
-                                    :Container(
-                                          height: 20,
-                                          width: 20,
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: 
-                                                  myC.selectedIndex
-                                                              .value ==
-                                                          index
-                                                      ? const AssetImage(
-                                                          'assets/icon/checkboxon.png')
-                                                      : const AssetImage(
-                                                          'assets/icon/checkboxoff.png'))),
-                                        )
+                                    
+                                    // :Container(
+                                    //       height: 20,
+                                    //       width: 20,
+                                    //       decoration: BoxDecoration(
+                                    //           image: DecorationImage(
+                                    //               image: 
+                                    //               myC.selectedIndex
+                                    //                           .value ==
+                                    //                       index
+                                    //                   ? const AssetImage(
+                                    //                       'assets/icon/checkboxon.png')
+                                    //                   : const AssetImage(
+                                    //                       'assets/icon/checkboxoff.png'))),
+                                    //     )
                                         )
                                         ,
                               )),

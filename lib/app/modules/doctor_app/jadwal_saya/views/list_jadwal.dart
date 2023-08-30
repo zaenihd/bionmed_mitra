@@ -36,16 +36,16 @@ class ListJadwal extends StatelessWidget {
               } else {
                 myC.serviceId.value = myC.service[index]['service']['id'];
               }
-              if(myC.serviceId.value != 4){
-                showPopUp(
-                              onTap: () {},
-                              imageAction: 'assets/json/eror.json',
-                              description: "Sedang dalam proses\npengembangan");
-              }else{
+              // if(myC.serviceId.value == 5 || myC.serviceId.value == 6 ){
+              //   showPopUp(
+              //                 onTap: () {},
+              //                 imageAction: 'assets/json/eror.json',
+              //                 description: "Sedang dalam proses\npengembangan");
+              // }else{
 
-              Get.to(() => const EditJadwal());
-              }
               // }
+              // }
+              Get.to(() => const EditJadwal());
             },
             child: Container(
               margin: const EdgeInsets.only(left: 24.0, right: 24, top: 10),

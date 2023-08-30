@@ -56,7 +56,7 @@ RxList dataPesan = [].obs;
       var bacaPesan = json.decode(result.toString());
       read.value = bacaPesan;
       log(read.toString());
-      readInbox.value = bacaPesan['status'];
+      readInbox.value = bacaPesan['status'] ?? 0;
 
 
       // }
