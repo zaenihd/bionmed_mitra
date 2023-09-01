@@ -11,6 +11,8 @@ import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_view.dar
 import 'package:bionmed/app/modules/doctor_app/profile/views/profil_login_required.dart';
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
+import 'package:bionmed/app/widget/container/container.dart';
+import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -43,373 +45,427 @@ class ProfileView extends GetView<ProfileController> {
     // if (phone != null) {
     //   Get.put(JadwalSayaController()).loginData(phoneNumber: phone);
     // }
-    return 
-    loginC.name.isEmpty ? const ProfilLoginRequired() :
-    Scaffold(
-        backgroundColor: backgroundColorC,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(children: [
-                // SizedBox(
-                //     width: Get.width,
-                //     child: Image.asset('assets/icon/Ellipse 179.png')),
-                Container(
-                  width: Get.width,
-                  height: 250,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/icon/Ellipse 179.png'),
-                          fit: BoxFit.cover)),
-                  // child: Image.asset('assets/icon/Ellipse 179.png', )
-                ),
-                Center(
-                  child: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Obx(
-                        () => Container(
-                          margin: const EdgeInsets.only(top: 100),
-                          width: 142,
-                          height: 142,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 6),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(100),
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      // ignore: prefer_if_null_operators, unnecessary_null_comparison, unrelated_type_equality_checks
-                                      '${loginCv2.profileImage == '' || loginCv2.profileImage == null ? "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg" : loginCv2.profileImage}'),
-                                  fit: BoxFit.cover)),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Obx(() {
-                        return Text(
-                          '${loginCv2.name}',
-                          style: blackTextStyle.copyWith(
-                              fontSize: 20, fontWeight: bold),
-                        );
-                      }),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      Obx(
-                        () => SizedBox(
-                          width: 200,
-                          child: Text(
-                            '${loginCv2.spesialis}',
-                            textAlign: TextAlign.center,
-                            style: blackTextStyle.copyWith(
-                                color: const Color(0xff292929)),
+    return loginC.name.isEmpty
+        ? const ProfilLoginRequired()
+        : Scaffold(
+            backgroundColor: backgroundColorC,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(children: [
+                    // SizedBox(
+                    //     width: Get.width,
+                    //     child: Image.asset('assets/icon/Ellipse 179.png')),
+                    Container(
+                      width: Get.width,
+                      height: 250,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/icon/Ellipse 179.png'),
+                              fit: BoxFit.cover)),
+                      // child: Image.asset('assets/icon/Ellipse 179.png', )
+                    ),
+                    Center(
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Obx(
+                            () => Container(
+                              margin: const EdgeInsets.only(top: 100),
+                              width: 142,
+                              height: 142,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.white, width: 6),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(100),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          // ignore: prefer_if_null_operators, unnecessary_null_comparison, unrelated_type_equality_checks
+                                          '${loginCv2.profileImage == '' || loginCv2.profileImage == null ? "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg" : loginCv2.profileImage}'),
+                                      fit: BoxFit.cover)),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 24),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 60, vertical: 15),
-                        width: Get.width,
-                        // height: 100,
-                        decoration: BoxDecoration(
-                            boxShadow: const [
-                              BoxShadow(
-                                  spreadRadius: 1,
-                                  blurRadius: 10,
-                                  offset: Offset(4, 8),
-                                  color: Color.fromARGB(255, 225, 223, 223))
-                            ],
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Get.to(() => PendapatanView());
-                                  },
-                                  child: Container(
-                                    height: 35,
-                                    width: 35,
-                                    decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/image 36.png'),
-                                            fit: BoxFit.cover)),
-                                    // child: Image.asset('assets/images/image 36.png')
-                                  ),
-                                ),
-                                Text(
-                                  'Pendapatan',
-                                  style:
-                                      subtitleTextStyle.copyWith(fontSize: 11),
-                                ),
-                                AutoSizeText(
-                                  maxLines: 1,
-                                  CurrencyFormat.convertToIdr(
-                                      Get.find<HomeController>()
-                                          .pendapatan
-                                          .value,
-                                      0),
-                                  style: greenTextStyle.copyWith(
-                                      fontWeight: bold, fontSize: 16),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  height: 35,
-                                  width: 35,
-                                  decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/icon/icon_rating.png'),
-                                          fit: BoxFit.cover)),
-                                  // child: Image.asset('assets/images/image 36.png')
-                                ),
-                                Text(
-                                  'Penilaian',
-                                  style:
-                                      subtitleTextStyle.copyWith(fontSize: 11),
-                                ),
-                                Text(
-                                  '${loginC.rating}',
-                                  style: greenTextStyle.copyWith(
-                                      fontSize: 16, color: yellowColor),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 26),
-                        width: Get.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Aktifitas',
-                              style: subtitleTextStyle.copyWith(
-                                  fontSize: 16, fontWeight: bold),
-                            ),
-                            ListAktifitas(
-                              iconUrl: 'assets/icon/icon_ativitas.png',
-                              label: 'Profil',
-                              onTap: () async {
-                                // final box = GetStorage();
-                                // var phone = await box.read('phone');
-                                // if (phone != null) {
-                                //   await Get.put(JadwalSayaController())
-                                //       .loginData(phoneNumber: phone);
-                                // }
-                                Get.to(() => PengaturanAkun());
-                              },
-                            ),
-                            Visibility(
-                              // visible: loginC.role.value != "nurse",
-                              child: ListAktifitas(
-                                iconUrl: 'assets/icon/icon_ativitas1.png',
-                                label: 'Jadwal saya',
-                                onTap: () async {
-                                  if (Get.put(ListServiceNurseController())
-                                      .listServiceNurseData
-                                      .isEmpty) {
-                                    await Get.put(ListServiceNurseController())
-                                        .listServiceNurse();
-                                  }
-                                  // final box = GetStorage();
-                                  // var phone = await box.read('phone');
-                                  // if (phone != null) {
-                                  //   await Get.put(JadwalSayaController())
-                                  //       .loginData(phoneNumber: phone);
-                                  // }
-                                  // Get.toNamed(Routes.JADWAL_SAYA);
-                                  Get.to(() => ListJadwal());
-
-                                  // Get.to(()=> EditJadwal());
-                                },
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Obx(() {
+                            return Text(
+                              '${loginCv2.name}',
+                              style: blackTextStyle.copyWith(
+                                  fontSize: 20, fontWeight: bold),
+                            );
+                          }),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          Obx(
+                            () => SizedBox(
+                              width: 200,
+                              child: Text(
+                                '${loginCv2.spesialis}',
+                                textAlign: TextAlign.center,
+                                style: blackTextStyle.copyWith(
+                                    color: const Color(0xff292929)),
                               ),
                             ),
-                            ListAktifitas(
-                              iconUrl: 'assets/icon/icon_ativitas2.png',
-                              label: 'Paket Layanan',
-                              onTap: () async {
-                                Get.put(ListServiceNurseController())
-                                    .listServiceNurse();
-                                // await Get.put(ListServiceNurseController())
-                                //   .listServiceNurse();
-                                loginC.role.value == "nurse"
-                                    ? Get.to(() => ListServiceNurseViewEdit())
-                                    : Get.to(() => PaketLayanan());
-                              },
-                            ),
-                            ListAktifitas(
-                              iconUrl: 'assets/icon/icon_ativitas3.png',
-                              label: 'Riwayat Transaksi',
-                              onTap: () {
-                                Get.to(() => RiwayatPesanan());
-
-                                // showPopUp(
-                                //     onTap: () {
-                                //       Get.back();
-                                //     },
-                                //     imageAction: 'assets/json/eror.json',
-                                //     description: "Under Development");
-                              },
-                            ),
-                            ListAktifitas(
-                              iconUrl: 'assets/icon/icon_ativitas4.png',
-                              label: 'Kebijakan Privasi',
-                              onTap: () {
-                                Get.to(() => Disclamer());
-                                // Get.put(AccountController())
-                                //     .ketentuanPengguna();
-
-                                // showPopUp(
-                                //     onTap: () {
-                                //       Get.back();
-                                //     },
-                                //     imageAction: 'assets/json/eror.json',
-                                //     description: "Under Development");
-                              },
-                            ),
-                            InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(30),
-                                          topRight: Radius.circular(30))),
-                                  context: context,
-                                  builder: (context) {
-                                    return SizedBox(
-                                      height: 270,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                bottom: 18, top: 14),
-                                            width: Get.width / 1.9,
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: const Color(0xffEDEDED)),
-                                          ),
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          Text(
-                                            'Anda yakin ingin keluar sekarang?',
-                                            style: blackTextStyle.copyWith(
-                                                fontWeight: medium),
-                                          ),
-                                          const SizedBox(
-                                            height: 36.0,
-                                          ),
-                                          SizedBox(
-                                            height: 45,
-                                            width: 312,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        6)),
-                                                    backgroundColor:
-                                                        Colors.red),
-                                                onPressed: () {
-                                                  Get.find<
-                                                          LayananHomeController>()
-                                                      .stopTimePeriodic();
-                                                  Get.offAllNamed(
-                                                      Routes.ACCOUNT);
-                                                  final box = GetStorage();
-                                                  box.remove('phone');
-                                                  box.remove('rememberme');
-                                                  box.remove('dontShowAgain');
-                                                  box.remove('idAccount');
-                                                  box.remove('popUp');
-                                                },
-                                                child: const Text("Keluar")),
-                                          ),
-                                          const SizedBox(
-                                            height: 16.0,
-                                          ),
-                                          SizedBox(
-                                            height: 45,
-                                            width: 312,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        6)),
-                                                    backgroundColor:
-                                                        buttonColor),
-                                                onPressed: () {
-                                                  Get.back();
-                                                },
-                                                child: const Text("Batal")),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
-                                Get.find<LoginController>()
-                                    .controllerPhone
-                                    .clear();
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(top: 20),
-                                height: 60,
-                                width: Get.width,
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.red)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          // cardNameOwnerHospital(),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 24),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 60, vertical: 15),
+                            width: Get.width,
+                            // height: 100,
+                            decoration: BoxDecoration(
+                                boxShadow: const [
+                                  BoxShadow(
+                                      spreadRadius: 1,
+                                      blurRadius: 10,
+                                      offset: Offset(4, 8),
+                                      color: Color.fromARGB(255, 225, 223, 223))
+                                ],
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
                                   children: [
-                                    Image.asset('assets/icon/icon_keluar.png'),
-                                    const SizedBox(
-                                      width: 8,
+                                    InkWell(
+                                      onTap: () {
+                                        Get.to(() => PendapatanView());
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        width: 35,
+                                        decoration: const BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/image 36.png'),
+                                                fit: BoxFit.cover)),
+                                        // child: Image.asset('assets/images/image 36.png')
+                                      ),
                                     ),
                                     Text(
-                                      'Keluar',
-                                      style:
-                                          GoogleFonts.ubuntu(color: Colors.red),
-                                    )
+                                      'Pendapatan',
+                                      style: subtitleTextStyle.copyWith(
+                                          fontSize: 11),
+                                    ),
+                                    AutoSizeText(
+                                      maxLines: 1,
+                                      CurrencyFormat.convertToIdr(
+                                          Get.find<HomeController>()
+                                              .pendapatan
+                                              .value,
+                                          0),
+                                      style: greenTextStyle.copyWith(
+                                          fontWeight: bold, fontSize: 16),
+                                    ),
                                   ],
                                 ),
+                                Column(
+                                  children: [
+                                    Container(
+                                      height: 35,
+                                      width: 35,
+                                      decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/icon/icon_rating.png'),
+                                              fit: BoxFit.cover)),
+                                      // child: Image.asset('assets/images/image 36.png')
+                                    ),
+                                    Text(
+                                      'Penilaian',
+                                      style: subtitleTextStyle.copyWith(
+                                          fontSize: 11),
+                                    ),
+                                    Text(
+                                      '${loginC.rating}',
+                                      style: greenTextStyle.copyWith(
+                                          fontSize: 16, color: yellowColor),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 26),
+                            width: Get.width,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Aktifitas',
+                                  style: subtitleTextStyle.copyWith(
+                                      fontSize: 16, fontWeight: bold),
+                                ),
+                                ListAktifitas(
+                                  iconUrl: 'assets/icon/icon_ativitas.png',
+                                  label: 'Profil',
+                                  onTap: () async {
+                                    // final box = GetStorage();
+                                    // var phone = await box.read('phone');
+                                    // if (phone != null) {
+                                    //   await Get.put(JadwalSayaController())
+                                    //       .loginData(phoneNumber: phone);
+                                    // }
+                                    Get.to(() => PengaturanAkun());
+                                  },
+                                ),
+                                Visibility(
+                                  // visible: loginC.role.value != "nurse",
+                                  child: ListAktifitas(
+                                    iconUrl: 'assets/icon/icon_ativitas1.png',
+                                    label: 'Jadwal saya',
+                                    onTap: () async {
+                                      if (Get.put(ListServiceNurseController())
+                                          .listServiceNurseData
+                                          .isEmpty) {
+                                        await Get.put(
+                                                ListServiceNurseController())
+                                            .listServiceNurse();
+                                      }
+                                      // final box = GetStorage();
+                                      // var phone = await box.read('phone');
+                                      // if (phone != null) {
+                                      //   await Get.put(JadwalSayaController())
+                                      //       .loginData(phoneNumber: phone);
+                                      // }
+                                      // Get.toNamed(Routes.JADWAL_SAYA);
+                                      Get.to(() => ListJadwal());
+
+                                      // Get.to(()=> EditJadwal());
+                                    },
+                                  ),
+                                ),
+                                ListAktifitas(
+                                  iconUrl: 'assets/icon/icon_ativitas2.png',
+                                  label: 'Paket Layanan',
+                                  onTap: () async {
+                                    Get.put(ListServiceNurseController())
+                                        .listServiceNurse();
+                                    // await Get.put(ListServiceNurseController())
+                                    //   .listServiceNurse();
+                                    loginC.role.value == "nurse"
+                                        ? Get.to(
+                                            () => ListServiceNurseViewEdit())
+                                        : Get.to(() => PaketLayanan());
+                                  },
+                                ),
+                                ListAktifitas(
+                                  iconUrl: 'assets/icon/icon_ativitas3.png',
+                                  label: 'Riwayat Transaksi',
+                                  onTap: () {
+                                    Get.to(() => RiwayatPesanan());
+
+                                    // showPopUp(
+                                    //     onTap: () {
+                                    //       Get.back();
+                                    //     },
+                                    //     imageAction: 'assets/json/eror.json',
+                                    //     description: "Under Development");
+                                  },
+                                ),
+                                ListAktifitas(
+                                  iconUrl: 'assets/icon/icon_ativitas4.png',
+                                  label: 'Kebijakan Privasi',
+                                  onTap: () {
+                                    Get.to(() => Disclamer());
+                                    // Get.put(AccountController())
+                                    //     .ketentuanPengguna();
+
+                                    // showPopUp(
+                                    //     onTap: () {
+                                    //       Get.back();
+                                    //     },
+                                    //     imageAction: 'assets/json/eror.json',
+                                    //     description: "Under Development");
+                                  },
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              topRight: Radius.circular(30))),
+                                      context: context,
+                                      builder: (context) {
+                                        return SizedBox(
+                                          height: 270,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 18, top: 14),
+                                                width: Get.width / 1.9,
+                                                height: 10,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: const Color(
+                                                        0xffEDEDED)),
+                                              ),
+                                              const SizedBox(
+                                                height: 16,
+                                              ),
+                                              Text(
+                                                'Anda yakin ingin keluar sekarang?',
+                                                style: blackTextStyle.copyWith(
+                                                    fontWeight: medium),
+                                              ),
+                                              const SizedBox(
+                                                height: 36.0,
+                                              ),
+                                              SizedBox(
+                                                height: 45,
+                                                width: 312,
+                                                child: ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            6)),
+                                                        backgroundColor:
+                                                            Colors.red),
+                                                    onPressed: () {
+                                                      Get.find<
+                                                              LayananHomeController>()
+                                                          .stopTimePeriodic();
+                                                      Get.offAllNamed(
+                                                          Routes.ACCOUNT);
+                                                      final box = GetStorage();
+                                                      box.remove('phone');
+                                                      box.remove('rememberme');
+                                                      box.remove(
+                                                          'dontShowAgain');
+                                                      box.remove('idAccount');
+                                                      box.remove('popUp');
+                                                    },
+                                                    child:
+                                                        const Text("Keluar")),
+                                              ),
+                                              const SizedBox(
+                                                height: 16.0,
+                                              ),
+                                              SizedBox(
+                                                height: 45,
+                                                width: 312,
+                                                child: ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            6)),
+                                                        backgroundColor:
+                                                            buttonColor),
+                                                    onPressed: () {
+                                                      Get.back();
+                                                    },
+                                                    child: const Text("Batal")),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                    Get.find<LoginController>()
+                                        .controllerPhone
+                                        .clear();
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(top: 20),
+                                    height: 60,
+                                    width: Get.width,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.red)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                            'assets/icon/icon_keluar.png'),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          'Keluar',
+                                          style: GoogleFonts.ubuntu(
+                                              color: Colors.red),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ]),
+                ],
+              ),
+            ));
+  }
+
+  Cntr cardNameOwnerHospital() {
+    return Cntr(
+                          radius: BorderRadius.circular(10),
+                          margin: EdgeInsets.symmetric(horizontal: 24),
+                          width: Get.width,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 24),
+                          gradient: gradient1,
+                          child: Row(
+                            children: [
+                              Cntr(
+                                height: 35,
+                                width: 35,
+                                radius: BorderRadius.circular(100),
+                                color: Colors.grey,
                               ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ]),
-            ],
-          ),
-        ));
+                              const SizedBox(
+                              width: 10.0,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Txt(
+                                    text: 'Pemilik / Owner',
+                                    size: 10,
+                                    color: Colors.white,
+                                  ),
+                                  Txt(
+                                    text:
+                                        'dr. Ni Putu Aniek M . MSi. Med. SpA',
+                                    size: 14,
+                                    color: Colors.white,
+                                    weight: bold,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
   }
 }
 

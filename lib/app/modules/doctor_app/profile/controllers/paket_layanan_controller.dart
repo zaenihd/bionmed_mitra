@@ -11,7 +11,7 @@ class PaketLayananController extends GetxController {
   RxList datService = [].obs;
   RxInt idService = 0.obs;
   RxString nameService = "".obs;
-  RxString serviceName= "".obs;
+  RxInt sequenceId= 0.obs;
   Future<dynamic> getDataService() async {
     final params = <String, dynamic>{};
     // ${Get.find<LoginController>().idPengguna}

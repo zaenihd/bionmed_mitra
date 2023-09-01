@@ -250,13 +250,20 @@ class MapSampleState extends State<MapSample> {
                             ['lng']),
                   ),
                 );
+                if(registerC.isHospital.isFalse){
 
                 registerC.lat.value = geolocation.fullJSON['geometry']['bounds']
                     ['northeast']['lat'];
                 registerC.long.value = geolocation.fullJSON['geometry']
                     ['bounds']['northeast']['lng'];
-                registerC.getUserLocationSearch();
-                registerC.getUserLocation();
+                }else{
+                  registerC.latHospital.value = geolocation.fullJSON['geometry']['bounds']
+                    ['northeast']['lat'];
+                registerC.longHospital.value = geolocation.fullJSON['geometry']
+                    ['bounds']['northeast']['lng'];
+                }
+               await registerC.getUserLocationSearch();
+               await registerC.getUserLocation();
 
 
 
@@ -316,7 +323,7 @@ class MapSampleState extends State<MapSample> {
                             controller.animateCamera(CameraUpdate.newLatLng(
                                 LatLng(registerC.lat.value,
                                     registerC.long.value)));
-                            registerC.getUserLocation();
+                            await registerC.getUserLocation();
                             // registerC.getUserLocationSearch();
                             Get.back();
                             // ignore: prefer_interpolation_to_compose_strings

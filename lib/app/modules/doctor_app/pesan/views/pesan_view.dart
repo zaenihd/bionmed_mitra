@@ -121,7 +121,7 @@ class PesanView extends GetView<PesanController> {
                                 .dataPesan[index]['nurse_order']['status'];
                             controller.nameLayanan.value =
                                 controller.dataPesan[index]['nurse_order']
-                                    ['service']['name'];
+                                    ['service']['sequence'];
                             controller.readPesanNurse();
                             controller.notificationNurse();
                           } else {
@@ -155,7 +155,7 @@ class PesanView extends GetView<PesanController> {
                             controller.statusLayanan.value =
                                 controller.dataPesan[index]['order']['status'];
                             controller.nameLayanan.value = controller
-                                .dataPesan[index]['order']['service']['name'];
+                                .dataPesan[index]['order']['service']['sequence'];
 
           homeC.statusOrderDetail.value = controller
                                 .dataPesan[index]['order']['statusOrder'];
@@ -1053,7 +1053,7 @@ class PesanView extends GetView<PesanController> {
                         imageUrl: '56',
                         title: 'Konsultasi Selesai',
                         subtitle: "Sesi konsultasi telah selesai")
-                    : dataService == "Telemedicine" &&
+                    : dataService == 1 &&
                                 controller.statusLayanan.value == 99 ||
                             dataService == "Dokter on Call" &&
                                 controller.statusLayanan.value == 99
@@ -1385,7 +1385,7 @@ class PesanView extends GetView<PesanController> {
       ),
       buttonGradient: Obx(
         () => controller.statusLayanan.value == 3 ||
-                dataService == "Telemedicine" &&
+                dataService == 1 &&
                     controller.statusLayanan.value == 4 ||
                 controller.statusLayanan.value == 6 &&
                     Get.find<DetailController>().imageRecipe.value == "" &&
@@ -1396,35 +1396,35 @@ class PesanView extends GetView<PesanController> {
                 // Get.find<DetailController>().imageRecipe.value == "" &&
                 //     myC.statusOrderDetail.value != 5 ||
                 // myC.statusOrderDetail.value != 7 || myC.statusOrderDetail.value != 5 ||
-                dataService == "Home Visit Doctor" ||
-                dataService == "Nursing Home" ||
-                dataService == "Mother Care" ||
-                dataService == "Baby Care" &&
+                dataService == 2 ||
+                dataService == 4 ||
+                dataService == 5 ||
+                dataService == 6 &&
                     controller.statusLayanan.value == 2 ||
                 controller.statusLayanan.value == 4 &&
-                    dataService == "Home Visit Doctor" ||
-                dataService == "Nursing Home" ||
-                dataService == "Mother Care" ||
-                dataService == "Baby Care" // 'Dokter on Call'
+                    dataService == 2 ||
+                dataService == 4 ||
+                dataService == 5 ||
+                dataService == 6 // 'Dokter on Call'
             ? Obx(() => myC.loading.value == true
                 ? loadingIndicator()
                 : Column(
                     children: [
                       controller.statusLayanan.value == 4 &&
-                                  dataService == "Home Visit Doctor" ||
-                              dataService == "Nursing Home" ||
-                              dataService == "Mother Care" ||
-                              dataService == "Baby Care" ||
+                                  dataService == 2 ||
+                              dataService == 4 ||
+                              dataService == 5 ||
+                              dataService == 6 ||
                               controller.statusLayanan.value == 3 &&
-                                  dataService == "Home Visit Doctor" ||
-                              dataService == "Nursing Home" ||
-                              dataService == "Mother Care" ||
-                              dataService == "Baby Care" ||
+                                  dataService == 2 ||
+                              dataService == 4 ||
+                              dataService == 5 ||
+                              dataService == 6 ||
                               controller.statusLayanan.value == 2 &&
-                                  dataService == "Home Visit Doctor" ||
-                              dataService == "Nursing Home" ||
-                              dataService == "Mother Care" ||
-                              dataService == "Baby Care"
+                                  dataService == 2 ||
+                              dataService == 4 ||
+                              dataService == 5 ||
+                              dataService == 6
                           ? Padding(
                               padding: const EdgeInsets.only(bottom: 10),
                               child: ButtomGradient(
@@ -1442,7 +1442,7 @@ class PesanView extends GetView<PesanController> {
                               height: 1.0,
                             ),
                       controller.statusLayanan.value == 4 &&
-                              dataService == "Home Visit Doctor"
+                              dataService == 2
                           ? ButtomGradient(
                               label: "Akhiri Pesanan",
                               // layanan == 'Layanan Chat' && dataLayanan == 3
@@ -1537,22 +1537,22 @@ class PesanView extends GetView<PesanController> {
                                 );
                               })
                           : controller.statusLayanan.value == 5 &&
-                                  dataService == "Home Visit Doctor"
+                                  dataService == 2
                               ? const SizedBox(
                                   height: 1.0,
                                 )
                               : controller.statusLayanan.value == 6 &&
-                                      dataService == "Home Visit Doctor" || controller.statusLayanan.value == 99 &&
-                                      dataService == "Home Visit Doctor"
+                                      dataService == 2 || controller.statusLayanan.value == 99 &&
+                                      dataService == 2
                                   ? const SizedBox(
                                       height: 1.0,
                                     )
                                   : ButtomGradient(
-                                      label: dataService == "Telemedicine" &&
+                                      label: dataService == 1 &&
                                               controller.statusLayanan.value ==
                                                   4
                                           ? 'Sedang Berlangsung'
-                                          : dataService == "Telemedicine" &&
+                                          : dataService == 1 &&
                                                       layananHomeC
                                                               .statusOrderDetail
                                                               .value ==
@@ -1572,7 +1572,7 @@ class PesanView extends GetView<PesanController> {
                                                                   .value ==
                                                               6
                                                       ? "Beri Resep Dokter"
-                                                      : dataService == "Telemedicine" &&
+                                                      : dataService == 1 &&
                                                               layananHomeC
                                                                       .statusOrderDetail
                                                                       .value ==
@@ -1586,14 +1586,14 @@ class PesanView extends GetView<PesanController> {
                                       //         : 'Mulai Sekarang',
                                       onTap: () async {
                                         if (myC.loading.value == false) {
-                                          if (dataService == "Telemedicine" &&
+                                          if (dataService == 1 &&
                                                   layananHomeC.statusOrderDetail
                                                           .value ==
                                                       6 ||
-                                              // dataService == "Home Visit Doctor" ||
-                                              dataService == "Nursing Home" ||
-                                              dataService == "Mother Care" ||
-                                              dataService == "Baby Care" &&
+                                              // dataService == 2 ||
+                                              dataService == 4 ||
+                                              dataService == 5 ||
+                                              dataService == 6 &&
                                                   layananHomeC.statusOrderDetail
                                                           .value ==
                                                       6) {
@@ -1692,10 +1692,10 @@ class PesanView extends GetView<PesanController> {
                                                   callId: layananHomeC.dataDetail['data']['id']
                                                       .toString()));
                                             } else if (dataService ==
-                                                    "Home Visit Doctor" ||
-                                                dataService == "Nursing Home" ||
-                                                dataService == "Mother Care" ||
-                                                dataService == "Baby Care" &&
+                                                    2 ||
+                                                dataService == 4 ||
+                                                dataService == 5 ||
+                                                dataService == 6 &&
                                                     dataLayanan == 2 ||
                                                 dataLayanan == 3) {
                                               Get.back();
@@ -1721,11 +1721,11 @@ class PesanView extends GetView<PesanController> {
       //         layananHomeC.statusOrderDetail.value == 4
       //     ? 210
       //     : layananHomeC.statusOrderDetail.value == 3 &&
-      //                 dataService == "Home Visit Doctor" ||
+      //                 dataService == 2 ||
       //             layananHomeC.statusOrderDetail.value == 2 &&
-      //                 dataService == "Home Visit Doctor" ||
+      //                 dataService == 2 ||
       //             layananHomeC.statusOrderDetail.value == 4 &&
-      //                 dataService == "Home Visit Doctor"
+      //                 dataService == 2
       //         ? 220
       //         : 210,
       // data: dataLayanan == 0,
@@ -1800,7 +1800,7 @@ class PesanView extends GetView<PesanController> {
                         imageUrl: '56',
                         title: 'Konsultasi Selesai',
                         subtitle: "Sesi konsultasi telah selesai")
-                    : dataService == "Telemedicine" &&
+                    : dataService == 1 &&
                                 controller.statusLayanan.value == 99 ||
                             dataService == "Dokter on Call" &&
                                 controller.statusLayanan.value == 99
@@ -2064,7 +2064,7 @@ class PesanView extends GetView<PesanController> {
       ),
       buttonGradient: Obx(
         () => controller.statusLayanan.value == 3 ||
-                dataService == "Telemedicine" &&
+                dataService == 1 &&
                     controller.statusLayanan.value == 4 ||
                 controller.statusLayanan.value == 6 &&
                     Get.find<DetailController>().imageRecipe.value == "" &&
@@ -2072,16 +2072,16 @@ class PesanView extends GetView<PesanController> {
                     controller.statusLayanan.value == 6 &&
                     Get.find<DetailController>().imageRecipe.value == "" &&
                     myC.statusOrderDetail.value != 7 ||
-                dataService == "Home Visit Doctor" ||
-                dataService == "Nursing Home" ||
-                dataService == "Mother Care" ||
-                dataService == "Baby Care" &&
+                dataService == 2 ||
+                dataService == 4 ||
+                dataService == 5 ||
+                dataService == 6 &&
                     controller.statusLayanan.value == 2 ||
                 controller.statusLayanan.value == 4 &&
-                    dataService == "Home Visit Doctor" ||
-                dataService == "Nursing Home" ||
-                dataService == "Mother Care" ||
-                dataService == "Baby Care" // 'Dokter on Call'
+                    dataService == 2 ||
+                dataService == 4 ||
+                dataService == 5 ||
+                dataService == 6 // 'Dokter on Call'
             ? Obx(() => myC.loading.value == true
                 ? loadingIndicator()
                 : controller.statusLayanan.value == 0 ||
@@ -2306,11 +2306,11 @@ class PesanView extends GetView<PesanController> {
       //         layananHomeC.statusOrderDetail.value == 4
       //     ? 210
       //     : layananHomeC.statusOrderDetail.value == 3 &&
-      //                 dataService == "Home Visit Doctor" ||
+      //                 dataService == 2 ||
       //             layananHomeC.statusOrderDetail.value == 2 &&
-      //                 dataService == "Home Visit Doctor" ||
+      //                 dataService == 2 ||
       //             layananHomeC.statusOrderDetail.value == 4 &&
-      //                 dataService == "Home Visit Doctor"
+      //                 dataService == 2
       //         ? 220
       //         : 210,
       // data: dataLayanan == 0,
@@ -2482,7 +2482,7 @@ class DetailPesan extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: detailPasienNurse(dataPesan['nurse_order']),
                 )
-              : dataPesan['order']['service']['name'] == "Home Visit Doctor"
+              : dataPesan['order']['service']['sequence'] == 2
                   ? Column(
                       children: [
                         detailPasienHomeVisit(dataPesan),

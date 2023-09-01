@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
@@ -20,40 +21,90 @@ class RegisterController extends GetxController {
   RxString kodePos = ''.obs;
   RxString desa = ''.obs;
 
+  RxBool isHospital = false.obs;
+
+  RxString cityHospital = ''.obs;
+  RxString kabupatenHospital = ''.obs;
+  RxString negaraHospital = ''.obs;
+  RxString kecamatanHospital = ''.obs;
+  RxString kodePosHospital = ''.obs;
+  RxString desaHospital = ''.obs;
+
   // late double lat;
   // late double long;
   RxDouble lat = 0.0.obs;
   RxDouble long = 0.0.obs;
+  RxDouble latHospital = 0.0.obs;
+  RxDouble longHospital = 0.0.obs;
   String locationMessage = "Current Location";
   RxBool isLoadingMaps = false.obs;
   RxDouble latMaps = 0.0.obs;
   RxDouble longMaps = 0.0.obs;
 
   getUserLocation() async {
+    //  Position position = await Geolocator.getCurrentPosition(
+    //       desiredAccuracy: LocationAccuracy.high);
     isLoadingMaps(true);
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(lat.value, long.value);
-    Placemark place = placemarks[0];
-    city.value = place.subAdministrativeArea.toString();
-    kabupaten.value = place.administrativeArea.toString();
-    desa.value = place.subLocality.toString();
-    negara.value = place.country.toString();
-    kecamatan.value = place.locality.toString();
-    kodePos.value = place.postalCode.toString();
-    isLoadingMaps(false);
+    if (isHospital.isFalse) {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(lat.value, long.value);
+      Placemark place = placemarks[0];
+      city.value = place.subAdministrativeArea.toString();
+      kabupaten.value = place.administrativeArea.toString();
+      desa.value = place.subLocality.toString();
+      negara.value = place.country.toString();
+      kecamatan.value = place.locality.toString();
+      kodePos.value = place.postalCode.toString();
+      log('user nih boss ==============');
+      // lat.value = position.latitude;
+      // long.value = position.longitude;
+    } else {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latHospital.value, longHospital.value);
+      Placemark place = placemarks[0];
+      cityHospital.value = place.subAdministrativeArea.toString();
+      kabupatenHospital.value = place.administrativeArea.toString();
+      desaHospital.value = place.subLocality.toString();
+      negaraHospital.value = place.country.toString();
+      kecamatanHospital.value = place.locality.toString();
+      kodePosHospital.value = place.postalCode.toString();
+      log('hospital nih boss ==============');
 
+      // latHospital.value = position.latitude;
+      // longHospital.value = position.longitude;
+    }
+    isLoadingMaps(false);
   }
 
   getUserLocationSearch() async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(lat.value, lat.value);
-    Placemark place = placemarks[0];
-    city.value = place.subAdministrativeArea.toString();
-    kabupaten.value = place.administrativeArea.toString();
-    desa.value = place.subLocality.toString();
-    negara.value = place.country.toString();
-    kecamatan.value = place.locality.toString();
-    kodePos.value = place.postalCode.toString();
+    //  Position position = await Geolocator.getCurrentPosition(
+    //       desiredAccuracy: LocationAccuracy.high);
+
+    if (isHospital.isFalse) {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(lat.value, lat.value);
+      Placemark place = placemarks[0];
+      city.value = place.subAdministrativeArea.toString();
+      kabupaten.value = place.administrativeArea.toString();
+      desa.value = place.subLocality.toString();
+      negara.value = place.country.toString();
+      kecamatan.value = place.locality.toString();
+      kodePos.value = place.postalCode.toString();
+      // lat.value = position.latitude;
+      // long.value = position.longitude;
+    } else {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latHospital.value, longHospital.value);
+      Placemark place = placemarks[0];
+      cityHospital.value = place.subAdministrativeArea.toString();
+      kabupatenHospital.value = place.administrativeArea.toString();
+      desaHospital.value = place.subLocality.toString();
+      negaraHospital.value = place.country.toString();
+      kecamatanHospital.value = place.locality.toString();
+      kodePosHospital.value = place.postalCode.toString();
+      // latHospital.value = position.latitude;
+      // longHospital.value = position.longitude;
+    }
   }
 
   Future<Position> getCurrentLocation() async {
@@ -70,8 +121,7 @@ class RegisterController extends GetxController {
       if (permission == LocationPermission.denied) {
         return Future.error('Location permissions are denied');
       }
-    isLoadingMaps(false);
-
+      isLoadingMaps(false);
     }
 
     if (permission == LocationPermission.deniedForever) {
@@ -150,16 +200,16 @@ class RegisterController extends GetxController {
       "phoneNumber": phoneNumber,
       "experience": experience,
       "strNumber": strNumber,
-      "sipNumber" : sipNumber,
-      "lat" :latit,
-      "long" :longin,
-      "districts" : districts,
-      "city" :city,
-      "country" :country,
+      "sipNumber": sipNumber,
+      "lat": latit,
+      "long": longin,
+      "districts": districts,
+      "city": city,
+      "country": country,
       "deviceId": deviceId,
       // "image" : image
     };
-    
+
     try {
       isLoading(true);
       final result = await RestClient()

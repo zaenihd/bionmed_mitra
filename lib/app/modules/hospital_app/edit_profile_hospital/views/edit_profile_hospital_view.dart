@@ -47,8 +47,8 @@ class _EditProfileHospitalViewState extends State<EditProfileHospitalView> {
 
   @override
   void initState() {
-    myC.namaHospitalC.addListener(() {
-      final isButtonActive = myC.namaHospitalC.text.isNotEmpty;
+    myC.namaOwnerC.addListener(() {
+      final isButtonActive = myC.namaOwnerC.text.isNotEmpty;
       setState(() {
         this.isButtonActive = isButtonActive;
       });
@@ -58,7 +58,7 @@ class _EditProfileHospitalViewState extends State<EditProfileHospitalView> {
 
   @override
   void dispose() {
-    myC.namaHospitalC.dispose();
+    myC.namaOwnerC.dispose();
     super.dispose();
   }
 
@@ -268,7 +268,7 @@ class _EditProfileHospitalViewState extends State<EditProfileHospitalView> {
                     ),
                     InputPrimary(
                       onChange: (p0) {},
-                      controller: myC.namaHospitalC,
+                      controller: myC.namaOwnerC,
                       onTap: () {},
                       hintText: 'Masukkan nama',
                     ),
@@ -285,7 +285,7 @@ class _EditProfileHospitalViewState extends State<EditProfileHospitalView> {
                     ),
                     InputPrimary(
                       onChange: (p0) {},
-                      controller: myC.emailHospitalC,
+                      controller: myC.namaOwnerC,
                       onTap: () {},
                       hintText: 'Masukkan Email',
                     ),
@@ -432,7 +432,7 @@ class _EditProfileHospitalViewState extends State<EditProfileHospitalView> {
                           ? "Informasi tidak boleh kosong"
                           : null,
                       onChange: (p0) {},
-                      controller: myC.informasiHospitalC,
+                      controller: myC.namaOwnerC,
                       onTap: () {},
                       hintText:
                           'Masukkan informasi tambahan',

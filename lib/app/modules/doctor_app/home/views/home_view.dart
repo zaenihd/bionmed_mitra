@@ -23,7 +23,6 @@ import '../../../../../theme.dart';
 import '../../../../widget/button/button_gradien.dart';
 import '../../../../widget/button/button_primary_withtext.dart';
 import '../../../../widget/card/card_layanan.dart';
-import '../../../../widget/card/carousel_banner.dart';
 import '../../connection/views/call/voice_screen.dart';
 import '../../connection/views/videocall_screen.dart';
 import '../../detail/views/detail_view.dart';
@@ -226,6 +225,10 @@ class HomeView extends GetView<HomeController> {
                         ],
                       ),
                     ),
+
+                    // pendapatanLayananHospital(),
+                    // CardOrderHospital(),
+
                     Obx(
                       () => CarouselSlider(
                           items: controller.dataBanner
@@ -319,8 +322,9 @@ class HomeView extends GetView<HomeController> {
                                                   'nurse'
                                               ? ""
                                               : layananHomeC
-                                                      .dataListOrder[index]
-                                                  ['order']['service']['name'];
+                                                          .dataListOrder[index]
+                                                      ['order']['service']
+                                                  ['sequence'];
                                           var dataLayanan =
                                               loginC.role.value == 'nurse'
                                                   ? ""
@@ -397,6 +401,93 @@ class HomeView extends GetView<HomeController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Padding pendapatanLayananHospital() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Txt(
+            text: 'Pendapatan Hari Ini',
+            weight: bold,
+          ),
+          GridView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 1.5,
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+            ),
+            itemCount: 4,
+            shrinkWrap: true,
+            physics: const ScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return Cntr(
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 6,
+                    spreadRadius: 0.4,
+                    color: Color.fromARGB(255, 222, 221, 221),
+                  )
+                ],
+                padding: const EdgeInsets.all(8),
+                radius: BorderRadius.circular(10),
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Cntr(
+                      color: const Color(0xffFDF8EC),
+                      radius: BorderRadius.circular(10),
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.asset('assets/icon/dollar.png'),
+                          Txt(text: CurrencyFormat.convertToIdr(10000, 0))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.local_hospital),
+                        const SizedBox(
+                          width: 5.0,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Txt(
+                              text: 'Layanan',
+                              size: 10,
+                              weight: light,
+                            ),
+                            const SizedBox(
+                              height: 3.0,
+                            ),
+                            Txt(
+                              text: 'Hospital',
+                              weight: medium,
+                            )
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -482,7 +573,7 @@ class HomeView extends GetView<HomeController> {
             myC.address.value =
                 layananHomeC.dataListOrder[index]['order']['address'];
           }
-          
+
           myC.statusOrderDetail.value = Get.find<LayananHomeController>()
               .dataListOrder[index]['order']['statusOrder'];
           // myC.timePeriodic.value = false;
@@ -667,7 +758,7 @@ class HomeView extends GetView<HomeController> {
                         imageUrl: '56',
                         title: 'Konsultasi Selesai',
                         subtitle: "Sesi konsultasi telah selesai")
-                    : dataService == "Telemedicine" &&
+                    : dataService == 1 &&
                                 layananHomeC.statusOrderDetail.value == 99 ||
                             dataService == "Dokter on Call" &&
                                 layananHomeC.statusOrderDetail.value == 99
@@ -998,8 +1089,7 @@ class HomeView extends GetView<HomeController> {
       ),
       buttonGradient: Obx(
         () => layananHomeC.statusOrderDetail.value == 3 ||
-                dataService == "Telemedicine" &&
-                    layananHomeC.statusOrderDetail.value == 4 ||
+                dataService == 1 && layananHomeC.statusOrderDetail.value == 4 ||
                 layananHomeC.statusOrderDetail.value == 6 &&
                     Get.find<DetailController>().imageRecipe.value == "" &&
                     myC.statusOrderDetail.value != 5 &&
@@ -1009,13 +1099,12 @@ class HomeView extends GetView<HomeController> {
                 // Get.find<DetailController>().imageRecipe.value == "" &&
                 //     myC.statusOrderDetail.value != 5 ||
                 // myC.statusOrderDetail.value != 7 || myC.statusOrderDetail.value != 5 ||
-                dataService == "Home Visit Doctor" ||
+                dataService == 2 ||
                 dataService == "Nursing Home" ||
                 dataService == "Mother Care" ||
                 dataService == "Baby Care" &&
                     layananHomeC.statusOrderDetail.value == 2 ||
-                layananHomeC.statusOrderDetail.value == 4 &&
-                    dataService == "Home Visit Doctor" ||
+                layananHomeC.statusOrderDetail.value == 4 && dataService == 2 ||
                 dataService == "Nursing Home" ||
                 dataService == "Mother Care" ||
                 dataService == "Baby Care" // 'Dokter on Call'
@@ -1024,17 +1113,17 @@ class HomeView extends GetView<HomeController> {
                 : Column(
                     children: [
                       layananHomeC.statusOrderDetail.value == 4 &&
-                                  dataService == "Home Visit Doctor" ||
+                                  dataService == 2 ||
                               dataService == "Nursing Home" ||
                               dataService == "Mother Care" ||
                               dataService == "Baby Care" ||
                               layananHomeC.statusOrderDetail.value == 3 &&
-                                  dataService == "Home Visit Doctor" ||
+                                  dataService == 2 ||
                               dataService == "Nursing Home" ||
                               dataService == "Mother Care" ||
                               dataService == "Baby Care" ||
                               layananHomeC.statusOrderDetail.value == 2 &&
-                                  dataService == "Home Visit Doctor" ||
+                                  dataService == 2 ||
                               dataService == "Nursing Home" ||
                               dataService == "Mother Care" ||
                               dataService == "Baby Care"
@@ -1055,7 +1144,7 @@ class HomeView extends GetView<HomeController> {
                               height: 1.0,
                             ),
                       layananHomeC.statusOrderDetail.value == 4 &&
-                              dataService == "Home Visit Doctor"
+                              dataService == 2
                           ? ButtomGradient(
                               label: "Akhiri Pesanan",
                               // layanan == 'Layanan Chat' && dataLayanan == 3
@@ -1152,26 +1241,27 @@ class HomeView extends GetView<HomeController> {
                                 );
                               })
                           : layananHomeC.statusOrderDetail.value == 5 &&
-                                  dataService == "Home Visit Doctor"
+                                  dataService == 2
                               ? const SizedBox(
                                   height: 1.0,
                                 )
                               : layananHomeC.statusOrderDetail.value == 6 &&
-                                      dataService == "Home Visit Doctor"
+                                      dataService == 2
                                   ? const SizedBox(
                                       height: 1.0,
                                     )
                                   : ButtomGradient(
-                                      label: dataService == "Telemedicine" &&
+                                      label: dataService == 1 &&
                                               layananHomeC.statusOrderDetail.value ==
                                                   4
                                           ? 'Sedang Berlangsung'
-                                          : dataService == "Telemedicine" &&
+                                          : dataService == 1 &&
                                                       layananHomeC
                                                               .statusOrderDetail
                                                               .value ==
                                                           5 ||
-                                                  layananHomeC.statusOrderDetail.value ==
+                                                  layananHomeC.statusOrderDetail
+                                                          .value ==
                                                       6
                                               ? 'Kirim Resep'
                                               : dataService == "Dokter on Call" &&
@@ -1186,7 +1276,7 @@ class HomeView extends GetView<HomeController> {
                                                                   .value ==
                                                               6
                                                       ? "Beri Resep Dokter"
-                                                      : dataService == "Telemedicine" &&
+                                                      : dataService == 1 &&
                                                               layananHomeC
                                                                       .statusOrderDetail
                                                                       .value ==
@@ -1200,11 +1290,11 @@ class HomeView extends GetView<HomeController> {
                                       //         : 'Mulai Sekarang',
                                       onTap: () async {
                                         if (controller.loading.value == false) {
-                                          if (dataService == "Telemedicine" &&
+                                          if (dataService == 1 &&
                                                   layananHomeC.statusOrderDetail
                                                           .value ==
                                                       6 ||
-                                              // dataService == "Home Visit Doctor" ||
+                                              // dataService == 2 ||
                                               dataService == "Nursing Home" ||
                                               dataService == "Mother Care" ||
                                               dataService == "Baby Care" &&
@@ -1337,8 +1427,7 @@ class HomeView extends GetView<HomeController> {
                                                       .dataListOrder[index]
                                                           ['order']['id']
                                                       .toString()));
-                                            } else if (dataService ==
-                                                    "Home Visit Doctor" ||
+                                            } else if (dataService == 2 ||
                                                 dataService == "Nursing Home" ||
                                                 dataService == "Mother Care" ||
                                                 dataService == "Baby Care" &&
@@ -1369,11 +1458,11 @@ class HomeView extends GetView<HomeController> {
       //         layananHomeC.statusOrderDetail.value == 4
       //     ? 210
       //     : layananHomeC.statusOrderDetail.value == 3 &&
-      //                 dataService == "Home Visit Doctor" ||
+      //                 dataService == 2 ||
       //             layananHomeC.statusOrderDetail.value == 2 &&
-      //                 dataService == "Home Visit Doctor" ||
+      //                 dataService == 2 ||
       //             layananHomeC.statusOrderDetail.value == 4 &&
-      //                 dataService == "Home Visit Doctor"
+      //                 dataService == 2
       //         ? 220
       //         : 210,
       // data: dataLayanan == 0,
@@ -1445,7 +1534,7 @@ class HomeView extends GetView<HomeController> {
                         imageUrl: '56',
                         title: 'Konsultasi Selesai',
                         subtitle: "Sesi konsultasi telah selesai")
-                    : dataService == "Telemedicine" &&
+                    : dataService == 1 &&
                                 layananHomeC.statusOrderDetail.value == 99 ||
                             dataService == "Dokter on Call" &&
                                 layananHomeC.statusOrderDetail.value == 99
@@ -1591,98 +1680,105 @@ class HomeView extends GetView<HomeController> {
                                 ? InfoOrder(onTap: () {}, status: '5N')
                                 : layananHomeC.statusOrderDetail.value == 5
                                     ? InfoOrder(onTap: () {}, status: '6N')
-                                : layananHomeC.statusOrderDetail.value == 98
-                                    ? InfoOrder(onTap: () {}, status: '98N')
-                                    : layananHomeC.statusOrderDetail.value == 99
-                                        ? InfoOrder(
-                                            onTap: () {
-                                              showModalBottomSheet(
-                                                  shape: const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(30),
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                      30))),
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return SizedBox(
-                                                      height: 340,
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Container(
-                                                            margin:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    bottom: 18,
-                                                                    top: 14),
-                                                            width:
-                                                                Get.width / 1.9,
-                                                            height: 10,
-                                                            decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
+                                    : layananHomeC.statusOrderDetail.value == 98
+                                        ? InfoOrder(onTap: () {}, status: '98N')
+                                        : layananHomeC
+                                                    .statusOrderDetail.value ==
+                                                99
+                                            ? InfoOrder(
+                                                onTap: () {
+                                                  showModalBottomSheet(
+                                                      shape: const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          30),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          30))),
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return SizedBox(
+                                                          height: 340,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Container(
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        bottom:
+                                                                            18,
+                                                                        top:
+                                                                            14),
+                                                                width:
+                                                                    Get.width /
+                                                                        1.9,
+                                                                height: 10,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
                                                                             10),
-                                                                color: const Color(
-                                                                    0xffEDEDED)),
+                                                                    color: const Color(
+                                                                        0xffEDEDED)),
+                                                              ),
+                                                              Text(
+                                                                'Pasien sudah mengganti jadwal baru',
+                                                                style:
+                                                                    subtitleTextStyle,
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 17,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 250,
+                                                                height: 70,
+                                                                child:
+                                                                    ListOrder(
+                                                                  heightC: 50,
+                                                                  widthC: 50,
+                                                                  colorText:
+                                                                      const Color(
+                                                                          0xff6C6C6C),
+                                                                  imageUrl:
+                                                                      'assets/icon/icon_calender.png',
+                                                                  title:
+                                                                      'Tanggal & Waktu',
+                                                                  subtitle:
+                                                                      'Senin, 14 Januari 2022\n08.20 PM',
+                                                                  widht: 0,
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 23,
+                                                              ),
+                                                              ButtomGradient(
+                                                                label:
+                                                                    "Konfirmasi Jadwal",
+                                                                onTap: () {
+                                                                  Get.back();
+                                                                },
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 17,
+                                                              ),
+                                                              ButtonPrimary(
+                                                                  title:
+                                                                      "Tidak Bisa, Coba atur ulang",
+                                                                  onPressed:
+                                                                      () {})
+                                                            ],
                                                           ),
-                                                          Text(
-                                                            'Pasien sudah mengganti jadwal baru',
-                                                            style:
-                                                                subtitleTextStyle,
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 17,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 250,
-                                                            height: 70,
-                                                            child: ListOrder(
-                                                              heightC: 50,
-                                                              widthC: 50,
-                                                              colorText:
-                                                                  const Color(
-                                                                      0xff6C6C6C),
-                                                              imageUrl:
-                                                                  'assets/icon/icon_calender.png',
-                                                              title:
-                                                                  'Tanggal & Waktu',
-                                                              subtitle:
-                                                                  'Senin, 14 Januari 2022\n08.20 PM',
-                                                              widht: 0,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 23,
-                                                          ),
-                                                          ButtomGradient(
-                                                            label:
-                                                                "Konfirmasi Jadwal",
-                                                            onTap: () {
-                                                              Get.back();
-                                                            },
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 17,
-                                                          ),
-                                                          ButtonPrimary(
-                                                              title:
-                                                                  "Tidak Bisa, Coba atur ulang",
-                                                              onPressed: () {})
-                                                        ],
-                                                      ),
-                                                    );
-                                                  });
-                                            },
-                                            status: '99')
-                                        : const SizedBox(
-                                            height: 1.0,
-                                          ),
+                                                        );
+                                                      });
+                                                },
+                                                status: '99')
+                                            : const SizedBox(
+                                                height: 1.0,
+                                              ),
       ),
       // discount: layananHomeC.dataListOrder[index]['order']['discount'],
       iconService: layananHomeC.dataListOrder[index]['order']['service']
@@ -1706,21 +1802,19 @@ class HomeView extends GetView<HomeController> {
       ),
       buttonGradient: Obx(
         () => layananHomeC.statusOrderDetail.value == 3 ||
-                dataService == "Telemedicine" &&
-                    layananHomeC.statusOrderDetail.value == 4 ||
+                dataService == 1 && layananHomeC.statusOrderDetail.value == 4 ||
                 layananHomeC.statusOrderDetail.value == 6 &&
                     Get.find<DetailController>().imageRecipe.value == "" &&
                     myC.statusOrderDetail.value != 5 &&
                     layananHomeC.statusOrderDetail.value == 6 &&
                     Get.find<DetailController>().imageRecipe.value == "" &&
                     myC.statusOrderDetail.value != 7 ||
-                dataService == "Home Visit Doctor" ||
+                dataService == 2 ||
                 dataService == "Nursing Home" ||
                 dataService == "Mother Care" ||
                 dataService == "Baby Care" &&
                     layananHomeC.statusOrderDetail.value == 2 ||
-                layananHomeC.statusOrderDetail.value == 4 &&
-                    dataService == "Home Visit Doctor" ||
+                layananHomeC.statusOrderDetail.value == 4 && dataService == 2 ||
                 dataService == "Nursing Home" ||
                 dataService == "Mother Care" ||
                 dataService == "Baby Care" // 'Dokter on Call'
@@ -1952,11 +2046,11 @@ class HomeView extends GetView<HomeController> {
       //         layananHomeC.statusOrderDetail.value == 4
       //     ? 210
       //     : layananHomeC.statusOrderDetail.value == 3 &&
-      //                 dataService == "Home Visit Doctor" ||
+      //                 dataService == 2 ||
       //             layananHomeC.statusOrderDetail.value == 2 &&
-      //                 dataService == "Home Visit Doctor" ||
+      //                 dataService == 2 ||
       //             layananHomeC.statusOrderDetail.value == 4 &&
-      //                 dataService == "Home Visit Doctor"
+      //                 dataService == 2
       //         ? 220
       //         : 210,
       // data: dataLayanan == 0,
@@ -1990,35 +2084,7 @@ class HomeView extends GetView<HomeController> {
   }
 }
 
-List<Widget> items = [
-  CarouselBanner(
-    imageUrl: '1',
-  ),
-  CarouselBanner(
-    imageUrl: '2',
-  ),
-  CarouselBanner(
-    imageUrl: '3',
-  ),
-  CarouselBanner(
-    imageUrl: '4',
-  ),
-  CarouselBanner(
-    imageUrl: '5',
-  ),
-  CarouselBanner(
-    imageUrl: '7',
-  ),
-  CarouselBanner(
-    imageUrl: '8',
-  ),
-  CarouselBanner(
-    imageUrl: '9',
-  ),
-  // Image.asset('assets/Group 804.png'),
-  // Image.asset('assets/Group 804.png'),
-  // Image.asset('assets/Group 804.png'),
-];
+
 
 class CurrencyFormat {
   static String convertToIdr(dynamic number, int decimalDigit) {

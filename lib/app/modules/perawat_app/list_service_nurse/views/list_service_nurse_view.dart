@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../doctor_app/login/controllers/login_controller.dart';
 import '../../paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import '../controllers/list_service_nurse_controller.dart';
 
@@ -36,11 +37,13 @@ class ListServiceNurseView extends GetView<ListServiceNurseController> {
           ),
         ),
         body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 26),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
             child: Obx(() => controller.listServiceNurseData.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    itemCount: controller.listServiceNurseData.length,
+                    itemCount: Get.find<LoginController>().inHospital == "0"
+                        ? 1
+                        :controller.listServiceNurseData.length,
                     itemBuilder: (context, index) => InkWell(
                       onTap: () async {
                         Get.put(PaketLayananNurseController())

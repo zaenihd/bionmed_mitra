@@ -1,13 +1,16 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:bionmed/app/constant/styles.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/controllers/register_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/views/maps.dart';
 import 'package:bionmed/app/modules/hospital_app/register_hospital/controllers/register_hospital_controller.dart';
+import 'package:bionmed/app/modules/hospital_app/register_hospital/views/register_hospital_lanjutan_view.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
+import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/header/header_layanan.dart';
 import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/theme.dart';
@@ -16,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../constant/colors.dart';
 import '../../../../widget/textform/input_primary1.dart';
@@ -35,19 +39,17 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
   final formKey = GlobalKey<FormState>();
   final box = GetStorage();
 
-  final jenisKelamin = ['Laki - laki', "Perempuan"];
   bool isButtonActive = false;
   final ImagePicker _picker = ImagePicker();
   final ImagePicker _pickerStr = ImagePicker();
   // ignore: prefer_typing_uninitialized_variables
-  var files;
   // ignore: prefer_typing_uninitialized_variables
   var filesStr;
 
   @override
   void initState() {
-    myC.namaHospitalC.addListener(() {
-      final isButtonActive = myC.namaHospitalC.text.isNotEmpty;
+    myC.namaOwnerC.addListener(() {
+      final isButtonActive = myC.namaOwnerC.text.isNotEmpty;
       setState(() {
         this.isButtonActive = isButtonActive;
       });
@@ -57,7 +59,7 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
 
   @override
   void dispose() {
-    myC.namaHospitalC.dispose();
+    myC.namaOwnerC.dispose();
     super.dispose();
   }
 
@@ -65,12 +67,12 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
     final XFile? image = await _picker.pickImage(source: source);
     // ignore: unnecessary_nullable_for_final_variable_declarations
     final File? file = File(image!.path);
-    files == file;
-    files = File(image.path);
+    myC.files == file;
+    myC.files = File(image.path);
 
-    log('zezeze $files');
+    log('zezeze $myC.files');
 
-    setState(() => files = File(image.path));
+    setState(() => myC.files = File(image.path));
     return file;
   }
 
@@ -147,6 +149,9 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
         });
   }
 
+  final status = ['Owner'];
+  final jenisKelamin = ['Laki - laki', "Perempuan"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,17 +176,22 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                 child: Column(
                   children: [
-                    HeaderWidget(
-                        imageUrl: 'assets/icon/icon_biodata.png',
-                        title: "Biodata Hospital",
-                        subtitle:
-                            "Isi data ini dengan lengkap untuk membuat \nakun anda"),
+                    InkWell(
+                      onTap: () {
+                        // myC.updateDokumenPendukung(myC.fileDokumenPendukung, "53");
+                      },
+                      child: HeaderWidget(
+                          imageUrl: 'assets/icon/icon_biodata.png',
+                          title: "Biodata Hospital",
+                          subtitle:
+                              "Isi data ini dengan lengkap untuk membuat \nakun anda"),
+                    ),
                     const SizedBox(height: 32),
                     GestureDetector(
                         onTap: () {
                           pickerFilesImage(context);
                         },
-                        child: files == null
+                        child: myC.files == null
                             ? Container(
                                 height: 120,
                                 width: 120,
@@ -220,7 +230,7 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                                           child: SizedBox.fromSize(
                                             size: const Size.fromRadius(
                                                 48), // Image radius
-                                            child: Image.file(files,
+                                            child: Image.file(myC.files,
                                                 fit: BoxFit.cover),
                                           ),
                                         ),
@@ -264,7 +274,7 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                     const SizedBox(
                       width: double.infinity,
                       child: Text(
-                        'Nama Rumah Sakit',
+                        'Pemilik / Owner',
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -273,51 +283,205 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                     ),
                     InputPrimary(
                       onChange: (p0) {},
-                      controller: myC.namaHospitalC,
+                      controller: myC.namaOwnerC,
                       onTap: () {},
                       hintText: 'Masukkan nama',
                     ),
-                    const SizedBox(height: 16),
                     const SizedBox(
                       width: double.infinity,
                       child: Text(
-                        'Email Rumah Sakit',
+                        'Status',
                         textAlign: TextAlign.left,
                       ),
                     ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      width: Get.width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: BorderStyles.borderGrey),
+                      // dropdown below..
+                      child: DropdownButtonFormField(
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            fillColor: AppColor.bgForm,
+                            filled: true,
+                            hintText: "Pilih Status",
+                            hintStyle: TextStyle(color: Colors.grey[500]!),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none)),
+                        validator: (jKelamin) => jKelamin == null
+                            ? "Status tidak boleh kosong"
+                            : null,
+                        items: status
+                            .map((e) => DropdownMenuItem(
+                                onTap: () {
+                                  myC.selectedStatus.value = e.toString();
+                                },
+                                value: e,
+                                child: Text(e.toString())))
+                            .toList(),
+                        onChanged: (value) {},
+                      ),
+                    ),
                     const SizedBox(
-                      height: 6,
+                      height: 15.0,
                     ),
-                    InputPrimary(
-                      onChange: (p0) {},
-                      controller: myC.emailHospitalC,
-                      onTap: () {},
-                      hintText: 'Masukkan Email',
-                      validate: (alamat) => alamat.toString().isEmpty
-                          ? "Email tidak boleh kosong"
-                          : null,
-                    ),
-
-                    // ignore: avoid_unnecessary_containers
-                    const SizedBox(height: 20),
                     const SizedBox(
                       width: double.infinity,
                       child: Text(
-                        'Nomer Rumah Sakit',
+                        'No KTP',
                         textAlign: TextAlign.left,
                       ),
                     ),
                     const SizedBox(
                       height: 10.0,
                     ),
+                    InkWell(
+                      onTap: () async {
+                        myC.pickerDokumenKtp();
+                        // Get.to(()=>MapSample());
+                      },
+                      child: Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
+                          height: 46,
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                            color: textFieldC,
+                            border:
+                                Border.all(color: Colors.grey.withOpacity(0.4)),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Obx(
+                                () => Cntr(
+                                  color: Colors.transparent,
+                                  width: Get.width / 1.5,
+                                  child: Text(
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    myC.dokumenKtp.isEmpty
+                                        ? "Upload dokumen"
+                                        : myC.dokumenKtp.value.substring(51),
+                                    style: greyTextStyle.copyWith(
+                                        color: myC.dokumenKtp.isNotEmpty
+                                            ? blackColor
+                                            : greyColor),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 4.0,
+                              ),
+                              Icon(
+                                Icons.upload,
+                                color: Colors.grey[400],
+                                size: 18,
+                              )
+                            ],
+                          )),
+                    ),
+                    // InputPrimary(
+                    //   onChange: (p0) {},
+                    //   controller: myC.controllerNomerKTP,
+                    //   onTap: () {},
+                    //   hintText: 'Masukkan No KTP',
+                    //   validate: (alamat) => alamat.toString().isEmpty
+                    //       ? "Email tidak boleh kosong"
+                    //       : null,
+                    // ),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+                    const SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'Tanggal Lahir',
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 6,
+                    ),
                     InputPrimary(
-                      validate: (nomerStr) => nomerStr.toString().isEmpty
-                          ? "Nomer Rumah Sakit tidak boleh kosong"
-                          : null,
-                      onChange: (p0) {},
-                      controller: myC.nomerHospitalC,
-                      onTap: () {},
-                      hintText: 'Masukkan No.Rumah Sakit',
+                      controller: myC.tanggalLahirC,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1800),
+                            lastDate: DateTime(2101));
+
+                        if (pickedDate != null) {
+                          // ignore: avoid_print
+                          print(pickedDate);
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                          // ignore: avoid_print
+                          print(formattedDate);
+
+                          setState(() {
+                            myC.tanggalLahirC.text = formattedDate;
+                          });
+                        } else {
+                          // ignore: avoid_print
+                          print("Date is not selected");
+                        }
+                      },
+                      hintText: "Masukkan tanggal lahir",
+                      onChange: (val) {},
+                      validate: (value) {
+                        if (value.toString().isNotEmpty) {
+                          return null;
+                        }
+                        return "Tanggal lahir tidak boleh kosong";
+                      },
+                      prefixIcon: const Icon(Icons.calendar_month),
+                    ),
+                    const SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'Jenis Kelamin',
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      width: Get.width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: BorderStyles.borderGrey),
+                      // dropdown below..
+                      child: DropdownButtonFormField(
+                        decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            fillColor: AppColor.bgForm,
+                            filled: true,
+                            hintText: "Pilih Jenis kelamin",
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none)),
+                        validator: (jKelamin) => jKelamin == null
+                            ? "Jenis kelamin tidak boleh kosong"
+                            : null,
+                        items: jenisKelamin
+                            .map((e) => DropdownMenuItem(
+                                onTap: () {
+                                  myC.selectedGender.value = e.toString();
+                                },
+                                value: e,
+                                child: Text(e.toString())))
+                            .toList(),
+                        onChanged: (value) {},
+                      ),
                     ),
                     const SizedBox(height: 16),
                     const SizedBox(
@@ -332,6 +496,8 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                     ),
                     InkWell(
                       onTap: () async {
+                        registerC.isHospital.value = false;
+
                         await registerC.getCurrentLocation().then((value) {
                           registerC.lat.value = value.latitude;
                           registerC.long.value = value.longitude;
@@ -422,28 +588,10 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                           ? "Alamat tidak boleh kosong"
                           : null,
                       onChange: (p0) {},
-                      controller: myC.alamatHospitalC,
+                      controller: myC.alamatOwnerC,
                       onTap: () {},
                       hintText: 'Deskripsi alamat lengkap',
                     ),
-                    const SizedBox(height: 16),
-                    const SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        'Informasi Rumah Sakit',
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    InputPrimary(
-                      validate: (alamat) => alamat.toString().isEmpty
-                          ? "Informasi tidak boleh kosong"
-                          : null,
-                      onChange: (p0) {},
-                      controller: myC.informasiHospitalC,
-                      onTap: () {},
-                      hintText: 'Masukkan informasi tambahan',
-                    ),
-                    const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -453,63 +601,106 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                   width: double.infinity,
                   child: isButtonActive
                       ? Obx(() => ButtomGradient(
-                          label:
-                              myC.isLoading.isFalse ? "Simpan" : "Loading...",
+                          label: myC.isLoading.isFalse
+                              ? "Lanjutkan"
+                              : "Loading...",
                           onTap: () async {
-                            // ignore: unused_local_variable
-                            File? image;
-                            final isValiForm = formKey.currentState!.validate();
-                            if (isValiForm) {
-                              if (myC.isLoading.isFalse) {
-                                if (files == null) {
-                                  showPopUp(
-                                      onTap: () {
-                                        Get.back();
-                                      },
-                                      imageAction: 'assets/json/eror.json',
-                                      description:
-                                          "Foto Profil\nTidak Boleh Kosong",
-                                      onPress: () {
-                                        Get.back();
-                                      });
-                                } else if (registerC.city.isEmpty) {
-                                  final snackBar = SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    duration: const Duration(seconds: 1),
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 24),
-                                    content: const Text(
-                                        'Mohon Masukkan Lokasi Anda Terlebih Dahulu!'),
-                                    backgroundColor: (Colors.red),
-                                    action: SnackBarAction(
-                                      label: '',
-                                      onPressed: () {},
-                                    ),
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else {
-                                  await myC.registerHospital(
-                                    name: myC.namaHospitalC.text,
-                                    email: myC.emailHospitalC.text,
-                                    phoneNumber: myC.nomerHospitalC.text,
-                                    description: myC.informasiHospitalC.text,
-                                    city: registerC.city.value,
-                                    country: registerC.negara.value,
-                                    districts: registerC.kecamatan.value,
-                                    latit: registerC.lat.value.toString(),
-                                    longin: registerC.long.value.toString(),
-                                    deviceId: box.read('deviceId'),
-                                    address: myC.alamatHospitalC.text,
-                                    files: files
-                                  );
-                                }
-                              }
+                            if (myC.namaOwnerC.text == "" ||
+                                myC.selectedStatus.value == "" ||
+                                myC.fileDokumenKtp == null ||
+                                myC.tanggalLahirC.text == "" ||
+                                myC.selectedGender.value == "" ||
+                                registerC.city.value == "" ||
+                                myC.alamatOwnerC.text == "") {
+                              final snackBar = SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                duration: const Duration(seconds: 2),
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 24),
+                                content:
+                                    const Text('Mohon Lengkapi Semua Data!'),
+                                backgroundColor: (Colors.red),
+                                action: SnackBarAction(
+                                  label: '',
+                                  onPressed: () {},
+                                ),
+                              );
+                              ScaffoldMessenger.of(Get.context!)
+                                  .showSnackBar(snackBar);
+                            } else if (myC.files == null) {
+                              final snackBar = SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                duration: const Duration(seconds: 2),
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 24),
+                                content:
+                                    const Text('Foto Profil Tidak Boleh Kosong!'),
+                                backgroundColor: (Colors.red),
+                                action: SnackBarAction(
+                                  label: '',
+                                  onPressed: () {},
+                                ),
+                              );
+                              ScaffoldMessenger.of(Get.context!)
+                                  .showSnackBar(snackBar);
+                            } else {
+                              Get.to(() => RegisterHospitalLanjutanView());
                             }
+
+                            // ignore: unused_local_variable
+                            // File? image;
+                            // final isValiForm = formKey.currentState!.validate();
+                            // if (isValiForm) {
+                            //   if (myC.isLoading.isFalse) {
+                            //     if (files == null) {
+                            //       showPopUp(
+                            //           onTap: () {
+                            //             Get.back();
+                            //           },
+                            //           imageAction: 'assets/json/eror.json',
+                            //           description:
+                            //               "Foto Profil\nTidak Boleh Kosong",
+                            //           onPress: () {
+                            //             Get.back();
+                            //           });
+                            //     } else if (registerC.city.isEmpty) {
+                            //       final snackBar = SnackBar(
+                            //         behavior: SnackBarBehavior.floating,
+                            //         duration: const Duration(seconds: 1),
+                            //         margin: const EdgeInsets.symmetric(
+                            //             vertical: 10, horizontal: 24),
+                            //         content: const Text(
+                            //             'Mohon Masukkan Lokasi Anda Terlebih Dahulu!'),
+                            //         backgroundColor: (Colors.red),
+                            //         action: SnackBarAction(
+                            //           label: '',
+                            //           onPressed: () {},
+                            //         ),
+                            //       );
+                            //       ScaffoldMessenger.of(context)
+                            //           .showSnackBar(snackBar);
+                            //     } else {
+                            //       await myC.registerHospital(
+                            //         name: myC.namaOwnerC.text,
+                            //         email: myC.emailHospitalC.text,
+                            //         phoneNumber: myC.nomerHospitalC.text,
+                            //         description: myC.informasiHospitalC.text,
+                            //         city: registerC.city.value,
+                            //         country: registerC.negara.value,
+                            //         districts: registerC.kecamatan.value,
+                            //         latit: registerC.lat.value.toString(),
+                            //         longin: registerC.long.value.toString(),
+                            //         deviceId: box.read('deviceId'),
+                            //         address: myC.alamatHospitalC.text,
+                            //         files: files
+                            //       );
+                            //     }
+                            //   }
+                            // }
                           }))
                       // Get.toNamed(Routes.LAYANAN);
                       : ButtonPrimary(
-                          title: "Simpan",
+                          title: "Lanjutkan",
                           onPressed: () {
                             log(
                               registerC.lat.value.toString(),
@@ -525,6 +716,4 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
       ),
     );
   }
-
-  
 }

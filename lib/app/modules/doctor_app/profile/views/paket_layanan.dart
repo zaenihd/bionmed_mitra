@@ -32,7 +32,7 @@ class PaketLayanan extends StatelessWidget {
                   onTap: () {
                     myC.idService.value = myC.datService[index]['id'];
                     // myC.nameService.value = myC.datService[index]['name'];
-                    myC.serviceName.value = myC.datService[index]['service']['name'];
+                    myC.sequenceId.value = myC.datService[index]['service']['sequence'];
                     
                     Get.toNamed(Routes.PROFILE_PAKET_LAYANAN);
 

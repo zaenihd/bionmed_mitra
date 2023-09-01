@@ -27,7 +27,11 @@ class ListJadwal extends StatelessWidget {
     return Scaffold(
         appBar: appbarGradient('Jadwal Layanan'),
         body: ListView.builder(
-          itemCount: loginC.role.value == 'nurse' ? 3 : myC.service.length,
+          itemCount: loginC.role.value == 'nurse' && loginC.inHospital == "0"
+              ? 1
+              : loginC.role.value == 'nurse'
+                  ? 3
+                  : myC.service.length,
           itemBuilder: (context, index) => InkWell(
             onTap: () async {
               if (loginC.role.value == 'nurse') {
@@ -135,7 +139,11 @@ class ListJadwalCompleteProfil extends StatelessWidget {
                 })),
         appBar: appbarGradient('Jadwal Layanan'),
         body: ListView.builder(
-          itemCount: loginC.role.value == 'nurse' ? 3 : myC.service.length,
+          itemCount: loginC.role.value == 'nurse' && loginC.inHospital == "0"
+              ? 1
+              : loginC.role.value == 'nurse'
+                  ? 3
+                  : myC.service.length,
           itemBuilder: (context, index) => InkWell(
             onTap: () async {
               if (loginC.role.value == 'nurse') {

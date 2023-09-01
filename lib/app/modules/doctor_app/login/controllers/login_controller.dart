@@ -185,6 +185,7 @@ class LoginController extends GetxController {
   //------------------------------------------LOGIN APP NURSE -------------------------------------------
   RxInt isVerifikasiNurse = 0.obs;
   RxList nurseEducation = [].obs;
+  var inHospital;
   Future<dynamic> loginNurse(
       {required String phoneNumber, bool? isSplash}) async {
     final map = <String, dynamic>{};
@@ -217,6 +218,8 @@ class LoginController extends GetxController {
         long.value = dataNurse['data']['nurse']['long'].toString();
         nurseEducation.value = dataNurse['data']['nurse']['nurse_educations'];
         rating = dataNurse['data']['nurse']['rating'] ?? 0;
+        inHospital = dataNurse['data']['nurse']['hospital'] ?? "0";
+        log('nurse Hospital ' +inHospital.toString());
         var setuju = await box.read('rememberme');
 
         if (setuju == true) {

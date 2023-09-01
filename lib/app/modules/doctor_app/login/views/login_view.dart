@@ -212,7 +212,7 @@ class _LoginScreenState extends State<LoginView> {
                           if (idAccount == 2) {
                             Get.find<LoginController>().loginNurse(
                                 phoneNumber: myC.controllerPhone.text);
-                          } else if (idAccount == 5) {
+                          } else if (idAccount == 3) {
                             Get.find<LoginController>().loginHospital(
                                 phoneNumber: myC.controllerPhone.text);
                           } else {

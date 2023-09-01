@@ -15,6 +15,7 @@ class Cntr extends StatelessWidget {
       this.boxShadow,
       this.alignment,
       this.gradient,
+      this.onTap,
       this.child});
 
   double? height;
@@ -29,23 +30,27 @@ class Cntr extends StatelessWidget {
   List<BoxShadow>? boxShadow;
   AlignmentGeometry? alignment;
   Widget? child;
+  Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: alignment,
-      height: height,
-      width: width,
-      padding: padding,
-      margin: margin,
-      decoration: BoxDecoration(
-          color: color ?? Colors.white,
-          borderRadius: radius,
-          image: image,
-          border: border,
-          gradient: gradient,
-          boxShadow: boxShadow),
-      child: child,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        alignment: alignment,
+        height: height,
+        width: width,
+        padding: padding,
+        margin: margin,
+        decoration: BoxDecoration(
+            color: color ?? Colors.white,
+            borderRadius: radius,
+            image: image,
+            border: border,
+            gradient: gradient,
+            boxShadow: boxShadow),
+        child: child,
+      ),
     );
   }
 }

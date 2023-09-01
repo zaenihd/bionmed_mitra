@@ -491,26 +491,29 @@ class _AccountViewState extends State<AccountView> {
                           // },
                           //     imageAction: 'assets/json/eror.json',
                           //     description: "Sedang dalam proses\npengembangan");
-                        } else if (myC.selected == 3) {
-                          showPopUp(
-                              onTap: () {},
-                              imageAction: 'assets/json/eror.json',
-                              description: "Sedang dalam proses\npengembangan");
-                        } else if (myC.selected == 4) {
-                          showPopUp(
-                              onTap: () {
-                                Get.back();
-                              },
-                              imageAction: 'assets/json/eror.json',
-                              description: "Sedang dalam proses\npengembangan");
                         } 
-                        else if (myC.selected == 5) {
-                          showPopUp(
-                              onTap: () {
-                                Get.back();
-                              },
-                              imageAction: 'assets/json/eror.json',
-                              description: "Sedang dalam proses\npengembangan");
+                        // else if (myC.selected == 3) {
+                        //   showPopUp(
+                        //       onTap: () {},
+                        //       imageAction: 'assets/json/eror.json',
+                        //       description: "Sedang dalam proses\npengembangan");
+                        // } else if (myC.selected == 4) {
+                        //   showPopUp(
+                        //       onTap: () {
+                        //         Get.back();
+                        //       },
+                        //       imageAction: 'assets/json/eror.json',
+                        //       description: "Sedang dalam proses\npengembangan");
+                        // } 
+                        else if (myC.selected == 3) {
+                          Get.toNamed(Routes.LOGIN);
+
+                          // showPopUp(
+                          //     onTap: () {
+                          //       Get.back();
+                          //     },
+                          //     imageAction: 'assets/json/eror.json',
+                          //     description: "Sedang dalam proses\npengembangan");
                         } 
                         else if (myC.selected == 6) {
                           showPopUp(
@@ -545,28 +548,28 @@ List<Map<String, dynamic>> loginBy = [
     "subtitle": "Masuk kedalam aplikasi sebagai Perawat",
     "index": 2
   },
-  {
-    "imageUrl": "assets/icon/icon3.png",
-    "title": "Apotek",
-    "subtitle": "Masuk kedalam aplikasi sebagai Mitra Apotek",
-    "index": 3
-  },
-  {
-    "imageUrl": "assets/icon/icon4.png",
-    "title": "Laboratorium Klinik",
-    "subtitle": "Masuk kedalam aplikasi sebagai Laboratorium Klinik",
-    "index": 4
-  },
+  // {
+  //   "imageUrl": "assets/icon/icon3.png",
+  //   "title": "Apotek",
+  //   "subtitle": "Masuk kedalam aplikasi sebagai Mitra Apotek",
+  //   "index": 3
+  // },
+  // {
+  //   "imageUrl": "assets/icon/icon4.png",
+  //   "title": "Laboratorium Klinik",
+  //   "subtitle": "Masuk kedalam aplikasi sebagai Laboratorium Klinik",
+  //   "index": 4
+  // },
   {
     "imageUrl": "assets/icon/icon5.png",
     "title": "Rumah Sakit",
     "subtitle": "Masuk kedalam aplikasi sebagai Rumah Sakit",
     "index": 5
   },
-  {
-    "imageUrl": "assets/icon/icon6.png",
-    "title": "Ambulance",
-    "subtitle": "Masuk kedalam aplikasi sebagai Ambulance",
-    "index": 6
-  },
+  // {
+  //   "imageUrl": "assets/icon/icon6.png",
+  //   "title": "Ambulance",
+  //   "subtitle": "Masuk kedalam aplikasi sebagai Ambulance",
+  //   "index": 6
+  // },
 ];

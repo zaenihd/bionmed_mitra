@@ -79,10 +79,10 @@ class ProfilePaketLayananView extends GetView<ProfilePaketLayananController> {
                     //     :
                     Column(
                   children: [
-                    Get.find<PaketLayananController>().serviceName ==
-                                'Home Visit Doctor' ||
-                            Get.find<PaketLayananController>().serviceName ==
-                                'Nursing Home'
+                    Get.find<PaketLayananController>().sequenceId.value ==
+                                2 ||
+                            Get.find<PaketLayananController>().sequenceId.value ==
+                                4
                         ? Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 12),
@@ -558,21 +558,21 @@ class ProfilePaketLayananView extends GetView<ProfilePaketLayananController> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    Get.find<PaketLayananController>().serviceName ==
-                                'Home Visit Doctor' ||
-                            Get.find<PaketLayananController>().serviceName ==
-                                'Nursing Home'
+                    Get.find<PaketLayananController>().sequenceId.value ==
+                                2 ||
+                            Get.find<PaketLayananController>().sequenceId.value ==
+                                4
                         ? const SizedBox(
                             height: 1.0,
                           )
                         : InkWell(
                             onTap: () {
                               if (Get.find<PaketLayananController>()
-                                          .serviceName ==
-                                      'Home Visit Doctor' ||
+                                          .sequenceId.value ==
+                                      2 ||
                                   Get.find<PaketLayananController>()
-                                          .serviceName ==
-                                      'Nursing Home') {
+                                          .sequenceId.value ==
+                                      4) {
                                 if (controller.harga.value.text.isEmpty) {
                                   showPopUp(
                                       imageAction: 'assets/json/eror.json',
@@ -657,11 +657,11 @@ class ProfilePaketLayananView extends GetView<ProfilePaketLayananController> {
                         ? Padding(
                             padding: const EdgeInsets.only(top: 180.0),
                             child: Get.find<PaketLayananController>()
-                                            .serviceName ==
-                                        "Home Visit Doctor" ||
+                                            .sequenceId.value ==
+                                        2 ||
                                     Get.find<PaketLayananController>()
-                                            .serviceName ==
-                                        'Nursing Home'
+                                            .sequenceId.value ==
+                                        4
                                 ? const SizedBox(
                                     height: 1.0,
                                   )
@@ -675,15 +675,15 @@ class ProfilePaketLayananView extends GetView<ProfilePaketLayananController> {
                               itemCount: controller.listPaketLayanan.length,
                               itemBuilder: (context, index) => Get.find<
                                                   PaketLayananController>()
-                                              .serviceName ==
-                                          "Home Visit Doctor" ||
+                                              .sequenceId.value ==
+                                          2 ||
                                       Get.find<PaketLayananController>()
-                                              .serviceName ==
-                                          'Nursing Home'
+                                              .sequenceId.value ==
+                                          4
                                   ? const Text('')
                                   :
 
-                                  //   Get.find<PaketLayananController>().serviceName ==
+                                  //   Get.find<PaketLayananController>().sequenceId.value ==
                                   // 'Dokter on Call' ?
                                   Column(
                                       children: [
@@ -1144,11 +1144,11 @@ class ProfilePaketLayananView extends GetView<ProfilePaketLayananController> {
                                 
                                 if (controller.isLoading.isFalse) {
                                   if (Get.find<PaketLayananController>()
-                                              .serviceName ==
-                                          "Home Visit Doctor" ||
+                                              .sequenceId.value ==
+                                          2 ||
                                       Get.find<PaketLayananController>()
-                                              .serviceName ==
-                                          'Nursing Home') {
+                                              .sequenceId.value ==
+                                          4) {
                                             controller.hargaCurrens.value = int.parse(
                                         controller.hargaHome.text
                                             .replaceAll(".", ""))

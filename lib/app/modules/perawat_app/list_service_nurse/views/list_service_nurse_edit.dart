@@ -1,5 +1,6 @@
 import 'package:bionmed/app/constant/colors.dart';
 import 'package:bionmed/app/constant/styles.dart';
+import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ListServiceNurseViewEdit extends GetView<ListServiceNurseController> {
-   ListServiceNurseViewEdit({Key? key}) : super(key: key);
+  ListServiceNurseViewEdit({Key? key}) : super(key: key);
   @override
   final controller = Get.put(ListServiceNurseController());
   @override
@@ -17,7 +18,7 @@ class ListServiceNurseViewEdit extends GetView<ListServiceNurseController> {
     controller.listServiceNurse();
     return Scaffold(
         appBar: AppBar(
-          title: const Text( 'Nurse Service'),
+          title: const Text('Nurse Service'),
           elevation: 0.0,
           centerTitle: false,
           flexibleSpace: Container(
@@ -27,34 +28,34 @@ class ListServiceNurseViewEdit extends GetView<ListServiceNurseController> {
           ),
         ),
         body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 26),
-            child:
-             Obx(() => controller.listServiceNurseData.isEmpty
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
+            child: Obx(() => controller.listServiceNurseData.isEmpty
                 ? const Center(child: CircularProgressIndicator())
-                : 
-                ListView.builder(
-                    itemCount: controller.listServiceNurseData.length,
+                : ListView.builder(
+                    itemCount: Get.find<LoginController>().inHospital == "0"
+                        ? 1
+                        : controller.listServiceNurseData.length,
                     itemBuilder: (context, index) => InkWell(
-                      onTap: ()async {
+                      onTap: () async {
                         Get.put(PaketLayananNurseController())
-                            .serviceIdNurse
-                            .value = controller.listServiceNurseData[index]['id'];
-                            // if( Get.put(PaketLayananNurseController())
-                            // .serviceIdNurse
-                            // .value !=4){
-                            //   showPopUp(
-                            //   onTap: () {},
-                            //   imageAction: 'assets/json/eror.json',
-                            //   description: "Sedang dalam proses\npengembangan");
-                            // }else{
-                            // }
-                             Get.put(PaketLayananNurseController()).getNursePket();
+                                .serviceIdNurse
+                                .value =
+                            controller.listServiceNurseData[index]['id'];
+                        // if( Get.put(PaketLayananNurseController())
+                        // .serviceIdNurse
+                        // .value !=4){
+                        //   showPopUp(
+                        //   onTap: () {},
+                        //   imageAction: 'assets/json/eror.json',
+                        //   description: "Sedang dalam proses\npengembangan");
+                        // }else{
+                        // }
+                        Get.put(PaketLayananNurseController()).getNursePket();
                         // print(  Get.put(PaketLayananNurseController()).serviceIdNurse.value.toString());
                         // controller.serviceId.value = controller.listServiceData[index]['id'];
                         // Get.to(() => LengkapiJamPraktek());
-                          Get.toNamed(Routes.PAKET_LAYANAN_NURSE);
-                              
-                          },
+                        Get.toNamed(Routes.PAKET_LAYANAN_NURSE);
+                      },
                       child: Container(
                         margin: const EdgeInsets.only(top: 10),
                         alignment: Alignment.center,
