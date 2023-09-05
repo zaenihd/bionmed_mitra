@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/konfirmasi_pin.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/pendapatan_saldo_controller/pendapatan_saldo_controller.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
@@ -9,7 +12,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class BuatPinSaldo extends StatelessWidget {
-  const BuatPinSaldo({super.key});
+  BuatPinSaldo({super.key});
+
+  final controller = Get.put(PendapatanSaldoController());
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +48,36 @@ class BuatPinSaldo extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Txt(
-                      text: '1234',
-                      size: 26,
-                      weight: bold,
+                    Obx(
+                      () => controller.isHiddenPin.isFalse
+                          ? Txt(
+                              text: controller.kodePinView.value,
+                              size: 26,
+                              weight: bold,
+                            )
+                          : Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  for (var i = 0;
+                                      i < controller.kodePin.length;
+                                      i++)
+                                    Txt(
+                                      text: '*',
+                                      weight: bold,
+                                      size: 40,
+                                    )
+                                ]),
                     ),
-                    Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.grey,
+                    InkWell(
+                      onTap: () {
+                        controller.isHiddenPin.value =
+                            !controller.isHiddenPin.value;
+                      },
+                      child:
+                      Obx(()=> Icon(
+                        Icons.remove_red_eye,
+                        color:controller.isHiddenPin.isTrue ?  Colors.grey : Colors.blue,
+                      ),),
                     )
                   ],
                 ),
@@ -60,20 +87,47 @@ class BuatPinSaldo extends StatelessWidget {
               ),
               GridView.builder(
                 padding: EdgeInsets.symmetric(horizontal: 24),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 1.0,
                   crossAxisCount: 3,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 30,
+                  crossAxisSpacing: 30,
+                  // mainAxisExtent: 100
                 ),
                 itemCount: 12,
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   return Cntr(
+                      onTap: () {
+                        if (controller.kodePin.length != 6) {
+                          if (index == 10) {
+                            controller.kodePin.value.add(0);
+                            controller.kodePinView.value =
+                                controller.kodePin.join("");
+                          } else if (index == 11) {
+                            print(index);
+                            controller.kodePin.value.removeLast();
+                            controller.kodePinView.value =
+                                controller.kodePin.join("");
+                          } else {
+                            controller.kodePin.value.add(index + 1);
+                            controller.kodePinView.value =
+                                controller.kodePin.join("");
+                            log(controller.kodePin.length.toString());
+                          }
+                        } else {
+                          if (index == 11) {
+                            print(index);
+                            controller.kodePin.value.removeLast();
+                            controller.kodePinView.value =
+                                controller.kodePin.join("");
+                          }
+                        }
+                      },
                       alignment: Alignment.center,
-                      height: 90,
-                      width: 90,
+                      height: 50,
+                      width: 50,
                       radius: BorderRadius.circular(100),
                       color: Colors.grey[300],
                       child: index == 11
@@ -98,9 +152,11 @@ class BuatPinSaldo extends StatelessWidget {
               const SizedBox(
                 height: 20.0,
               ),
-              ButtomGradient(label: 'Simpan', onTap: () {
-                Get.to(()=> KonfirmasiPinSaldo());
-              }),
+              ButtomGradient(
+                  label: 'Simpan',
+                  onTap: () {
+                    Get.to(() => KonfirmasiPinSaldo());
+                  }),
               const SizedBox(
                 height: 20.0,
               ),

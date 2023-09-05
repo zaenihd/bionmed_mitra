@@ -41,6 +41,7 @@ abstract class Routes {
   static const PAKET_HOSPITAL_DAN_AMBULANCE =
       _Paths.PAKET_HOSPITAL_DAN_AMBULANCE;
   static const LENGKAPI_DATA_HOSPITAL = _Paths.LENGKAPI_DATA_HOSPITAL;
+  static const EDIT_PROFILE_OWNER_HOSPITAL = _Paths.EDIT_PROFILE_OWNER_HOSPITAL;
 }
 
 abstract class _Paths {
@@ -80,4 +81,5 @@ abstract class _Paths {
       '/tambah-tenaga-medis-atau-ambulance-in-profile';
   static const PAKET_HOSPITAL_DAN_AMBULANCE = '/paket-hospital-dan-ambulance';
   static const LENGKAPI_DATA_HOSPITAL = '/lengkapi-data-hospital';
+  static const EDIT_PROFILE_OWNER_HOSPITAL = '/edit-profile-owner-hospital';
 }

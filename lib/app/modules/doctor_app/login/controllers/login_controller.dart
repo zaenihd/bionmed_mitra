@@ -85,7 +85,7 @@ class LoginController extends GetxController {
         image.value = donors['data']['doctor']['image'];
         idLogin = donors['data']['doctor']['id'];
         userIdLogin = donors['data']['doctor']['userId'];
-        balance.value = donors['data']['doctor']['balance'];
+        balance.value = donors['data']['doctor']['balance'] ?? 0;
         phoneNumberUser.value = donors['data']['phoneNumber'];
         isVerifi.value = donors['isVerification'];
         address.value = donors['data']['doctor']['address'];
@@ -323,12 +323,12 @@ class LoginController extends GetxController {
             Get.to(() => Ditolak());
           }
         }
-        // if (dataHospital['data']['hospital']['hospital_educations'].toString() == "[]" &&
-        //         dataHospital['data']['hospital']['verifiedStatus'] == 1 ||
-        //     dataHospital['data']['hospital']['hospital_educations'] == null &&
-        //         dataHospital['data']['hospital']['verifiedStatus'] == 1) {
-        //   lengkapiProfil(Get.context!);
-        // }
+        if (dataHospital['data']['hospital']['hospital_doctors'].toString() == "[]" &&
+                dataHospital['data']['hospital']['verifiedStatus'] == 1 ||
+            dataHospital['data']['hospital']['hospital_doctors'] == null &&
+                dataHospital['data']['hospital']['verifiedStatus'] == 1) {
+          lengkapiProfil(Get.context!);
+        }
       } else {}
       isloading(false);
     } on Exception catch (e) {
@@ -411,7 +411,12 @@ class LoginController extends GetxController {
                           ButtomGradient(
                             label: "Lengkapi Sekarang",
                             onTap: () {
+                              if(role.value == "hospital"){
+                                Get.toNamed(Routes.LENGKAPI_DATA_HOSPITAL);
+                              }else{
                               Get.toNamed(Routes.LENGKAPI_PROFIL);
+                              }
+
                             },
                           )
                         ])

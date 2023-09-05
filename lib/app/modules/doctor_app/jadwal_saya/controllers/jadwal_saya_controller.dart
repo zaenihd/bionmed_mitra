@@ -7,6 +7,7 @@ import 'package:bionmed/app/constant/string.dart';
 import 'package:bionmed/app/constant/url.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/splash_screen/controllers/splash_screen_controller.dart';
+import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -17,6 +18,7 @@ class JadwalSayaController extends GetxController {
   RxList jadwalDoctor = [].obs;
   RxList statusJadwal = [].obs;
   RxString name = "".obs;
+  RxString namePic = "".obs;
   RxString birthDay = "".obs;
   RxString experience = "".obs;
   RxString strNumber = "".obs;
@@ -25,6 +27,7 @@ class JadwalSayaController extends GetxController {
   RxList pengalamanDokter = [].obs;
   RxList pendidikanDokter = [].obs;
   RxString profileImage = ''.obs;
+  RxString profileImagePic = ''.obs;
   RxInt spesialist = 0.obs;
   RxString spesialis = ''.obs;
   RxList service = [].obs;
@@ -35,6 +38,7 @@ class JadwalSayaController extends GetxController {
   RxInt serviceId = 0.obs;
 
   final loginC = Get.put(LoginController());
+  final paketLayananNurse = Get.put(PaketLayananNurseController());
 
   Future<dynamic> updateJadwanOnOff({required bool isActive}) async {
     final params = <String, dynamic>{
@@ -136,6 +140,47 @@ class JadwalSayaController extends GetxController {
       // ignore: unused_catch_clause
     } on Exception catch (e) {}
   }
+  Future<dynamic> loginDataHospital({required String phoneNumber}) async {
+    // ignore: unused_local_variable
+    final map = <String, dynamic>{};
+    isloading(true);
+
+    final params = <String, dynamic>{"phoneNumber": phoneNumber};
+    try {
+      var result = await RestClient()
+          .request('${MainUrl.urlApi}login/hospital', Method.POST, params);
+      final donors = json.decode(result.toString());
+      // if (donors['code'] == 200)
+      if (donors['data']['hospital'] != null) {
+        // dataDokter.value = donors['data']['hospital']['hospital_schedules'];
+        name.value = donors['data']['hospital']['name'];
+        namePic.value =  donors['data']['hospital']['picName'];
+        // birthDay.value = donors['data']['hospital']['brithday_date'];
+        // experience.value = donors['data']['hospital']['experience'];
+        // strNumber.value = donors['data']['hospital']['register_number_hospital'];
+        // sipNumber.value = donors['data']['hospital']['sipNumber'];
+        address.value = donors['data']['hospital']['address'] ?? "Alamat";
+        // pengalamanDokter.value = donors['data']['hospital']['hospital_experiences'];
+        // pendidikanDokter.value = donors['data']['hospital']['hospital_educations'];
+        profileImage.value = donors['data']['hospital']['image'];
+        profileImagePic.value = donors['data']['hospital']['picImage'];
+        // spesialist.value = donors['data']['hospital']['specialist']['id'];
+        // jadwal.value = donors['data']['hospital']['hospital_schedules'];
+        // service.value = donors['data']['hospital']['hospital_services'];
+        spesialis.value = donors['data']['hospital']['description'] ?? "";
+        // isVerifi.value = donors['isVerification'];
+        
+        // if(isVerifi.value == false){
+        //     print('Masuk Weu');
+        //     // Get.defaultDialog();
+        //     lengkapiProfil(Get.context!);
+        //   };
+      }
+
+      isloading(false);
+      // ignore: unused_catch_clause
+    } on Exception catch (e) {}
+  }
 
   Future<dynamic> checkPengalaman() async {
     isloading(true);
@@ -175,6 +220,19 @@ class JadwalSayaController extends GetxController {
     // isloading(true);
     final result = await RestClient().request(
         '${MainUrl.urlApi}nurse/data/schedule/${loginC.idLogin}/${Get.find<JadwalSayaController>().serviceId}?lat=${Get.put(SplashScreenController()).lat.value}&long=${Get.put(SplashScreenController()).long.value}',
+        // /${serviceId.value}',
+        Method.GET,
+        {});
+    final jadwal = json.decode(result.toString());
+    // isloading(false);
+        log('haha +$jadwal');
+    return jadwal['data'];
+  }
+  
+  Future<dynamic> checkJadwalTimHospital() async {
+    // isloading(true);
+    final result = await RestClient().request(
+        '${MainUrl.urlApi}nurse/data/schedule/${paketLayananNurse.idTimHospital.value}/${Get.find<JadwalSayaController>().serviceId}?lat=${Get.put(SplashScreenController()).lat.value}&long=${Get.put(SplashScreenController()).long.value}',
         // /${serviceId.value}',
         Method.GET,
         {});

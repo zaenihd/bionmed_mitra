@@ -28,10 +28,12 @@ class _EditJadwalState extends State<EditJadwal> {
 
   @override
   void initState() {
-    if(testC.role.value == 'nurse'){
+    if (testC.role.value == 'nurse') {
       schedulSetNurser();
-    }else{
-    schedulSet();
+    } else if (testC.role.value == 'hospital') {
+      schedulSetHospital();
+    } else {
+      schedulSet();
     }
     super.initState();
   }
@@ -56,8 +58,16 @@ class _EditJadwalState extends State<EditJadwal> {
       dataSchedul = data;
     });
   }
+
   schedulSetNurser() async {
     var data = await loginC.checkJadwalNurse();
+    setState(() {
+      dataSchedul = data;
+    });
+  }
+
+  schedulSetHospital() async {
+    var data = await loginC.checkJadwalTimHospital();
     setState(() {
       dataSchedul = data;
     });
@@ -107,7 +117,7 @@ class _EditJadwalState extends State<EditJadwal> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ButtomGradient(
-          onTap: ()async {
+          onTap: () async {
             dataSchedulSubmit.clear();
             for (var i in dataSchedul) {
               if (i['isActive'] == true) {
@@ -121,33 +131,35 @@ class _EditJadwalState extends State<EditJadwal> {
                 }
               }
             }
-            if(testC.role.value == "nurse"){
-          await controller.tambahJadwalNurse(scheduler: dataSchedulSubmit);
-            }else{
-          await  controller.tambahJadwal(scheduler: dataSchedulSubmit);
+            if (testC.role.value == "nurse") {
+              await controller.tambahJadwalNurse(scheduler: dataSchedulSubmit);
+            } else if (testC.role.value == "hospital") {
+              await controller.tambahJadwalHospital(
+                  scheduler: dataSchedulSubmit);
+            } else {
+              await controller.tambahJadwal(scheduler: dataSchedulSubmit);
             }
-            if(testC.isVerifikasiNurse.value == 1){
-             await Get.put(LengkapiProfilController()).updateProfilNurseVerifikasi();
+            if (testC.isVerifikasiNurse.value == 1) {
+              await Get.put(LengkapiProfilController())
+                  .updateProfilNurseVerifikasi();
 
-              Get.to(()=>const Sukses());
-            }else{
-            Get.back();
+              Get.to(() => const Sukses());
+            } else {
+              Get.back();
             }
             // Get.back();
           },
           label: "Simpan",
         ),
       ),
-      body:
-      
-       SingleChildScrollView(
+      body: SingleChildScrollView(
           child: Column(
         children: [
           InkWell(
-            onTap: () {
-              loginC.checkJadwalNurse();
-                        },
-            child: Center(child: Image.asset('assets/icon/icon_jadwal.png'))),
+              onTap: () {
+                loginC.checkJadwalNurse();
+              },
+              child: Center(child: Image.asset('assets/icon/icon_jadwal.png'))),
           const SizedBox(
             height: 10.0,
           ),
@@ -359,15 +371,20 @@ class _EditJadwalState extends State<EditJadwal> {
                                                           timeSelesai.substring(
                                                               0, 2);
                                                       if (int.parse(
-                                                              timeMulaiCek) >
-                                                          int.parse(
-                                                              timesBerakhirCek) || int.parse(
-                                                              timeMulaiCek) ==
-                                                          int.parse(
-                                                              timesBerakhirCek) &&  int.parse(
-                                                              timeMulai.substring(3,5)) >
-                                                          int.parse(
-                                                              timeSelesai.substring(3,5))) {
+                                                                  timeMulaiCek) >
+                                                              int.parse(
+                                                                  timesBerakhirCek) ||
+                                                          int.parse(timeMulaiCek) ==
+                                                                  int.parse(
+                                                                      timesBerakhirCek) &&
+                                                              int.parse(timeMulai
+                                                                      .substring(
+                                                                          3,
+                                                                          5)) >
+                                                                  int.parse(timeSelesai
+                                                                      .substring(
+                                                                          3,
+                                                                          5))) {
                                                         Get.defaultDialog(
                                                             title:
                                                                 "Terjadi Kesalahan",

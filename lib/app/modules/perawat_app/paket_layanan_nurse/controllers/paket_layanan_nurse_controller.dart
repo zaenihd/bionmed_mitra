@@ -27,6 +27,8 @@ class PaketLayananNurseController extends GetxController {
   RxString hargaCurrens = ''.obs;
 
   RxInt idPaket = 0.obs;
+  RxInt idTimHospital = 0.obs;
+  RxBool isHospital = false.obs;
 
   Future<dynamic> getNursePket() async {
     isloading(true);
@@ -34,6 +36,26 @@ class PaketLayananNurseController extends GetxController {
     try {
       final result = await RestClient().request(
           '${MainUrl.urlApi}service-price-nurse/${Get.put(LoginController()).idLogin}/$serviceIdNurse',
+          Method.GET,
+          params);
+      var nursePaket = json.decode(result.toString());
+      nursepaketData.value = nursePaket['data'];
+      log(nursepaketData.toString());
+
+      isloading(false);
+    } on Exception catch (e) {
+      isloading(false);
+      nursepaketData.clear();
+      // ignore: avoid_print
+      print("Cek error pesan haha $e");
+    }
+  }
+  Future<dynamic> getTimHospitalPket() async {
+    isloading(true);
+    final params = <String, dynamic>{};
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}service-price-nurse/$idTimHospital/$serviceIdNurse',
           Method.GET,
           params);
       var nursePaket = json.decode(result.toString());
@@ -86,6 +108,32 @@ class PaketLayananNurseController extends GetxController {
     try {
       final result = await RestClient().request(
           '${MainUrl.urlApi}package-nurse/${Get.put(LoginController()).idLogin}/$serviceIdNurse',
+          Method.POST,
+          params);
+      // ignore: unused_local_variable
+      final paketLayanan = json.decode(result.toString());
+      // jadwalDokter = jadwal['data']['doctor_schedules'];
+      // }
+
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
+  Future<dynamic> tambahPaketLayananHospital() async {
+    final params = <String, dynamic>{
+      "name": namaPaketC.text,
+      "description": deskripsiPaketC.text,
+      "price": int.parse(hargaCurrens.value),
+      "discount": diskonPaket.text == "" ? "0" : diskonPaket.text,
+      "sop": tampunganNurseId
+    };
+    isloading(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}package-nurse/$idTimHospital/$serviceIdNurse',
           Method.POST,
           params);
       // ignore: unused_local_variable

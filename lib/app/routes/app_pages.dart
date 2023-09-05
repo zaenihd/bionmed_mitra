@@ -38,10 +38,14 @@ import '../modules/doctor_app/register/bindings/register_binding.dart';
 import '../modules/doctor_app/register/views/register_view.dart';
 import '../modules/doctor_app/splash_screen/bindings/splash_screen_binding.dart';
 import '../modules/doctor_app/splash_screen/views/splash_screen_view.dart';
+import '../modules/hospital_app/profile/edit_profile_owner_hospital/bindings/edit_profile_owner_hospital_binding.dart';
+import '../modules/hospital_app/profile/edit_profile_owner_hospital/views/edit_profile_owner_hospital_view.dart';
 import '../modules/hospital_app/detail_order_hospital/bindings/detail_order_hospital_binding.dart';
 import '../modules/hospital_app/detail_order_hospital/views/detail_order_hospital_view.dart';
-import '../modules/hospital_app/edit_profile_hospital/bindings/edit_profile_hospital_binding.dart';
-import '../modules/hospital_app/edit_profile_hospital/views/edit_profile_hospital_view.dart';
+import '../modules/hospital_app/profile/edit_profile_hospital/bindings/edit_profile_hospital_binding.dart';
+import '../modules/hospital_app/profile/edit_profile_hospital/views/edit_profile_hospital_view.dart';
+import '../modules/hospital_app/lengkapi_data_hospital/bindings/lengkapi_data_hospital_binding.dart';
+import '../modules/hospital_app/lengkapi_data_hospital/views/lengkapi_data_hospital_view.dart';
 import '../modules/hospital_app/paket_hospital_dan_ambulance/bindings/paket_hospital_dan_ambulance_binding.dart';
 import '../modules/hospital_app/paket_hospital_dan_ambulance/views/paket_hospital_dan_ambulance_view.dart';
 import '../modules/hospital_app/register_hospital/bindings/register_hospital_binding.dart';
@@ -52,8 +56,6 @@ import '../modules/hospital_app/tambah_tenaga_medis_atau_ambulance_in_profile/bi
 import '../modules/hospital_app/tambah_tenaga_medis_atau_ambulance_in_profile/views/tambah_tenaga_medis_atau_ambulance_in_profile_view.dart';
 import '../modules/laboratorium_klinik_app/detail_order_laboratorium/bindings/detail_order_laboratorium_binding.dart';
 import '../modules/laboratorium_klinik_app/detail_order_laboratorium/views/detail_order_laboratorium_view.dart';
-import '../modules/hospital_app/lengkapi_data_hospital/bindings/lengkapi_data_hospital_binding.dart';
-import '../modules/hospital_app/lengkapi_data_hospital/views/lengkapi_data_hospital_view.dart';
 import '../modules/perawat_app/list_service_nurse/bindings/list_service_nurse_binding.dart';
 import '../modules/perawat_app/list_service_nurse/views/list_service_nurse_view.dart';
 import '../modules/perawat_app/paket_layanan_nurse/bindings/paket_layanan_nurse_binding.dart';
@@ -230,7 +232,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.EDIT_PROFILE_HOSPITAL,
-      page: () => const EditProfileHospitalView(),
+      page: () => const EditProfileHospital(),
       binding: EditProfileHospitalBinding(),
     ),
     GetPage(
@@ -252,6 +254,11 @@ class AppPages {
       name: _Paths.LENGKAPI_DATA_HOSPITAL,
       page: () => const LengkapiDataHospitalView(),
       binding: LengkapiDataHospitalBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_PROFILE_OWNER_HOSPITAL,
+      page: () => const EditProfileOwnerHospitalView(),
+      binding: EditProfileOwnerHospitalBinding(),
     ),
   ];
 }

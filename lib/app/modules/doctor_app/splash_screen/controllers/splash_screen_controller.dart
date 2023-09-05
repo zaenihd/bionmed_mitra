@@ -29,8 +29,10 @@ class SplashScreenController extends GetxController {
     if (phone != null) {
       if (idAccount == 1) {
         cLogin.loginV2(phoneNumber: phone, isSplash: true);
-      } else {
+      } else if(idAccount == 2) {
         cLogin.loginNurse(phoneNumber: phone, isSplash: true);
+      }else{
+        cLogin.loginHospital(phoneNumber: phone, isSplash: true);
       }
     }
     

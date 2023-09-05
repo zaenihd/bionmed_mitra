@@ -514,14 +514,14 @@ class _AccountViewState extends State<AccountView> {
                           //     },
                           //     imageAction: 'assets/json/eror.json',
                           //     description: "Sedang dalam proses\npengembangan");
-                        } 
-                        else if (myC.selected == 6) {
-                          showPopUp(
-                              onTap: () {
-                                Get.back();
-                              },
-                              imageAction: 'assets/json/eror.json',
-                              description: "Sedang dalam proses\npengembangan");
+                        // } 
+                        // else if (myC.selected == 6) {
+                        //   showPopUp(
+                        //       onTap: () {
+                        //         Get.back();
+                        //       },
+                        //       imageAction: 'assets/json/eror.json',
+                        //       description: "Sedang dalam proses\npengembangan");
                         } else {
                           Get.toNamed(Routes.LOGIN);
                         }

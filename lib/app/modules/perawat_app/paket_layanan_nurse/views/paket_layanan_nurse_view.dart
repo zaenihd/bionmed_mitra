@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
+import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/controllers/lengkapi_data_hospital_controller.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/container/container.dart';
@@ -25,7 +26,11 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
   final loginC = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
-    controller.getNursePket();
+    if (controller.isHospital.isTrue) {
+      controller.getTimHospitalPket();
+    } else {
+      controller.getNursePket();
+    }
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -50,70 +55,78 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Center(
-                        child: Cntr(
-                            alignment: Alignment.center,
-                            radius: BorderRadius.circular(100),
-                            height: 72,
-                            width: 72,
-                            border: Border.all(color: Colors.blue, width: 3),
-                            child: Image.asset('assets/icon/layanan.png')),
-                      ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      Txt(
-                        text: 'Paket Layanan',
-                        size: 16,
-                        weight: bold,
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      controller.nursepaketData.isNotEmpty
-                          ? const SizedBox(
-                              height: 1.0,
-                            )
-                          : Column(
-                              children: [
-                                Txt(
-                                  text: 'Tambahkan paket layanan Anda',
-                                  size: 11,
-                                  weight: medium,
+                      Visibility(
+                          visible: controller.isHospital.isFalse,
+                          child: Column(
+                            children: [
+                              Center(
+                                child: Cntr(
+                                    alignment: Alignment.center,
+                                    radius: BorderRadius.circular(100),
+                                    height: 72,
+                                    width: 72,
+                                    border: Border.all(
+                                        color: Colors.blue, width: 3),
+                                    child:
+                                        Image.asset('assets/icon/layanan.png')),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Txt(
+                                text: 'Paket Layanan',
+                                size: 16,
+                                weight: bold,
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              controller.nursepaketData.isNotEmpty
+                                  ? const SizedBox(
+                                      height: 1.0,
+                                    )
+                                  : Column(
+                                      children: [
+                                        Txt(
+                                          text: 'Tambahkan paket layanan Anda',
+                                          size: 11,
+                                          weight: medium,
+                                        ),
+                                        const SizedBox(
+                                          height: 20.0,
+                                        ),
+                                        Image.asset('assets/icon/stepper3.png'),
+                                        const SizedBox(
+                                          height: 20.0,
+                                        ),
+                                      ],
+                                    ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: InkWell(
+                                  onTap: () {
+                                    log(controller.serviceIdNurse.toString());
+                                  },
+                                  child: Txt(
+                                    text: controller.nursepaketData.isNotEmpty
+                                        ? "Edit Paket"
+                                        : 'Buat Paket',
+                                    weight: bold,
+                                  ),
                                 ),
-                                const SizedBox(
-                                  height: 20.0,
-                                ),
-                                Image.asset('assets/icon/stepper3.png'),
-                                const SizedBox(
-                                  height: 20.0,
-                                ),
-                              ],
-                            ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: InkWell(
-                          onTap: () {
-                            log(controller.serviceIdNurse.toString());
-                          },
-                          child: Txt(
-                            text: controller.nursepaketData.isNotEmpty
-                                ? "Edit Paket"
-                                : 'Buat Paket',
-                            weight: bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
+                              ),
+                              const SizedBox(
+                                height: 15.0,
+                              ),
+                            ],
+                          )),
                       Obx(
-                        () => 
-                        Visibility(
+                        () => Visibility(
                           visible: controller.nursepaketData.isNotEmpty,
                           child: Cntr(
+                            // color: Colors.amber,
                             // margin: const EdgeInsets.only(bottom: 10),
-                            height: 270,
+                            height: Get.height /1.4,
                             width: Get.width,
                             radius: BorderRadius.circular(10),
                             // padding: EdgeInsets.symmetric(vertical :10),
@@ -177,8 +190,14 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                       onPressed: () async {
                                                         await controller
                                                             .deleteNursePket();
-                                                        controller
-                                                            .getNursePket();
+                                                        if (loginC.role.value ==
+                                                            'hospital') {
+                                                          controller
+                                                              .getTimHospitalPket();
+                                                        } else {
+                                                          controller
+                                                              .getNursePket();
+                                                        }
                                                         Get.back();
                                                       },
                                                       child: Txt(
@@ -228,7 +247,8 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                         .nursepaketData[index]
                                                             ['discount']
                                                         .toString();
-                                                        controller.hargaCurrens.value = controller
+                                                controller.hargaCurrens.value =
+                                                    controller
                                                         .nursepaketData[index]
                                                             ['price']
                                                         .toString();
@@ -326,30 +346,38 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                                         .deskripsiPaketC,
                                                                 onTap: () {}),
                                                             InputPrimary(
-                                                               inputFormatters: [
-                                            // FilteringTextInputFormatter.allow(
-                                            //     RegExp(r'^\d+\.?\d{0,1}')),
-                                            CurrencyTextInputFormatter(
-                                              locale: 'id',
-                                              decimalDigits: 0,
-                                              symbol: '',
-                                            ),
-                                          ],
+                                                                inputFormatters: [
+                                                                  // FilteringTextInputFormatter.allow(
+                                                                  //     RegExp(r'^\d+\.?\d{0,1}')),
+                                                                  CurrencyTextInputFormatter(
+                                                                    locale:
+                                                                        'id',
+                                                                    decimalDigits:
+                                                                        0,
+                                                                    symbol: '',
+                                                                  ),
+                                                                ],
                                                                 keyboardType:
                                                                     TextInputType
                                                                         .number,
                                                                 hintText:
                                                                     "Harga Paket",
                                                                 onChange: (p0) {
-                                                                   controller.hargaCurrens.value =
-                                                int.parse(controller
-                                                        .hargaPaketC.text
-                                                        .replaceAll(".", ""))
-                                                    .toString();
+                                                                  controller
+                                                                      .hargaCurrens
+                                                                      .value = int.parse(controller
+                                                                          .hargaPaketC
+                                                                          .text
+                                                                          .replaceAll(
+                                                                              ".",
+                                                                              ""))
+                                                                      .toString();
                                                                   controller
                                                                           .totalHargaPaket
                                                                           .value =
-                                                                      double.parse(controller.hargaCurrens.value);
+                                                                      double.parse(controller
+                                                                          .hargaCurrens
+                                                                          .value);
                                                                 },
                                                                 controller:
                                                                     controller
@@ -467,7 +495,6 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                                                   padding: const EdgeInsets.only(left: 10),
                                                                                   width: Get.width / 2,
                                                                                   child: TextFormField(
-                                                                                  
                                                                                     keyboardType: TextInputType.number,
                                                                                     controller: controller.diskonPaket,
                                                                                     onChanged: (value) {
@@ -648,8 +675,16 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                                         controller
                                                                             .tampunganNurseId
                                                                             .value = [];
-                                                                        controller
-                                                                            .getNursePket();
+                                                                        if (loginC.role.value ==
+                                                                            'hospital') {
+                                                                          controller
+                                                                              .getTimHospitalPket();
+                                                                        } else {
+                                                                          controller
+                                                                              .getNursePket();
+                                                                        }
+                                                                        // controller
+                                                                        //     .getNursePket();
                                                                         controller
                                                                             .namaPaket
                                                                             .value = "";
@@ -829,7 +864,19 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      //INIBUAT
+                    
+                    ],
+                  ),
+                ),
+              ),
+      ),
+      bottomSheet: Cntr(
+        margin: const EdgeInsets.only(bottom: 20),
+        width: Get.width,
+        height: 120,
+        child: Column(
+          children: [
+             //INIBUAT
                       InkWell(
                         onTap: () {
                           controller.tambahDiskon.value = false;
@@ -912,7 +959,8 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                         .replaceAll(".", ""))
                                                     .toString();
                                             controller.totalHargaPaket.value =
-                                                double.parse(controller.hargaCurrens.value);
+                                                double.parse(controller
+                                                    .hargaCurrens.value);
                                           },
                                           controller: controller.hargaPaketC,
                                           onTap: () {}),
@@ -1012,7 +1060,9 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                               onChanged:
                                                                   (value) {
                                                                 var harga = double
-                                                                    .parse(controller.hargaCurrens.value);
+                                                                    .parse(controller
+                                                                        .hargaCurrens
+                                                                        .value);
                                                                 var diskonHome =
                                                                     double.parse(controller
                                                                         .diskonPaket
@@ -1182,8 +1232,14 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                 margin: 0,
                                                 label: 'Tambahkan',
                                                 onTap: () async {
-                                                  await controller
-                                                      .tambahPaketLayananNurse();
+                                                  if (loginC.role.value ==
+                                                      "hospital") {
+                                                    await controller
+                                                        .tambahPaketLayananHospital();
+                                                  } else {
+                                                    await controller
+                                                        .tambahPaketLayananNurse();
+                                                  }
                                                   Get.back();
                                                   controller.namaPaketC.clear();
                                                   controller.deskripsiPaketC
@@ -1194,7 +1250,15 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                                       .clear();
                                                   controller.tampunganNurseId
                                                       .value = [];
-                                                  controller.getNursePket();
+                                                      if (loginC.role.value ==
+                                                            'hospital') {
+                                                          controller
+                                                              .getTimHospitalPket();
+                                                        } else {
+                                                          controller
+                                                              .getNursePket();
+                                                        }
+                                                  // controller.getNursePket();
                                                   controller.namaPaket.value =
                                                       "";
                                                   controller.deskripsiPaket
@@ -1214,10 +1278,11 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                     ],
                                   ),
                                 ),
-                              ));
+                              )
+                              );
                         },
                         child: Container(
-                          margin: const EdgeInsets.only(bottom: 100),
+                          margin: const EdgeInsets.only(left: 24, right: 24),
                           width: Get.width,
                           height: 55,
                           decoration: DottedDecoration(
@@ -1242,27 +1307,27 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                             ],
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-      ),
-      bottomSheet: Cntr(
-        margin: const EdgeInsets.only(bottom: 20),
-        width: Get.width,
-        height: 50,
-        child: ButtomGradient(
-            label: loginC.isVerifikasiNurse.value == 1 &&
-                    loginC.nurseEducation.isEmpty
-                ? 'Lanjutkan'
-                : "Simpan",
-            onTap: () {
-              loginC.isVerifikasiNurse.value == 1 &&
-                      loginC.nurseEducation.isEmpty
-                  ? Get.to(() => ListJadwal())
-                  : Get.back();
-            }),
+                      ),
+                      const SizedBox(
+                      height: 10.0,
+                      ),
+            ButtomGradient(
+                label: loginC.isVerifikasiNurse.value == 1 &&
+                        loginC.nurseEducation.isEmpty
+                    ? 'Lanjutkan'
+                    : "Simpan",
+                onTap: () async {
+                  if (loginC.role.value == "hospital") {
+                    await Get.find<LengkapiDataHospitalController>()
+                        .allTimHospital();
+                  }
+                  loginC.isVerifikasiNurse.value == 1 &&
+                          loginC.nurseEducation.isEmpty
+                      ? Get.to(() => ListJadwal())
+                      : Get.back();
+                }),
+          ],
+        ),
       ),
     );
   }

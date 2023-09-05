@@ -4,8 +4,13 @@
 
 import 'dart:io';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/edit%20profile/pengaturan_akun.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/buat_pin.dart';
 import 'package:bionmed/app/modules/doctor_app/splash_screen/views/disclamer.dart';
 import 'package:bionmed/app/modules/doctor_app/splash_screen/views/splash_screen_view.dart';
+import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/views/lengkapi_data_hospital_view.dart';
+import 'package:bionmed/app/modules/hospital_app/profile/edit_profile_hospital/views/edit_profile_hospital_view.dart';
+import 'package:bionmed/app/modules/hospital_app/profile/pengaturan%20akun/pengaturan_akun_hospital.dart';
 import 'package:bionmed/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -19,6 +24,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 import 'app/constant/utils.dart';
+import 'app/modules/hospital_app/profile/edit_profile_owner_hospital/views/edit_profile_owner_hospital_view.dart';
 import 'app/routes/app_pages.dart';
 import 'certificate_api.dart';
 
@@ -125,8 +131,8 @@ void main() async {
           title: "Application",
           // initialRoute: Routes.SPLASH_SCREEN,
           home: setuju == null ? DisclamerSplash() : const SplashScreenView(),
-          // initialRoute: Routes.PAKET_LAYANAN_NURSE,
-          // home: PaketHospitalDanAmbulanceView(),
+          // initialRoute: Routes.LENGKAPI_DATA_HOSPITAL,
+          // home: PengaturanAkunHospital(),
           getPages: AppPages.routes,
         );
       },

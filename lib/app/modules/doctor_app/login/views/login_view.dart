@@ -208,7 +208,6 @@ class _LoginScreenState extends State<LoginView> {
                         onTap: () async {
                           var idAccount = await GetStorage().read('idAccount');
                           log(idAccount.toString());
-
                           if (idAccount == 2) {
                             Get.find<LoginController>().loginNurse(
                                 phoneNumber: myC.controllerPhone.text);

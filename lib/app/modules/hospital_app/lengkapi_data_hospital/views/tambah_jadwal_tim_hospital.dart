@@ -2,6 +2,7 @@ import 'package:bionmed/app/constant/colors.dart';
 import 'package:bionmed/app/modules/doctor_app/lengkapi_profil/views/sukses.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/edit%20profile/edit_jadwal.dart';
 import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/views/tambah_harga_paket_hospital.dart';
+import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
 import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
 import '../controllers/lengkapi_data_hospital_controller.dart';
 
 class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
@@ -39,9 +41,10 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
             Cntr(
               height: Get.height / 2.1,
               child: ListView.builder(
-                itemCount: 1,
+                itemCount: controller.listAllTimHospital.length,
                 shrinkWrap: true,
-                itemBuilder: (context, index) => cardHargaPaketTimHospital(),
+                itemBuilder: (context, index) =>
+                    cardHargaPaketTimHospital(index),
               ),
             )
           ],
@@ -52,14 +55,14 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
         child: ButtomGradient(
           label: 'Submit',
           onTap: () {
-            Get.to(()=>Sukses());
+            Get.to(() => Sukses());
           },
         ),
       ),
     );
   }
 
-  Cntr cardHargaPaketTimHospital() {
+  Cntr cardHargaPaketTimHospital(int index) {
     return Cntr(
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       radius: BorderRadius.circular(10),
@@ -70,15 +73,20 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.people,
-                size: 30,
+              Cntr(
+                color: Colors.transparent,
+                height: 40,
+                width: 40,
+                image: DecorationImage(
+                    image: NetworkImage(
+                        '${controller.listAllTimHospital[index]['service']['image']}'),
+                    fit: BoxFit.cover),
               ),
               const SizedBox(
                 width: 10.0,
               ),
               Txt(
-                text: 'Tim Home Visit Dokter 1',
+                text: '${controller.listAllTimHospital[index]['team']['name']}',
                 weight: bold,
                 color: Colors.white,
               ),
@@ -87,15 +95,24 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
           const SizedBox(
             height: 20.0,
           ),
-          dataPaketlistName(title: 'Rumah sakit', data: 'RS Dedari Kupang'),
+          dataPaketlistName(
+              title: 'Rumah sakit',
+              data:
+                  '${controller.listAllTimHospital[index]['team']['hospital']['name']}'),
           const SizedBox(
             height: 12.0,
           ),
-          dataPaketlistName(title: 'Layanan', data: 'Home Visit Dokter'),
+          dataPaketlistName(
+              title: 'Layanan',
+              data:
+                  "${controller.listAllTimHospital[index]['service']['name']}"),
           const SizedBox(
             height: 12.0,
           ),
-          dataPaketlistName(title: 'No PIC Layanan', data: '0882 2871 8273'),
+          dataPaketlistName(
+              title: 'No PIC Layanan',
+              data:
+                  "${controller.listAllTimHospital[index]['team']['user']['phoneNumber']}"),
           const SizedBox(
             height: 12.0,
           ),
@@ -105,6 +122,11 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
           ButtonPrimary(
             title: 'Buat Jadwal',
             onPressed: () {
+              Get.put(PaketLayananNurseController()).idTimHospital.value =
+                  controller.listAllTimHospital[index]['team']['id'];
+              Get.put(JadwalSayaController()).serviceId.value =
+                  controller.listAllTimHospital[index]['team']['nurse_services']
+                      [0]['serviceId'];
               Get.to(() => EditJadwal());
             },
             backgroundColor: Color(0xffFFC93F),
@@ -114,24 +136,24 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
           const SizedBox(
             height: 10.0,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.check_circle,
-                color: Color(0xff50FF61),
-                size: 15,
-              ),
-              const SizedBox(
-                width: 5.0,
-              ),
-              Txt(
-                text: '1 Jadwal didaftarkan',
-                size: 11,
-                color: Colors.white,
-              )
-            ],
-          )
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Icon(
+          //       Icons.check_circle,
+          //       color: Color(0xff50FF61),
+          //       size: 15,
+          //     ),
+          //     const SizedBox(
+          //       width: 5.0,
+          //     ),
+          //     Txt(
+          //       text: '1 Jadwal didaftarkan',
+          //       size: 11,
+          //       color: Colors.white,
+          //     )
+          //   ],
+          // )
         ],
       ),
     );

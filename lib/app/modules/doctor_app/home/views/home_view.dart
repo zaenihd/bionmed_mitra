@@ -225,41 +225,46 @@ class HomeView extends GetView<HomeController> {
                         ],
                       ),
                     ),
-
-                    // pendapatanLayananHospital(),
+                    Visibility(
+                      visible: loginC.role.value == 'hospital',
+                      child: pendapatanLayananHospital(),
+                    ),
                     // CardOrderHospital(),
 
-                    Obx(
-                      () => CarouselSlider(
-                          items: controller.dataBanner
-                              .map((element) => Container(
-                                    width: 312,
-                                    height: 128,
-                                    margin: const EdgeInsets.only(left: 10),
-                                    decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(15.0),
-                                        ),
-                                        color: Colors.grey[300],
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                '${element['image']}'),
-                                            fit: BoxFit.cover)),
-                                  ))
-                              .toList(),
-                          options: CarouselOptions(
-                            scrollDirection: Axis.horizontal,
-                            autoPlay: true,
-                            autoPlayInterval:
-                                const Duration(milliseconds: 3200),
-                            autoPlayAnimationDuration:
-                                const Duration(milliseconds: 800),
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            pauseAutoPlayOnTouch: true,
-                            height: 128,
-                            pageSnapping: false,
-                            aspectRatio: 16 / 9,
-                          )),
+                    Visibility(
+                      visible: loginC.role.value != 'hospital' ,
+                      child: Obx(
+                        () => CarouselSlider(
+                            items: controller.dataBanner
+                                .map((element) => Container(
+                                      width: 312,
+                                      height: 128,
+                                      margin: const EdgeInsets.only(left: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(15.0),
+                                          ),
+                                          color: Colors.grey[300],
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  '${element['image']}'),
+                                              fit: BoxFit.cover)),
+                                    ))
+                                .toList(),
+                            options: CarouselOptions(
+                              scrollDirection: Axis.horizontal,
+                              autoPlay: true,
+                              autoPlayInterval:
+                                  const Duration(milliseconds: 3200),
+                              autoPlayAnimationDuration:
+                                  const Duration(milliseconds: 800),
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              pauseAutoPlayOnTouch: true,
+                              height: 128,
+                              pageSnapping: false,
+                              aspectRatio: 16 / 9,
+                            )),
+                      ),
                     ),
                     const SizedBox(
                       height: 16,
@@ -2083,8 +2088,6 @@ class HomeView extends GetView<HomeController> {
     );
   }
 }
-
-
 
 class CurrencyFormat {
   static String convertToIdr(dynamic number, int decimalDigit) {

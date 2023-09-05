@@ -9,6 +9,7 @@ import 'package:bionmed/app/modules/doctor_app/profile/views/edit%20profile/peng
 import 'package:bionmed/app/modules/doctor_app/profile/views/paket_layanan.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_view.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/profil_login_required.dart';
+import 'package:bionmed/app/modules/hospital_app/profile/pengaturan%20akun/pengaturan_akun_hospital.dart';
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/container/container.dart';
@@ -35,7 +36,12 @@ class ProfileView extends GetView<ProfileController> {
     if (loginC.role.value == 'nurse') {
       Get.find<JadwalSayaController>().loginDataNurse(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
-    } else {
+    } else if(loginC.role.value == 'hospital') {
+
+      Get.find<JadwalSayaController>().loginDataHospital(
+          phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
+    }else{
+
       Get.find<JadwalSayaController>().loginData(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
     }
@@ -113,7 +119,10 @@ class ProfileView extends GetView<ProfileController> {
                           const SizedBox(
                             height: 10.0,
                           ),
-                          // cardNameOwnerHospital(),
+                          Visibility(
+                            visible: loginC.role.value == 'hospital',
+                            child: cardNameOwnerHospital(),
+                          ),
                           const SizedBox(
                             height: 16,
                           ),
@@ -211,7 +220,9 @@ class ProfileView extends GetView<ProfileController> {
                                 ),
                                 ListAktifitas(
                                   iconUrl: 'assets/icon/icon_ativitas.png',
-                                  label: 'Profil',
+                                  label: loginC.role.value == 'hospital'
+                                      ? "Pengaturan Akun"
+                                      : 'Profil',
                                   onTap: () async {
                                     // final box = GetStorage();
                                     // var phone = await box.read('phone');
@@ -219,11 +230,16 @@ class ProfileView extends GetView<ProfileController> {
                                     //   await Get.put(JadwalSayaController())
                                     //       .loginData(phoneNumber: phone);
                                     // }
-                                    Get.to(() => PengaturanAkun());
+                                    if (loginC.role.value == 'hospital') {
+                                      Get.to(
+                                          () => const PengaturanAkunHospital());
+                                    } else {
+                                      Get.to(() => PengaturanAkun());
+                                    }
                                   },
                                 ),
                                 Visibility(
-                                  // visible: loginC.role.value != "nurse",
+                                  visible: loginC.role.value != 'hospital',
                                   child: ListAktifitas(
                                     iconUrl: 'assets/icon/icon_ativitas1.png',
                                     label: 'Jadwal saya',
@@ -250,8 +266,13 @@ class ProfileView extends GetView<ProfileController> {
                                 ),
                                 ListAktifitas(
                                   iconUrl: 'assets/icon/icon_ativitas2.png',
-                                  label: 'Paket Layanan',
+                                  label:loginC.role.value == 'hospital' ?"Layanan" : 'Paket Layanan',
                                   onTap: () async {
+                                     if (loginC.role.value == 'hospital') {
+                                      // Get.to(
+                                      //     () => const PengaturanAkunHospital());
+                                    } else {
+                                      // Get.to(() => PengaturanAkun());
                                     Get.put(ListServiceNurseController())
                                         .listServiceNurse();
                                     // await Get.put(ListServiceNurseController())
@@ -260,11 +281,12 @@ class ProfileView extends GetView<ProfileController> {
                                         ? Get.to(
                                             () => ListServiceNurseViewEdit())
                                         : Get.to(() => PaketLayanan());
+                                    }
                                   },
                                 ),
                                 ListAktifitas(
                                   iconUrl: 'assets/icon/icon_ativitas3.png',
-                                  label: 'Riwayat Transaksi',
+                                  label: loginC.role.value == 'hospital' ? "Transaksi & Tarik Saldo" : 'Riwayat Transaksi',
                                   onTap: () {
                                     Get.to(() => RiwayatPesanan());
 
@@ -429,43 +451,42 @@ class ProfileView extends GetView<ProfileController> {
 
   Cntr cardNameOwnerHospital() {
     return Cntr(
-                          radius: BorderRadius.circular(10),
-                          margin: EdgeInsets.symmetric(horizontal: 24),
-                          width: Get.width,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 24),
-                          gradient: gradient1,
-                          child: Row(
-                            children: [
-                              Cntr(
-                                height: 35,
-                                width: 35,
-                                radius: BorderRadius.circular(100),
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(
-                              width: 10.0,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Txt(
-                                    text: 'Pemilik / Owner',
-                                    size: 10,
-                                    color: Colors.white,
-                                  ),
-                                  Txt(
-                                    text:
-                                        'dr. Ni Putu Aniek M . MSi. Med. SpA',
-                                    size: 14,
-                                    color: Colors.white,
-                                    weight: bold,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        );
+      radius: BorderRadius.circular(10),
+      margin: EdgeInsets.symmetric(horizontal: 24),
+      width: Get.width,
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 24),
+      gradient: gradient1,
+      child: Row(
+        children: [
+          Cntr(
+            height: 35,
+            width: 35,
+            radius: BorderRadius.circular(100),
+            color: Colors.grey,
+            image: DecorationImage(image: NetworkImage(loginCv2.profileImagePic.value)),
+          ),
+          const SizedBox(
+            width: 10.0,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Txt(
+                text: 'Pemilik / Owner',
+                size: 10,
+                color: Colors.white,
+              ),
+              Txt(
+                text: loginCv2.namePic.value,
+                size: 14,
+                color: Colors.white,
+                weight: bold,
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
 

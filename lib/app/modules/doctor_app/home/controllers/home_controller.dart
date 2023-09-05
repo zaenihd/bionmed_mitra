@@ -209,7 +209,7 @@ class HomeController extends GetxController {
           Method.GET,
           params);
       final detailDoctor = json.decode(result.toString());
-      pendapatan.value = detailDoctor['data']['balance'];
+      pendapatan.value = detailDoctor['data']['balance'] ?? 0;
       // ignore: empty_catches, unused_catch_clause
     } on Exception catch (e) {}
   }
@@ -797,8 +797,12 @@ class HomeController extends GetxController {
 
     // ignore: prefer_const_constructors
     Timer(Duration(seconds: 2), () async {
+      if(Get.find<LoginController>().role.value != 'hospital'){
+            
       getDetailDoctor();
+          }
       getBanner();
+
 
       // await Get.find<LayananHomeController>().addOrder();
       Get.lazyPut(() => LayananHomeController());
@@ -811,8 +815,8 @@ class HomeController extends GetxController {
         // ignore: prefer_interpolation_to_compose_strings
       }
       timePeriodic.value = false;
-      await realtimeApi();
-      await trimUpdateStatus();
+      // await realtimeApi();
+      // await trimUpdateStatus();
     });
   }
 

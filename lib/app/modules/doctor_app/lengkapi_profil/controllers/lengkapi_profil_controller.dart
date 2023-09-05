@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:bionmed/app/constant/string.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
+import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -153,6 +154,41 @@ class LengkapiProfilController extends GetxController {
     try {
       final result = await RestClient().request(
           '${MainUrl.urlApi}nurse/schedule/${Get.find<JadwalSayaController>().serviceId}/${loginC.idLogin}',
+          Method.POST,
+          params);
+      // ignore: unused_local_variable
+      final jadwal = json.decode(result.toString());
+      if(jadwal['code'] == 200){
+        // ignore: avoid_print
+        print('zaza == . $jadwal' );
+      }
+
+      log( 'hahaa$jadwal');
+      // jadwalDokter = jadwal['data']['doctor_schedules'];
+      // }
+      isloading(false);
+    } on Exception catch (e) {
+      Get.defaultDialog(title: 'Error', middleText: e.toString());
+
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
+
+  Future<dynamic> tambahJadwalHospital({
+    required List scheduler,
+  }) async {
+    final params = <String, dynamic>{
+      "request": scheduler
+
+      // "serviceId": serviceId,
+    };
+    isloading(true);
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}nurse/schedule/${Get.find<JadwalSayaController>().serviceId}/${Get.put(PaketLayananNurseController()).idTimHospital.value}',
           Method.POST,
           params);
       // ignore: unused_local_variable
