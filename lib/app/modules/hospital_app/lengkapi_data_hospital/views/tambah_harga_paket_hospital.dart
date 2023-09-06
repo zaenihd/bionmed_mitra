@@ -1,14 +1,13 @@
 import 'package:bionmed/app/constant/colors.dart';
-import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/views/tambah_jadwal_tim_hospital.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/views/paket_layanan_nurse_view.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
-import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/header/header_lengkapi_data.dart';
+import 'package:bionmed/app/widget/other/loading_indicator.dart';
 import 'package:bionmed/app/widget/textform/input_primary1.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
@@ -33,33 +32,41 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeaderLengkapiDataHospital(
-                imageUrl: 'assets/icon/icon_harga.png',
-                title: 'Harga paket',
-                subtitle: 'Buat paket harga layanan tim\nanda pada rumah sakit',
-                stepper: 'assets/icon/stepper2.png'),
+            Visibility(
+              visible: controller.isFromProfile.isFalse,
+              child: HeaderLengkapiDataHospital(
+                  imageUrl: 'assets/icon/icon_harga.png',
+                  title: 'Harga paket',
+                  subtitle: 'Buat paket harga layanan tim\nanda pada rumah sakit',
+                  stepper: 'assets/icon/stepper2.png'),
+            ),
             const SizedBox(
               height: 30.0,
             ),
+            Obx(()=>
+            controller.isloading.isTrue ? Center(child: loadingIndicator()) :
             Cntr(
-              height: Get.height / 2.1,
+              height:controller.isFromProfile.isFalse ? Get.height / 2.1 : Get.height /1.2,
               child: ListView.builder(
                 itemCount: controller.listAllTimHospital.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) =>
                     cardHargaPaketTimHospital(index),
               ),
-            )
+            ))
           ],
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.only(bottom: 24.0),
-        child: ButtomGradient(
-          label: 'Lanjutkan',
-          onTap: () {
-            Get.to(() => TambahJadwalTimHospital());
-          },
+      bottomSheet: Visibility(
+        visible: controller.isFromProfile.isFalse,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 24.0),
+          child: ButtomGradient(
+            label: 'Lanjutkan',
+            onTap: () {
+              Get.to(() => const TambahJadwalTimHospital());
+            },
+          ),
         ),
       ),
     );
@@ -67,11 +74,11 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
 
   Cntr cardHargaPaketTimHospital(int index) {
     return Cntr(
-      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       radius: BorderRadius.circular(10),
       width: Get.width,
       gradient: gradient1,
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       child: Column(
         children: [
           Row(
@@ -135,7 +142,7 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
               // controller.paketTimHospital();
               Get.to(() => PaketLayananNurseView());
             },
-            backgroundColor: Color(0xffFFC93F),
+            backgroundColor: const Color(0xffFFC93F),
             marginLeft: 0,
             marginRight: 0,
           ),
@@ -148,7 +155,7 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
             child:  Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.check_circle,
                 color: Color(0xff50FF61),
               ),
@@ -198,7 +205,7 @@ class PaketTimLayanan extends GetView<LengkapiDataHospitalController> {
       appBar: appbarBack(),
       body: ListView.builder(
         itemCount: 1,
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         itemBuilder: (context, index) => cardPaketTim(index),
       ),
       bottomSheet: Cntr(

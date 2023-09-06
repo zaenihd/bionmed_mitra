@@ -1,18 +1,14 @@
-import 'package:bionmed/app/constant/colors.dart';
 import 'package:bionmed/app/modules/doctor_app/lengkapi_profil/views/sukses.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/edit%20profile/edit_jadwal.dart';
-import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/views/tambah_harga_paket_hospital.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
-import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/header/header_lengkapi_data.dart';
-import 'package:bionmed/app/widget/textform/input_primary1.dart';
+import 'package:bionmed/app/widget/other/loading_indicator.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
-import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -29,34 +25,42 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeaderLengkapiDataHospital(
-                imageUrl: 'assets/icon/icon_jadwal.png',
-                title: 'Jadwal tim layanan',
-                subtitle:
-                    'Buat jadwal tim anda untuk setiap\nlayanan yang didaftarkan',
-                stepper: 'assets/icon/stepper3.png'),
+            Visibility(
+              visible: controller.isFromProfile.isFalse,
+              child: HeaderLengkapiDataHospital(
+                  imageUrl: 'assets/icon/icon_jadwal.png',
+                  title: 'Jadwal tim layanan',
+                  subtitle:
+                      'Buat jadwal tim anda untuk setiap\nlayanan yang didaftarkan',
+                  stepper: 'assets/icon/stepper3.png'),
+            ),
             const SizedBox(
               height: 30.0,
             ),
+        Obx(()=>
+            controller.isloading.isTrue ? loadingIndicator() :
             Cntr(
-              height: Get.height / 2.1,
+              height:controller.isFromProfile.isFalse? Get.height / 2.1 : Get.height/1.2,
               child: ListView.builder(
                 itemCount: controller.listAllTimHospital.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) =>
                     cardHargaPaketTimHospital(index),
               ),
-            )
+            ))
           ],
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.only(bottom: 24.0),
-        child: ButtomGradient(
-          label: 'Submit',
-          onTap: () {
-            Get.to(() => Sukses());
-          },
+      bottomSheet: Visibility(
+        visible: controller.isFromProfile.isFalse,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 24.0),
+          child: ButtomGradient(
+            label: 'Submit',
+            onTap: () {
+              Get.to(() => const Sukses());
+            },
+          ),
         ),
       ),
     );
@@ -64,11 +68,11 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
 
   Cntr cardHargaPaketTimHospital(int index) {
     return Cntr(
-      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       radius: BorderRadius.circular(10),
       width: Get.width,
       gradient: gradient1,
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       child: Column(
         children: [
           Row(
@@ -127,9 +131,9 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
               Get.put(JadwalSayaController()).serviceId.value =
                   controller.listAllTimHospital[index]['team']['nurse_services']
                       [0]['serviceId'];
-              Get.to(() => EditJadwal());
+              Get.to(() => const EditJadwal());
             },
-            backgroundColor: Color(0xffFFC93F),
+            backgroundColor: const Color(0xffFFC93F),
             marginLeft: 0,
             marginRight: 0,
           ),

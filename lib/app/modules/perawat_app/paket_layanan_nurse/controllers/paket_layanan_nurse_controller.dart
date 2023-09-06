@@ -29,6 +29,7 @@ class PaketLayananNurseController extends GetxController {
   RxInt idPaket = 0.obs;
   RxInt idTimHospital = 0.obs;
   RxBool isHospital = false.obs;
+  RxBool isTimHospital = false.obs;
 
   Future<dynamic> getNursePket() async {
     isloading(true);

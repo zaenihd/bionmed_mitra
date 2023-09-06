@@ -357,7 +357,7 @@ class HomeController extends GetxController {
             statusCode.value = 0;
           }
 
-          getDetailDoctor();
+          // getDetailDoctor();
           for (int i = 0;
               i < Get.find<LayananHomeController>().dataListOrder.length;
               i++) {

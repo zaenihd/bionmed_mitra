@@ -88,7 +88,7 @@ class JadwalSayaController extends GetxController {
         service.value = donors['data']['doctor']['doctor_services'];
         spesialis.value = donors['data']['doctor']['specialist']['name'];
         isVerifi.value = donors['isVerification'];
-        
+
         // if(isVerifi.value == false){
         //     print('Masuk Weu');
         //     // Get.defaultDialog();
@@ -115,20 +115,26 @@ class JadwalSayaController extends GetxController {
       if (donors['data']['nurse'] != null) {
         // dataDokter.value = donors['data']['nurse']['nurse_schedules'];
         name.value = donors['data']['nurse']['name'];
-        birthDay.value = donors['data']['nurse']['brithday_date'];
+        birthDay.value = donors['data']['nurse']['brithday_date'] ?? "";
         // experience.value = donors['data']['nurse']['experience'];
         strNumber.value = donors['data']['nurse']['register_number_nurse'];
         // sipNumber.value = donors['data']['nurse']['sipNumber'];
         address.value = donors['data']['nurse']['address'] ?? "Alamat";
         pengalamanDokter.value = donors['data']['nurse']['nurse_experiences'];
         pendidikanDokter.value = donors['data']['nurse']['nurse_educations'];
-        profileImage.value = donors['data']['nurse']['image'];
+        profileImage.value = donors['data']['nurse']['image'] != ""
+            ? donors['data']['nurse']['image']
+            : donors['data']['nurse']['hospital'].toString() == "[]"
+                ? donors['data']['nurse']['image']
+                : donors['data']['nurse']['hospital']['image'];
         // spesialist.value = donors['data']['nurse']['specialist']['id'];
         // jadwal.value = donors['data']['nurse']['nurse_schedules'];
         service.value = donors['data']['nurse']['nurse_services'];
-        spesialis.value = donors['data']['nurse']['nurse_services'][0]['service']['name'] ?? "";
+        spesialis.value = donors['data']['nurse']['nurse_services'][0]
+                ['service']['name'] ??
+            "";
         // isVerifi.value = donors['isVerification'];
-        
+
         // if(isVerifi.value == false){
         //     print('Masuk Weu');
         //     // Get.defaultDialog();
@@ -140,6 +146,7 @@ class JadwalSayaController extends GetxController {
       // ignore: unused_catch_clause
     } on Exception catch (e) {}
   }
+
   Future<dynamic> loginDataHospital({required String phoneNumber}) async {
     // ignore: unused_local_variable
     final map = <String, dynamic>{};
@@ -154,7 +161,7 @@ class JadwalSayaController extends GetxController {
       if (donors['data']['hospital'] != null) {
         // dataDokter.value = donors['data']['hospital']['hospital_schedules'];
         name.value = donors['data']['hospital']['name'];
-        namePic.value =  donors['data']['hospital']['picName'];
+        namePic.value = donors['data']['hospital']['picName'];
         // birthDay.value = donors['data']['hospital']['brithday_date'];
         // experience.value = donors['data']['hospital']['experience'];
         // strNumber.value = donors['data']['hospital']['register_number_hospital'];
@@ -169,7 +176,7 @@ class JadwalSayaController extends GetxController {
         // service.value = donors['data']['hospital']['hospital_services'];
         spesialis.value = donors['data']['hospital']['description'] ?? "";
         // isVerifi.value = donors['isVerification'];
-        
+
         // if(isVerifi.value == false){
         //     print('Masuk Weu');
         //     // Get.defaultDialog();
@@ -202,7 +209,7 @@ class JadwalSayaController extends GetxController {
         Method.GET,
         {});
     final jadwal = json.decode(result.toString());
-        log('haha +$jadwal');
+    log('haha +$jadwal');
 
     // isloading(false);
     return jadwal['data'];
@@ -225,10 +232,10 @@ class JadwalSayaController extends GetxController {
         {});
     final jadwal = json.decode(result.toString());
     // isloading(false);
-        log('haha +$jadwal');
+    log('haha +$jadwal');
     return jadwal['data'];
   }
-  
+
   Future<dynamic> checkJadwalTimHospital() async {
     // isloading(true);
     final result = await RestClient().request(
@@ -238,7 +245,7 @@ class JadwalSayaController extends GetxController {
         {});
     final jadwal = json.decode(result.toString());
     // isloading(false);
-        log('haha +$jadwal');
+    log('haha +$jadwal');
     return jadwal['data'];
   }
 

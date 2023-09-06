@@ -43,8 +43,10 @@ class PesanView extends GetView<PesanController> {
   Widget build(BuildContext context) {
     if (Get.find<LoginController>().role.value == "nurse") {
       myC.notificationNurse();
-    } else {
+    } else if(Get.find<LoginController>().role.value == "hospital"){
+    }else{
       myC.notification();
+
     }
     return Scaffold(
         appBar: AppBar(

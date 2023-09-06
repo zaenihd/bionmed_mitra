@@ -11,6 +11,7 @@ import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_view.dar
 import 'package:bionmed/app/modules/doctor_app/profile/views/profil_login_required.dart';
 import 'package:bionmed/app/modules/hospital_app/profile/pengaturan%20akun/pengaturan_akun_hospital.dart';
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
+import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
@@ -36,15 +37,16 @@ class ProfileView extends GetView<ProfileController> {
     if (loginC.role.value == 'nurse') {
       Get.find<JadwalSayaController>().loginDataNurse(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
-    } else if(loginC.role.value == 'hospital') {
-
+    } else if (loginC.role.value == 'hospital') {
       Get.find<JadwalSayaController>().loginDataHospital(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
-    }else{
-
+    } else {
       Get.find<JadwalSayaController>().loginData(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
     }
+       Get.put(PaketLayananNurseController())
+                                          .isTimHospital
+                                          .value = false;
 
     // final box = GetStorage();
     // var phone = box.read('phone');
@@ -120,7 +122,8 @@ class ProfileView extends GetView<ProfileController> {
                             height: 10.0,
                           ),
                           Visibility(
-                            visible: loginC.role.value == 'hospital',
+                            visible: loginC.role.value == 'hospital' ||
+                                loginC.inHospital != "0",
                             child: cardNameOwnerHospital(),
                           ),
                           const SizedBox(
@@ -220,17 +223,24 @@ class ProfileView extends GetView<ProfileController> {
                                 ),
                                 ListAktifitas(
                                   iconUrl: 'assets/icon/icon_ativitas.png',
-                                  label: loginC.role.value == 'hospital'
+                                  label: loginC.role.value == 'hospital' ||
+                                          loginC.inHospital != "0"
                                       ? "Pengaturan Akun"
                                       : 'Profil',
                                   onTap: () async {
+                                    if (loginC.role.value != 'hospital') {
+                                      Get.put(PaketLayananNurseController())
+                                          .isTimHospital
+                                          .value = true;
+                                    }
                                     // final box = GetStorage();
                                     // var phone = await box.read('phone');
                                     // if (phone != null) {
                                     //   await Get.put(JadwalSayaController())
                                     //       .loginData(phoneNumber: phone);
                                     // }
-                                    if (loginC.role.value == 'hospital') {
+                                    if (loginC.role.value == 'hospital' ||
+                                        loginC.inHospital != "0") {
                                       Get.to(
                                           () => const PengaturanAkunHospital());
                                     } else {
@@ -238,55 +248,97 @@ class ProfileView extends GetView<ProfileController> {
                                     }
                                   },
                                 ),
-                                Visibility(
-                                  visible: loginC.role.value != 'hospital',
-                                  child: ListAktifitas(
-                                    iconUrl: 'assets/icon/icon_ativitas1.png',
-                                    label: 'Jadwal saya',
-                                    onTap: () async {
-                                      if (Get.put(ListServiceNurseController())
-                                          .listServiceNurseData
-                                          .isEmpty) {
-                                        await Get.put(
-                                                ListServiceNurseController())
-                                            .listServiceNurse();
-                                      }
-                                      // final box = GetStorage();
-                                      // var phone = await box.read('phone');
-                                      // if (phone != null) {
-                                      //   await Get.put(JadwalSayaController())
-                                      //       .loginData(phoneNumber: phone);
-                                      // }
-                                      // Get.toNamed(Routes.JADWAL_SAYA);
-                                      Get.to(() => ListJadwal());
+                                loginC.inHospital != "0" &&
+                                            loginC.role.value != "hospital" ||
+                                        loginC.inHospital != "0"
+                                    ? const SizedBox(
+                                        height: 1.0,
+                                      )
+                                    : ListAktifitas(
+                                        iconUrl:
+                                            'assets/icon/icon_ativitas1.png',
+                                        label: 'Jadwal saya',
+                                        onTap: () async {
+                                          if (Get.put(
+                                                  ListServiceNurseController())
+                                              .listServiceNurseData
+                                              .isEmpty) {
+                                            await Get.put(
+                                                    ListServiceNurseController())
+                                                .listServiceNurse();
+                                          }
+                                          // final box = GetStorage();
+                                          // var phone = await box.read('phone');
+                                          // if (phone != null) {
+                                          //   await Get.put(JadwalSayaController())
+                                          //       .loginData(phoneNumber: phone);
+                                          // }
+                                          // Get.toNamed(Routes.JADWAL_SAYA);
+                                          Get.to(() => ListJadwal());
 
-                                      // Get.to(()=> EditJadwal());
-                                    },
-                                  ),
-                                ),
-                                ListAktifitas(
-                                  iconUrl: 'assets/icon/icon_ativitas2.png',
-                                  label:loginC.role.value == 'hospital' ?"Layanan" : 'Paket Layanan',
-                                  onTap: () async {
-                                     if (loginC.role.value == 'hospital') {
-                                      // Get.to(
-                                      //     () => const PengaturanAkunHospital());
-                                    } else {
-                                      // Get.to(() => PengaturanAkun());
-                                    Get.put(ListServiceNurseController())
-                                        .listServiceNurse();
-                                    // await Get.put(ListServiceNurseController())
-                                    //   .listServiceNurse();
-                                    loginC.role.value == "nurse"
-                                        ? Get.to(
-                                            () => ListServiceNurseViewEdit())
-                                        : Get.to(() => PaketLayanan());
-                                    }
-                                  },
-                                ),
+                                          // Get.to(()=> EditJadwal());
+                                        },
+                                      ),
+                                loginC.role.value == "hospital"
+                                    ? ListAktifitas(
+                                        iconUrl:
+                                            'assets/icon/icon_ativitas2.png',
+                                        label: loginC.role.value == 'hospital'
+                                            ? "Layanan"
+                                            : 'Paket Layanan',
+                                        onTap: () async {
+                                          if (loginC.role.value == 'hospital') {
+                                            // Get.to(
+                                            //     () => const PengaturanAkunHospital());
+                                          } else {
+                                            // Get.to(() => PengaturanAkun());
+                                            Get.put(ListServiceNurseController())
+                                                .listServiceNurse();
+                                            // await Get.put(ListServiceNurseController())
+                                            //   .listServiceNurse();
+                                            loginC.role.value == "nurse"
+                                                ? Get.to(() =>
+                                                    ListServiceNurseViewEdit())
+                                                : Get.to(() => PaketLayanan());
+                                          }
+                                        },
+                                      )
+                                    : const SizedBox(
+                                        height: 0,
+                                      ),
+                                loginC.inHospital == "0"
+                                    ? ListAktifitas(
+                                        iconUrl:
+                                            'assets/icon/icon_ativitas2.png',
+                                        label: loginC.role.value == 'hospital'
+                                            ? "Layanan"
+                                            : 'Paket Layanan',
+                                        onTap: () async {
+                                          if (loginC.role.value == 'hospital') {
+                                            // Get.to(
+                                            //     () => const PengaturanAkunHospital());
+                                          } else {
+                                            // Get.to(() => PengaturanAkun());
+                                            Get.put(ListServiceNurseController())
+                                                .listServiceNurse();
+                                            // await Get.put(ListServiceNurseController())
+                                            //   .listServiceNurse();
+                                            loginC.role.value == "nurse"
+                                                ? Get.to(() =>
+                                                    ListServiceNurseViewEdit())
+                                                : Get.to(() => PaketLayanan());
+                                          }
+                                        },
+                                      )
+                                    : const SizedBox(
+                                        height: 0,
+                                      ),
                                 ListAktifitas(
                                   iconUrl: 'assets/icon/icon_ativitas3.png',
-                                  label: loginC.role.value == 'hospital' ? "Transaksi & Tarik Saldo" : 'Riwayat Transaksi',
+                                  label: loginC.role.value == 'hospital' ||
+                                          loginC.inHospital != "0"
+                                      ? "Transaksi & Tarik Saldo"
+                                      : 'Riwayat Transaksi',
                                   onTap: () {
                                     Get.to(() => RiwayatPesanan());
 
@@ -452,9 +504,9 @@ class ProfileView extends GetView<ProfileController> {
   Cntr cardNameOwnerHospital() {
     return Cntr(
       radius: BorderRadius.circular(10),
-      margin: EdgeInsets.symmetric(horizontal: 24),
+      margin: const EdgeInsets.symmetric(horizontal: 24),
       width: Get.width,
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 24),
       gradient: gradient1,
       child: Row(
         children: [
@@ -463,7 +515,8 @@ class ProfileView extends GetView<ProfileController> {
             width: 35,
             radius: BorderRadius.circular(100),
             color: Colors.grey,
-            image: DecorationImage(image: NetworkImage(loginCv2.profileImagePic.value)),
+            image: DecorationImage(
+                image: NetworkImage(loginCv2.profileImagePic.value)),
           ),
           const SizedBox(
             width: 10.0,

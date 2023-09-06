@@ -20,6 +20,7 @@ class LengkapiDataHospitalController extends GetxController {
     super.onInit();
   }
   RxBool isloading = false.obs;
+  RxBool isFromProfile = false.obs;
   RxInt nurseId = 0.obs;
   RxInt serviceId = 0.obs;
   //====================TIM LAYANAN=======================
@@ -57,7 +58,7 @@ class LengkapiDataHospitalController extends GetxController {
       final serviceHospital = json.decode(result.toString());
       listServiceHospital.value = serviceHospital['data'];
       if (serviceHospital['code'] == 200) {
-        log(listServiceHospital.toString())
+        log("hahhahah$listServiceHospital")
 ;      }
       isloading(false);
     } on Exception catch (e) {
@@ -88,7 +89,7 @@ class LengkapiDataHospitalController extends GetxController {
       // ignore: unused_local_variable
       final paketLayanan = json.decode(result.toString());
       log("tambah paket ");
-      log("tambah paket " + paketLayanan.toString());
+      log("tambah paket $paketLayanan");
       // jadwalDokter = jadwal['data']['doctor_schedules'];
       // }
 
@@ -118,7 +119,7 @@ class LengkapiDataHospitalController extends GetxController {
           params);
       // ignore: unused_local_variable
       final paketLayanan = json.decode(result.toString());
-      log("ahhahaha " + paketLayanan.toString());
+      log("ahhahaha $paketLayanan");
       // jadwalDokter = jadwal['data']['doctor_schedules'];
       // }
 

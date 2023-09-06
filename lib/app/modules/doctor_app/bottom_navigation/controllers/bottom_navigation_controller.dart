@@ -19,8 +19,13 @@ class BottomNavigationController extends GetxController {
       if(loginC.role.value == 'nurse'){
       layananHomeC.listOrderNurse();
       }else{
+        if(loginC.role.value == 'hospital'){
 
+        }else{
      await Get.find<PesanController>().notification();
+
+        }
+
       //  Get.find<PesanController>().dataPesan[index]['orderId'];
       // homeC.timePeriodic.value = false;
       // realtimeApi.value = false;

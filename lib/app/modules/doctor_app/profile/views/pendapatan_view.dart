@@ -30,7 +30,9 @@ class PendapatanView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     if (loginC.role.value == 'nurse') {
       controllerNurse.listBanknurse();
-    } else {
+    } else if(loginC.role.value == 'hospital'){
+    }else{
+
       controllerDoctor.listBankDoctor();
     }
     return Scaffold(

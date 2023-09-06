@@ -23,17 +23,22 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
   const LengkapiDataHospitalView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    controller.
+    serviceHospital();
     return Scaffold(
       appBar: appbarBack(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeaderLengkapiDataHospital(
-                imageUrl: 'assets/icon/icon_praktek.png',
-                title: 'Layanan',
-                subtitle:
-                    'Pilih layanan yang tersedia di Rumah\nSakit dan buat paket layanan',
-                stepper: 'assets/icon/steper1.png'),
+            Visibility(
+              visible: controller.isFromProfile.isFalse,
+              child: HeaderLengkapiDataHospital(
+                  imageUrl: 'assets/icon/icon_praktek.png',
+                  title: 'Layanan',
+                  subtitle:
+                      'Pilih layanan yang tersedia di Rumah\nSakit dan buat paket layanan',
+                  stepper: 'assets/icon/steper1.png'),
+            ),
             const SizedBox(
               height: 30.0,
             ),
@@ -41,15 +46,18 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
           ],
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.only(bottom: 24.0),
-        child: ButtomGradient(
-          label: 'Lanjutkan',
-          onTap: ()async {
-            await controller.allTimHospital();
-
-            Get.to(() => TambahHargaPaketHospital());
-          },
+      bottomSheet: Visibility(
+        visible: controller.isFromProfile.isFalse,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 24.0),
+          child: ButtomGradient(
+            label: 'Lanjutkan',
+            onTap: ()async {
+              await controller.allTimHospital();
+      
+              Get.to(() => TambahHargaPaketHospital());
+            },
+          ),
         ),
       ),
     );
@@ -57,7 +65,7 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
 
   Cntr listTimLayanan() {
     return Cntr(
-        height: Get.height / 2,
+        height:controller.isFromProfile.isFalse? Get.height / 2 : Get.height,
         width: Get.width,
         child: Obx(
           () => controller.listServiceHospital.isEmpty
@@ -78,7 +86,7 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
                                 "";
                         controller.serviceId.value = controller
                             .listServiceHospital[index]['service']['id'];
-                        log('message ' + controller.serviceId.value.toString());
+                        log('message ${controller.serviceId.value}');
                         controller.index.value = index;
                         Get.to(() => TambahTimLayanan(
                               dataTim: controller.listServiceHospital[index]

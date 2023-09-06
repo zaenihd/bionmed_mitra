@@ -40,11 +40,11 @@ class BuatPinSaldo extends StatelessWidget {
                 height: 40.0,
               ),
               Cntr(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                margin: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 24),
                 height: 60,
                 width: Get.width,
-                border: Border.all(color: Color(0xffC1C1C1)),
+                border: Border.all(color: const Color(0xffC1C1C1)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -86,7 +86,7 @@ class BuatPinSaldo extends StatelessWidget {
                 height: 40.0,
               ),
               GridView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 1.0,
                   crossAxisCount: 3,
@@ -96,7 +96,7 @@ class BuatPinSaldo extends StatelessWidget {
                 ),
                 itemCount: 12,
                 shrinkWrap: true,
-                physics: ScrollPhysics(),
+                physics: const ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   return Cntr(
                       onTap: () {
@@ -131,7 +131,7 @@ class BuatPinSaldo extends StatelessWidget {
                       radius: BorderRadius.circular(100),
                       color: Colors.grey[300],
                       child: index == 11
-                          ? Icon(Icons.backspace_rounded)
+                          ? const Icon(Icons.backspace_rounded)
                           : index == 9
                               ? const SizedBox(
                                   height: 1.0,

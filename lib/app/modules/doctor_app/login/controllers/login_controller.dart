@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:bionmed/app/constant/string.dart';
 import 'package:bionmed/app/constant/url.dart';
+import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/login/views/disclamer.dart';
 import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/ditolak.dart';
 import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/menunggu_konfirmasi.dart';
@@ -15,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../../widget/other/show_dialog.dart';
+import '../../../hospital_app/lengkapi_data_hospital/controllers/lengkapi_data_hospital_controller.dart';
 import '../../home/controllers/home_controller.dart';
 
 class LoginController extends GetxController {
@@ -45,6 +47,11 @@ class LoginController extends GetxController {
   RxString long = ''.obs;
   RxString role = ''.obs;
   RxInt idAccount = 0.obs;
+  RxInt nurseServiceId = 0.obs;
+  RxString nameHospital = ''.obs;
+  RxString nameService = ''.obs;
+  RxString imageService = ''.obs;
+  RxString descriptionNurse= ''.obs;
   // ignore: prefer_typing_uninitialized_variables
   var dataUser;
   final donors = [].obs;
@@ -185,6 +192,8 @@ class LoginController extends GetxController {
   //------------------------------------------LOGIN APP NURSE -------------------------------------------
   RxInt isVerifikasiNurse = 0.obs;
   RxList nurseEducation = [].obs;
+  RxString namePic = ''.obs;
+  RxString imagePic = ''.obs;
   var inHospital;
   Future<dynamic> loginNurse(
       {required String phoneNumber, bool? isSplash}) async {
@@ -219,7 +228,21 @@ class LoginController extends GetxController {
         nurseEducation.value = dataNurse['data']['nurse']['nurse_educations'];
         rating = dataNurse['data']['nurse']['rating'] ?? 0;
         inHospital = dataNurse['data']['nurse']['hospital'] ?? "0";
-        log('nurse Hospital ' +inHospital.toString());
+        nurseServiceId.value = dataNurse['data']['nurse']['nurse_services'][0]['serviceId'] ?? 0; 
+        nameService.value = dataNurse['data']['nurse']['nurse_services'][0]['service']['name'] ?? ""; 
+        imageService.value = dataNurse['data']['nurse']['nurse_services'][0]['service']['image'] ?? ""; 
+        nameHospital.value = dataNurse['data']['nurse']['hospital'].toString() == "null"
+                ? "" : dataNurse['data']['nurse']['hospital']['name'];
+      descriptionNurse.value = dataNurse['data']['nurse']['description'] ?? "";
+        Get.put(JadwalSayaController()).profileImagePic.value =
+            dataNurse['data']['nurse']['hospital'].toString() == "null"
+                ? ""
+                : dataNurse['data']['nurse']['hospital']['picImage'];
+        Get.put(JadwalSayaController()).namePic.value =
+            dataNurse['data']['nurse']['hospital'].toString() == "null"
+                ? ""
+                : dataNurse['data']['nurse']['hospital']['picName'] ?? "";
+        log('nurse Hospital $inHospital');
         var setuju = await box.read('rememberme');
 
         if (setuju == true) {
@@ -239,11 +262,15 @@ class LoginController extends GetxController {
             Get.to(() => Ditolak());
           }
         }
-        if (dataNurse['data']['nurse']['nurse_educations'].toString() == "[]" &&
-                dataNurse['data']['nurse']['verifiedStatus'] == 1 ||
-            dataNurse['data']['nurse']['nurse_educations'] == null &&
-                dataNurse['data']['nurse']['verifiedStatus'] == 1) {
-          lengkapiProfil(Get.context!);
+        if (inHospital != "0") {
+        } else {
+          if (dataNurse['data']['nurse']['nurse_educations'].toString() ==
+                      "[]" &&
+                  dataNurse['data']['nurse']['verifiedStatus'] == 1 ||
+              dataNurse['data']['nurse']['nurse_educations'] == null &&
+                  dataNurse['data']['nurse']['verifiedStatus'] == 1) {
+            lengkapiProfil(Get.context!);
+          }
         }
       } else {}
       isloading(false);
@@ -280,6 +307,7 @@ class LoginController extends GetxController {
     final map = <String, dynamic>{};
     map['page'] = page;
     isloading(true);
+    Get.put(LengkapiDataHospitalController()).isFromProfile.value = false;
 
     final box = GetStorage();
 
@@ -323,7 +351,8 @@ class LoginController extends GetxController {
             Get.to(() => Ditolak());
           }
         }
-        if (dataHospital['data']['hospital']['hospital_doctors'].toString() == "[]" &&
+        if (dataHospital['data']['hospital']['hospital_doctors'].toString() ==
+                    "[]" &&
                 dataHospital['data']['hospital']['verifiedStatus'] == 1 ||
             dataHospital['data']['hospital']['hospital_doctors'] == null &&
                 dataHospital['data']['hospital']['verifiedStatus'] == 1) {
@@ -411,12 +440,11 @@ class LoginController extends GetxController {
                           ButtomGradient(
                             label: "Lengkapi Sekarang",
                             onTap: () {
-                              if(role.value == "hospital"){
+                              if (role.value == "hospital") {
                                 Get.toNamed(Routes.LENGKAPI_DATA_HOSPITAL);
-                              }else{
-                              Get.toNamed(Routes.LENGKAPI_PROFIL);
+                              } else {
+                                Get.toNamed(Routes.LENGKAPI_PROFIL);
                               }
-
                             },
                           )
                         ])
