@@ -24,6 +24,9 @@ class JadwalSayaController extends GetxController {
   RxString strNumber = "".obs;
   RxString sipNumber = "".obs;
   RxString address = ''.obs;
+  RxString addressPicHospital = ''.obs;
+  RxString tanggalLahirPicHospital = ''.obs;
+  RxString emailHospital = ''.obs;
   RxList pengalamanDokter = [].obs;
   RxList pendidikanDokter = [].obs;
   RxString profileImage = ''.obs;
@@ -146,6 +149,7 @@ class JadwalSayaController extends GetxController {
       // ignore: unused_catch_clause
     } on Exception catch (e) {}
   }
+  RxMap dataHospital = {}.obs;
 
   Future<dynamic> loginDataHospital({required String phoneNumber}) async {
     // ignore: unused_local_variable
@@ -159,14 +163,18 @@ class JadwalSayaController extends GetxController {
       final donors = json.decode(result.toString());
       // if (donors['code'] == 200)
       if (donors['data']['hospital'] != null) {
+        dataHospital.value = donors['data']['hospital'];
         // dataDokter.value = donors['data']['hospital']['hospital_schedules'];
         name.value = donors['data']['hospital']['name'];
         namePic.value = donors['data']['hospital']['picName'];
+        emailHospital.value = donors['data']['email'];
         // birthDay.value = donors['data']['hospital']['brithday_date'];
         // experience.value = donors['data']['hospital']['experience'];
         // strNumber.value = donors['data']['hospital']['register_number_hospital'];
         // sipNumber.value = donors['data']['hospital']['sipNumber'];
         address.value = donors['data']['hospital']['address'] ?? "Alamat";
+        addressPicHospital.value = donors['data']['hospital']['picAddress'] ?? "alamat";
+        tanggalLahirPicHospital.value =donors['data']['hospital']['picBrithday'];
         // pengalamanDokter.value = donors['data']['hospital']['hospital_experiences'];
         // pendidikanDokter.value = donors['data']['hospital']['hospital_educations'];
         profileImage.value = donors['data']['hospital']['image'];
@@ -182,6 +190,7 @@ class JadwalSayaController extends GetxController {
         //     // Get.defaultDialog();
         //     lengkapiProfil(Get.context!);
         //   };
+        log(dataHospital.toString());
       }
 
       isloading(false);

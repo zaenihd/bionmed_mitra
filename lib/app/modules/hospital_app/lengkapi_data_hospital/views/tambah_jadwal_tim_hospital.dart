@@ -124,7 +124,7 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
             height: 15.0,
           ),
           ButtonPrimary(
-            title: 'Buat Jadwal',
+            title:controller.isFromProfile.isFalse ? 'Buat Jadwal': "Lihat atau buat jadwal baru",
             onPressed: () {
               Get.put(PaketLayananNurseController()).idTimHospital.value =
                   controller.listAllTimHospital[index]['team']['id'];

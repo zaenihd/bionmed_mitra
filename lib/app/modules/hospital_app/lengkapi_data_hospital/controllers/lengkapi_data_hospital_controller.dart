@@ -12,12 +12,20 @@ import 'package:http/http.dart' as http;
 class LengkapiDataHospitalController extends GetxController {
 
   final loginC = Get.find<LoginController>();
+  RxBool isJadwal = false.obs;
 
   @override
   void onInit() {
-    serviceHospital();
+    getService();
+    if(isFromProfile.isFalse){
+    // serviceHospital();
+    }
     // TODO: implement onInit
     super.onInit();
+  }
+
+  getService()async{
+    await serviceHospital();
   }
   RxBool isloading = false.obs;
   RxBool isFromProfile = false.obs;

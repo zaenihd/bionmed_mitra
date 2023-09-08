@@ -4,7 +4,6 @@ import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controlle
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
-import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,7 +31,7 @@ class ListServiceNurseViewEdit extends GetView<ListServiceNurseController> {
             child: Obx(() => controller.listServiceNurseData.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    itemCount: Get.find<LoginController>().inHospital == "0"
+                    itemCount: Get.find<LoginController>().inHospital.value == "0"
                         ? 1
                         : controller.listServiceNurseData.length,
                     itemBuilder: (context, index) => InkWell(

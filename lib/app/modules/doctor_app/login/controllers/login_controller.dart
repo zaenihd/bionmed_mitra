@@ -194,7 +194,7 @@ class LoginController extends GetxController {
   RxList nurseEducation = [].obs;
   RxString namePic = ''.obs;
   RxString imagePic = ''.obs;
-  var inHospital;
+  RxString inHospital = "dokter".obs;
   Future<dynamic> loginNurse(
       {required String phoneNumber, bool? isSplash}) async {
     final map = <String, dynamic>{};
@@ -212,6 +212,8 @@ class LoginController extends GetxController {
       final dataNurse = json.decode(result.toString());
 
       if (dataNurse['code'] == 200) {
+        inHospital.value = "'dokter'";
+
         id = dataNurse['data']['id'];
         cHome.dataUser = dataNurse['data'];
         dataUser = dataNurse['data'];
@@ -227,7 +229,7 @@ class LoginController extends GetxController {
         long.value = dataNurse['data']['nurse']['long'].toString();
         nurseEducation.value = dataNurse['data']['nurse']['nurse_educations'];
         rating = dataNurse['data']['nurse']['rating'] ?? 0;
-        inHospital = dataNurse['data']['nurse']['hospital'] ?? "0";
+        inHospital.value = dataNurse['data']['nurse']['hospital'] == null ? "0" : '';
         nurseServiceId.value = dataNurse['data']['nurse']['nurse_services'][0]['serviceId'] ?? 0; 
         nameService.value = dataNurse['data']['nurse']['nurse_services'][0]['service']['name'] ?? ""; 
         imageService.value = dataNurse['data']['nurse']['nurse_services'][0]['service']['image'] ?? ""; 
@@ -262,7 +264,7 @@ class LoginController extends GetxController {
             Get.to(() => Ditolak());
           }
         }
-        if (inHospital != "0") {
+        if (inHospital.value != "0") {
         } else {
           if (dataNurse['data']['nurse']['nurse_educations'].toString() ==
                       "[]" &&
@@ -320,6 +322,7 @@ class LoginController extends GetxController {
       final dataHospital = json.decode(result.toString());
 
       if (dataHospital['code'] == 200) {
+        inHospital.value = "hospital";
         id = dataHospital['data']['id'];
         cHome.dataUser = dataHospital['data'];
         dataUser = dataHospital['data'];

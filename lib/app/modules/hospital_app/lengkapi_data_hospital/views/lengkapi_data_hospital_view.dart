@@ -23,8 +23,17 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
   const LengkapiDataHospitalView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    controller.
-    serviceHospital();
+    // controller.
+    // getService();
+    if (controller.isFromProfile.isTrue) {
+      controller.listServiceHospital.value = controller.listServiceHospital
+          .where(
+            (p0) => p0['team'].length != 0,
+          )
+          .toList();
+    } else {
+      controller.serviceHospital();
+    }
     return Scaffold(
       appBar: appbarBack(),
       body: SingleChildScrollView(
@@ -52,9 +61,9 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
           padding: const EdgeInsets.only(bottom: 24.0),
           child: ButtomGradient(
             label: 'Lanjutkan',
-            onTap: ()async {
+            onTap: () async {
               await controller.allTimHospital();
-      
+
               Get.to(() => TambahHargaPaketHospital());
             },
           ),
@@ -65,7 +74,7 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
 
   Cntr listTimLayanan() {
     return Cntr(
-        height:controller.isFromProfile.isFalse? Get.height / 2 : Get.height,
+        height: controller.isFromProfile.isFalse ? Get.height / 2 : Get.height,
         width: Get.width,
         child: Obx(
           () => controller.listServiceHospital.isEmpty
@@ -74,7 +83,12 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
                   itemCount: controller.listServiceHospital.length,
                   itemBuilder: (context, index) => Cntr(
                     onTap: () {
-                      if (index == 1 || index == 2) {
+                      if (controller.listServiceHospital[index]['service']
+                                  ['name'] ==
+                              "Mother Care" ||
+                          controller.listServiceHospital[index]['service']
+                                  ['name'] ==
+                              "Baby Care") {
                         // dataTim.value = controller.listServiceHospital[index]['team'] ?? [];
                         controller.serviceName.value =
                             controller.listServiceHospital[index]['service']
@@ -121,14 +135,21 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
                         children: [
                           Row(
                             children: [
-                              Image.asset(controller.listServiceHospital[index]
-                                              ['team']
-                                          .toString() ==
-                                      "[]"
-                                  ? 'assets/icon/cekoff.png'
-                                  : 'assets/icon/cekon.png'),
+                              Visibility(
+                                visible: controller.isFromProfile.isFalse,
+                                child: Row(
+                                  children: [
+                                    Image.asset(controller.listServiceHospital[index]
+                                                    ['team']
+                                                .toString() ==
+                                            "[]"
+                                        ? 'assets/icon/cekoff.png'
+                                        : 'assets/icon/cekon.png'),
                               const SizedBox(
                                 width: 15.0,
+                              ),
+                                  ],
+                                ),
                               ),
                               Cntr(
                                 // color: Colors.grey,
@@ -156,7 +177,7 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
                                     height: 5.0,
                                   ),
                                   Txt(
-                                    text: 'Buat tim layanan',
+                                    text: controller.isFromProfile.isTrue ? "${controller.listServiceHospital[index]['team'].length} tim terdaftar" :'Buat tim layanan',
                                     weight: medium,
                                     size: 11,
                                     color: Colors.grey,
@@ -447,7 +468,7 @@ class TambahTimLayanan extends GetView<LengkapiDataHospitalController> {
                     controller: controller.namaTimController,
                     onTap: () {}),
                 InputPrimary(
-                  keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.number,
                     hintText: "No. handphone / akses login PIC",
                     onChange: (p0) {},
                     controller: controller.nomerHpTimController,

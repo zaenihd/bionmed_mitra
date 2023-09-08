@@ -131,7 +131,7 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
             height: 15.0,
           ),
           ButtonPrimary(
-            title: 'Buat paket harga',
+            title: controller.isFromProfile.isFalse  ?'Buat paket harga' :"Lihat atau buat paket baru",
             onPressed: () {
                Get.put(PaketLayananNurseController()).isHospital.value = true;
              Get.put(PaketLayananNurseController()).idTimHospital.value = controller.listAllTimHospital[index]['team']['id'];

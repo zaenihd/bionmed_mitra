@@ -1,12 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed/app/modules/doctor_app/account/controllers/account_controller.dart';
+import 'package:bionmed/app/modules/doctor_app/account/views/account_hospital.dart';
 import 'package:bionmed/app/modules/doctor_app/account/widget/skpengguna_widget.dart';
 import 'package:bionmed/app/modules/doctor_app/layanan_home/controllers/layanan_home_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/container/container.dart';
-import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +25,7 @@ class AccountView extends StatefulWidget {
 class _AccountViewState extends State<AccountView> {
   final myC = Get.put(AccountController());
   final loginC = Get.put(LoginController());
-  // int? myC.selected;
+  // int? myC.selected.value;
 
   @override
   Widget build(BuildContext context) {
@@ -392,20 +392,21 @@ class _AccountViewState extends State<AccountView> {
                 child: ListView.builder(
                     padding: const EdgeInsets.all(15),
                     itemCount: loginBy.length,
-                    itemBuilder: (context, index) => InkWell(
+                    itemBuilder: (context, index) => 
+                    InkWell(
                           onTap: () {
                             // print(loginC.idAccount.value.toString());
         
-                            // myC.selected = 1;
+                            // myC.selected.value = 1;
                             // '${loginBy[index]['subtitle']}' = index
-                            setState(() {
-                              myC.selected = index + 1;
-                            });
-                             loginC.idAccount.value = myC.selected!;
-                            loginC.idAccount.value = myC.selected!;
-                           GetStorage().write('idAccount', myC.selected);
+                            // setState(() {
+                              myC.selected.value = index + 1;
+                            // });
+                             loginC.idAccount.value = myC.selected.value;
+                            loginC.idAccount.value = myC.selected.value;
+                           GetStorage().write('idAccount', myC.selected.value);
                           },
-                          child: Container(
+                          child:Obx(()=> Container(
                             margin: const EdgeInsets.only(bottom: 16),
                             padding: const EdgeInsets.all(23),
                             height: 100,
@@ -417,7 +418,7 @@ class _AccountViewState extends State<AccountView> {
                                       color: Colors.grey)
                                 ],
                                 border: Border.all(
-                                    color: myC.selected == index + 1
+                                    color: myC.selected.value == index + 1
                                         ? blueColor!
                                         : whiteColor!,
                                     width: 2),
@@ -460,8 +461,9 @@ class _AccountViewState extends State<AccountView> {
                                 )
                               ],
                             ),
-                          ),
-                        )),
+                          ),),
+                        )
+                        ),
               ),
               // const SkPengguna()
               const SizedBox(
@@ -479,11 +481,11 @@ class _AccountViewState extends State<AccountView> {
               const SizedBox(
                 height: 24,
               ),
-              myC.selected != null
+              myC.selected.value != null
                   ? ButtomGradient(
                       label: "Lanjutkan",
                       onTap: () {
-                        if (myC.selected == 2) {
+                        if (myC.selected.value == 2) {
                           Get.toNamed(Routes.LOGIN);
                           // showPopUp(
                           //   onTap: () {
@@ -492,12 +494,12 @@ class _AccountViewState extends State<AccountView> {
                           //     imageAction: 'assets/json/eror.json',
                           //     description: "Sedang dalam proses\npengembangan");
                         } 
-                        // else if (myC.selected == 3) {
+                        // else if (myC.selected.value == 3) {
                         //   showPopUp(
                         //       onTap: () {},
                         //       imageAction: 'assets/json/eror.json',
                         //       description: "Sedang dalam proses\npengembangan");
-                        // } else if (myC.selected == 4) {
+                        // } else if (myC.selected.value == 4) {
                         //   showPopUp(
                         //       onTap: () {
                         //         Get.back();
@@ -505,8 +507,9 @@ class _AccountViewState extends State<AccountView> {
                         //       imageAction: 'assets/json/eror.json',
                         //       description: "Sedang dalam proses\npengembangan");
                         // } 
-                        else if (myC.selected == 3) {
-                          Get.toNamed(Routes.LOGIN);
+                        else if (myC.selected.value == 3) {
+                          // Get.toNamed(Routes.LOGIN);
+                          Get.to(()=> AccountHospital());
 
                           // showPopUp(
                           //     onTap: () {
@@ -515,7 +518,7 @@ class _AccountViewState extends State<AccountView> {
                           //     imageAction: 'assets/json/eror.json',
                           //     description: "Sedang dalam proses\npengembangan");
                         // } 
-                        // else if (myC.selected == 6) {
+                        // else if (myC.selected.value == 6) {
                         //   showPopUp(
                         //       onTap: () {
                         //         Get.back();
@@ -525,13 +528,14 @@ class _AccountViewState extends State<AccountView> {
                         } else {
                           Get.toNamed(Routes.LOGIN);
                         }
-                        // myC.selected == 2 ? Get.defaultDialog() :
+                        // myC.selected.value == 2 ? Get.defaultDialog() :
                       },
                     )
                   : ButtonPrimary(title: "Lanjutkan", onPressed: () {}),
             ],
           ),
-        ));
+        )
+        );
   }
 }
 

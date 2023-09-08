@@ -3,7 +3,6 @@ import 'package:bionmed/app/constant/styles.dart';
 import 'package:bionmed/app/modules/doctor_app/jadwal_saya/views/list_jadwal.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
-import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +40,7 @@ class ListServiceNurseView extends GetView<ListServiceNurseController> {
             child: Obx(() => controller.listServiceNurseData.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    itemCount: Get.find<LoginController>().inHospital == "0"
+                    itemCount: Get.find<LoginController>().inHospital.value == "0"
                         ? 1
                         :controller.listServiceNurseData.length,
                     itemBuilder: (context, index) => InkWell(

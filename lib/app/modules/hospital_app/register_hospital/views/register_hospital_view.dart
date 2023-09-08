@@ -309,7 +309,7 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                             filled: true,
                             hintText: "Pilih Status",
                             hintStyle: TextStyle(color: Colors.grey[500]!),
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide: BorderSide.none)),
                         validator: (jKelamin) => jKelamin == null
                             ? "Status tidak boleh kosong"
@@ -502,7 +502,7 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                           registerC.lat.value = value.latitude;
                           registerC.long.value = value.longitude;
                         });
-                        registerC.getUserLocation();
+                       await registerC.getUserLocation();
 
                         Get.to(() => MapSample(
                               lat: registerC.lat.value,
@@ -644,7 +644,7 @@ class _RegisterHospitalViewState extends State<RegisterHospitalView> {
                               ScaffoldMessenger.of(Get.context!)
                                   .showSnackBar(snackBar);
                             } else {
-                              Get.to(() => RegisterHospitalLanjutanView());
+                              Get.to(() => const RegisterHospitalLanjutanView());
                             }
 
                             // ignore: unused_local_variable

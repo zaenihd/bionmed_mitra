@@ -42,6 +42,7 @@ abstract class Routes {
       _Paths.PAKET_HOSPITAL_DAN_AMBULANCE;
   static const LENGKAPI_DATA_HOSPITAL = _Paths.LENGKAPI_DATA_HOSPITAL;
   static const EDIT_PROFILE_OWNER_HOSPITAL = _Paths.EDIT_PROFILE_OWNER_HOSPITAL;
+  static const PAKET_LAYANAN_HOSPITAL = _Paths.PAKET_LAYANAN_HOSPITAL;
 }
 
 abstract class _Paths {
@@ -82,4 +83,5 @@ abstract class _Paths {
   static const PAKET_HOSPITAL_DAN_AMBULANCE = '/paket-hospital-dan-ambulance';
   static const LENGKAPI_DATA_HOSPITAL = '/lengkapi-data-hospital';
   static const EDIT_PROFILE_OWNER_HOSPITAL = '/edit-profile-owner-hospital';
+  static const PAKET_LAYANAN_HOSPITAL = '/paket-layanan-hospital';
 }

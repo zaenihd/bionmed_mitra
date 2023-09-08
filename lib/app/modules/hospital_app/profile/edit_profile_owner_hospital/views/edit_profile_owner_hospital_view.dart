@@ -1,23 +1,20 @@
-
-
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:bionmed/app/constant/colors.dart';
 import 'package:bionmed/app/constant/styles.dart';
+import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/controllers/register_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/views/maps.dart';
 import 'package:bionmed/app/modules/hospital_app/profile/edit_profile_owner_hospital/controllers/edit_profile_owner_hospital_controller.dart';
-import 'package:bionmed/app/modules/hospital_app/register_hospital/controllers/register_hospital_controller.dart';
-import 'package:bionmed/app/modules/hospital_app/register_hospital/views/register_hospital_lanjutan_view.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/header/header_layanan.dart';
-import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/app/widget/textform/input_primary1.dart';
+import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -31,10 +28,12 @@ class EditProfileOwnerHospitalView extends StatefulWidget {
   const EditProfileOwnerHospitalView({Key? key}) : super(key: key);
 
   @override
-  State<EditProfileOwnerHospitalView> createState() => _EditProfileOwnerHospitalViewState();
+  State<EditProfileOwnerHospitalView> createState() =>
+      _EditProfileOwnerHospitalViewState();
 }
 
-class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalView> {
+class _EditProfileOwnerHospitalViewState
+    extends State<EditProfileOwnerHospitalView> {
   final myC = Get.put(EditProfileOwnerHospitalController());
   final registerC = Get.put(RegisterController());
   final loginC = Get.put(LoginController());
@@ -50,6 +49,11 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
 
   @override
   void initState() {
+    myC.selectedStatus.value =
+        Get.find<JadwalSayaController>().dataHospital['picStatus'];
+    myC.selectedGender.value =
+        Get.find<JadwalSayaController>().dataHospital['picGender'];
+
     myC.namaOwnerC.addListener(() {
       final isButtonActive = myC.namaOwnerC.text.isNotEmpty;
       setState(() {
@@ -157,26 +161,42 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
                                 decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: AppColor.weak2Color),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  // ignore: prefer_const_literals_to_create_immutables
-                                  children: [
-                                    Icon(
-                                      Icons.add_a_photo_outlined,
-                                      size: 42,
-                                      color: AppColor.bodyColor[500],
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      "Tambahkan foto",
-                                      style: TextStyle(
-                                        color: AppColor.bodyColor[500],
-                                        fontSize: 11,
+                                child: Get.find<JadwalSayaController>()
+                                            .dataHospital['picImage'] ==
+                                        ""
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        // ignore: prefer_const_literals_to_create_immutables
+                                        children: [
+                                          Icon(
+                                            Icons.add_a_photo_outlined,
+                                            size: 42,
+                                            color: AppColor.bodyColor[500],
+                                          ),
+                                          const SizedBox(height: 6),
+                                          Text(
+                                            "Tambahkan foto",
+                                            style: TextStyle(
+                                              color: AppColor.bodyColor[500],
+                                              fontSize: 11,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Cntr(
+                                        height: 120,
+                                        width: 120,
+                                        radius: BorderRadius.circular(100),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                          Get.find<JadwalSayaController>()
+                                              .dataHospital['picImage']
+                                              .toString(),
+                                        )),
                                       ),
-                                    ),
-                                  ],
-                                ),
                               )
                             : SizedBox(
                                 height: 120,
@@ -266,9 +286,9 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
                             contentPadding: EdgeInsets.zero,
                             fillColor: AppColor.bgForm,
                             filled: true,
-                            hintText: "Pilih Status",
+                            hintText: myC.selectedStatus.value,
                             hintStyle: TextStyle(color: Colors.grey[500]!),
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide: BorderSide.none)),
                         validator: (jKelamin) => jKelamin == null
                             ? "Status tidak boleh kosong"
@@ -328,7 +348,13 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     myC.dokumenKtp.isEmpty
-                                        ? "Upload dokumen"
+                                        ? Get.find<JadwalSayaController>()
+                                                .dataHospital
+                                                .isEmpty
+                                            ? "Upload Dokumen"
+                                            : Get.find<JadwalSayaController>()
+                                                .dataHospital['picKtp']
+                                                .toString()
                                         : myC.dokumenKtp.value.substring(51),
                                     style: greyTextStyle.copyWith(
                                         color: myC.dokumenKtp.isNotEmpty
@@ -421,12 +447,12 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
                           border: BorderStyles.borderGrey),
                       // dropdown below..
                       child: DropdownButtonFormField(
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             contentPadding: EdgeInsets.zero,
                             fillColor: AppColor.bgForm,
                             filled: true,
-                            hintText: "Pilih Jenis kelamin",
-                            border: OutlineInputBorder(
+                            hintText: myC.selectedGender.value,
+                            border: const OutlineInputBorder(
                                 borderSide: BorderSide.none)),
                         validator: (jKelamin) => jKelamin == null
                             ? "Jenis kelamin tidak boleh kosong"
@@ -461,7 +487,7 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
                           registerC.lat.value = value.latitude;
                           registerC.long.value = value.longitude;
                         });
-                        registerC.getUserLocation();
+                       await registerC.getUserLocation();
 
                         Get.to(() => MapSample(
                               lat: registerC.lat.value,
@@ -495,33 +521,42 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
                                             ? greyColor
                                             : Colors.black),
                                   )
-                                : Row(
-                                    children: [
-                                      Text(
-                                        "Masukkan Lokasi anda",
-                                        style: greyTextStyle.copyWith(
-                                            color: registerC.city.isEmpty
-                                                ? greyColor
-                                                : Colors.black),
-                                      ),
-                                      const SizedBox(
-                                        width: 4.0,
-                                      ),
-                                      Text(
-                                        'Buka Maps',
-                                        style: blueTextStyle.copyWith(
-                                            fontWeight: bold),
-                                      ),
-                                      const SizedBox(
-                                        width: 4.0,
-                                      ),
-                                      Icon(
-                                        Icons.open_in_new,
-                                        color: blueColor,
-                                        size: 18,
-                                      )
-                                    ],
-                                  )),
+                                : Get.find<JadwalSayaController>()
+                                        .dataHospital
+                                        .isNotEmpty
+                                    ? Txt(
+                                        text: Get.find<JadwalSayaController>()
+                                                .dataHospital['picDistrict'] +
+                                            " " +
+                                            Get.find<JadwalSayaController>()
+                                                .dataHospital['picCity'])
+                                    : Row(
+                                        children: [
+                                          Text(
+                                            "Masukkan Lokasi anda",
+                                            style: greyTextStyle.copyWith(
+                                                color: registerC.city.isEmpty
+                                                    ? greyColor
+                                                    : Colors.black),
+                                          ),
+                                          const SizedBox(
+                                            width: 4.0,
+                                          ),
+                                          Text(
+                                            'Buka Maps',
+                                            style: blueTextStyle.copyWith(
+                                                fontWeight: bold),
+                                          ),
+                                          const SizedBox(
+                                            width: 4.0,
+                                          ),
+                                          Icon(
+                                            Icons.open_in_new,
+                                            color: blueColor,
+                                            size: 18,
+                                          )
+                                        ],
+                                      )),
                       ),
                     ),
                     // InputPrimary(
@@ -558,166 +593,156 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
                   margin: const EdgeInsets.only(bottom: 24),
                   height: 45,
                   width: double.infinity,
-                  child: isButtonActive
-                      ? Obx(() => ButtomGradient(
-                          label: myC.isLoading.isFalse
-                              ? "Simpan perubahan"
-                              : "Loading...",
-                          onTap: () async {
-                            // if (myC.namaOwnerC.text == "" ||
-                            //     myC.selectedStatus.value == "" ||
-                            //     myC.fileDokumenKtp == null ||
-                            //     myC.tanggalLahirC.text == "" ||
-                            //     myC.selectedGender.value == "" ||
-                            //     registerC.city.value == "" ||
-                            //     myC.alamatOwnerC.text == "") {
-                            //   final snackBar = SnackBar(
-                            //     behavior: SnackBarBehavior.floating,
-                            //     duration: const Duration(seconds: 2),
-                            //     margin: const EdgeInsets.symmetric(
-                            //         vertical: 20, horizontal: 24),
-                            //     content:
-                            //         const Text('Mohon Lengkapi Semua Data!'),
-                            //     backgroundColor: (Colors.red),
-                            //     action: SnackBarAction(
-                            //       label: '',
-                            //       onPressed: () {},
-                            //     ),
-                            //   );
-                            //   ScaffoldMessenger.of(Get.context!)
-                            //       .showSnackBar(snackBar);
-                            // } else if (myC.files == null) {
-                            //   final snackBar = SnackBar(
-                            //     behavior: SnackBarBehavior.floating,
-                            //     duration: const Duration(seconds: 2),
-                            //     margin: const EdgeInsets.symmetric(
-                            //         vertical: 20, horizontal: 24),
-                            //     content:
-                            //         const Text('Foto Profil Tidak Boleh Kosong!'),
-                            //     backgroundColor: (Colors.red),
-                            //     action: SnackBarAction(
-                            //       label: '',
-                            //       onPressed: () {},
-                            //     ),
-                            //   );
-                            //   ScaffoldMessenger.of(Get.context!)
-                            //       .showSnackBar(snackBar);
-                            // } else {
-                            //   Get.to(() => RegisterHospitalLanjutanView());
-                            // }
-                            showModalBottomSheet(
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30))),
-                                context: context,
-                                builder: (context) {
-                                  return SizedBox(
-                                    height: 290,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              bottom: 18, top: 14),
-                                          width: Get.width / 1.9,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: const Color(0xffEDEDED)),
-                                        ),
-                                        const SizedBox(
-                                          height: 16,
-                                        ),
-                                        Text(
-                                          'Simpan perubahan?',
-                                          style: subtitleTextStyle,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(
-                                          height: 46,
-                                        ),
-                                        ButtomGradient(
-                                            label: 'Simpan',
-                                            onTap: () async {}),
-                                        const SizedBox(
-                                          height: 16,
-                                        ),
-                                        ButtonPrimary(
-                                            title: "Batal",
-                                            onPressed: () {
-                                              Get.back();
-                                            })
-                                      ],
+                  child: ButtomGradient(
+                      label: myC.isLoading.isFalse
+                          ? "Simpan perubahan"
+                          : "Loading...",
+                      onTap: () async {
+                        // if (myC.namaOwnerC.text == "" ||
+                        //     myC.selectedStatus.value == "" ||
+                        //     myC.fileDokumenKtp == null ||
+                        //     myC.tanggalLahirC.text == "" ||
+                        //     myC.selectedGender.value == "" ||
+                        //     registerC.city.value == "" ||
+                        //     myC.alamatOwnerC.text == "") {
+                        //   final snackBar = SnackBar(
+                        //     behavior: SnackBarBehavior.floating,
+                        //     duration: const Duration(seconds: 2),
+                        //     margin: const EdgeInsets.symmetric(
+                        //         vertical: 20, horizontal: 24),
+                        //     content:
+                        //         const Text('Mohon Lengkapi Semua Data!'),
+                        //     backgroundColor: (Colors.red),
+                        //     action: SnackBarAction(
+                        //       label: '',
+                        //       onPressed: () {},
+                        //     ),
+                        //   );
+                        //   ScaffoldMessenger.of(Get.context!)
+                        //       .showSnackBar(snackBar);
+                        // } else if (myC.files == null) {
+                        //   final snackBar = SnackBar(
+                        //     behavior: SnackBarBehavior.floating,
+                        //     duration: const Duration(seconds: 2),
+                        //     margin: const EdgeInsets.symmetric(
+                        //         vertical: 20, horizontal: 24),
+                        //     content:
+                        //         const Text('Foto Profil Tidak Boleh Kosong!'),
+                        //     backgroundColor: (Colors.red),
+                        //     action: SnackBarAction(
+                        //       label: '',
+                        //       onPressed: () {},
+                        //     ),
+                        //   );
+                        //   ScaffoldMessenger.of(Get.context!)
+                        //       .showSnackBar(snackBar);
+                        // } else {
+                        //   Get.to(() => RegisterHospitalLanjutanView());
+                        // }
+                        showModalBottomSheet(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30))),
+                            context: context,
+                            builder: (context) {
+                              return SizedBox(
+                                height: 290,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          bottom: 18, top: 14),
+                                      width: Get.width / 1.9,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: const Color(0xffEDEDED)),
                                     ),
-                                  );
-                                });
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    Text(
+                                      'Simpan perubahan?',
+                                      style: subtitleTextStyle,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                      height: 46,
+                                    ),
+                                    ButtomGradient(
+                                        label: 'Simpan',
+                                        onTap: () async {
+                                          myC.updateProfilePic();
+                                        }),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    ButtonPrimary(
+                                        title: "Batal",
+                                        onPressed: () {
+                                          Get.back();
+                                        })
+                                  ],
+                                ),
+                              );
+                            });
 
-                            // ignore: unused_local_variable
-                            // File? image;
-                            // final isValiForm = formKey.currentState!.validate();
-                            // if (isValiForm) {
-                            //   if (myC.isLoading.isFalse) {
-                            //     if (files == null) {
-                            //       showPopUp(
-                            //           onTap: () {
-                            //             Get.back();
-                            //           },
-                            //           imageAction: 'assets/json/eror.json',
-                            //           description:
-                            //               "Foto Profil\nTidak Boleh Kosong",
-                            //           onPress: () {
-                            //             Get.back();
-                            //           });
-                            //     } else if (registerC.city.isEmpty) {
-                            //       final snackBar = SnackBar(
-                            //         behavior: SnackBarBehavior.floating,
-                            //         duration: const Duration(seconds: 1),
-                            //         margin: const EdgeInsets.symmetric(
-                            //             vertical: 10, horizontal: 24),
-                            //         content: const Text(
-                            //             'Mohon Masukkan Lokasi Anda Terlebih Dahulu!'),
-                            //         backgroundColor: (Colors.red),
-                            //         action: SnackBarAction(
-                            //           label: '',
-                            //           onPressed: () {},
-                            //         ),
-                            //       );
-                            //       ScaffoldMessenger.of(context)
-                            //           .showSnackBar(snackBar);
-                            //     } else {
-                            //       await myC.registerHospital(
-                            //         name: myC.namaOwnerC.text,
-                            //         email: myC.emailHospitalC.text,
-                            //         phoneNumber: myC.nomerHospitalC.text,
-                            //         description: myC.informasiHospitalC.text,
-                            //         city: registerC.city.value,
-                            //         country: registerC.negara.value,
-                            //         districts: registerC.kecamatan.value,
-                            //         latit: registerC.lat.value.toString(),
-                            //         longin: registerC.long.value.toString(),
-                            //         deviceId: box.read('deviceId'),
-                            //         address: myC.alamatHospitalC.text,
-                            //         files: files
-                            //       );
-                            //     }
-                            //   }
-                            // }
-                          }))
-                      // Get.toNamed(Routes.LAYANAN);
-                      : ButtonPrimary(
-                          title: "Simpan perubahan",
-                          onPressed: () {
-                            log(
-                              registerC.lat.value.toString(),
-                            );
-                            log(
-                              registerC.long.value.toString(),
-                            );
-                            // Get.toNamed(Routes.LAYANAN);
-                          })),
+                        // ignore: unused_local_variable
+                        // File? image;
+                        // final isValiForm = formKey.currentState!.validate();
+                        // if (isValiForm) {
+                        //   if (myC.isLoading.isFalse) {
+                        //     if (files == null) {
+                        //       showPopUp(
+                        //           onTap: () {
+                        //             Get.back();
+                        //           },
+                        //           imageAction: 'assets/json/eror.json',
+                        //           description:
+                        //               "Foto Profil\nTidak Boleh Kosong",
+                        //           onPress: () {
+                        //             Get.back();
+                        //           });
+                        //     } else if (registerC.city.isEmpty) {
+                        //       final snackBar = SnackBar(
+                        //         behavior: SnackBarBehavior.floating,
+                        //         duration: const Duration(seconds: 1),
+                        //         margin: const EdgeInsets.symmetric(
+                        //             vertical: 10, horizontal: 24),
+                        //         content: const Text(
+                        //             'Mohon Masukkan Lokasi Anda Terlebih Dahulu!'),
+                        //         backgroundColor: (Colors.red),
+                        //         action: SnackBarAction(
+                        //           label: '',
+                        //           onPressed: () {},
+                        //         ),
+                        //       );
+                        //       ScaffoldMessenger.of(context)
+                        //           .showSnackBar(snackBar);
+                        //     } else {
+                        //       await myC.registerHospital(
+                        //         name: myC.namaOwnerC.text,
+                        //         email: myC.emailHospitalC.text,
+                        //         phoneNumber: myC.nomerHospitalC.text,
+                        //         description: myC.informasiHospitalC.text,
+                        //         city: registerC.city.value,
+                        //         country: registerC.negara.value,
+                        //         districts: registerC.kecamatan.value,
+                        //         latit: registerC.lat.value.toString(),
+                        //         longin: registerC.long.value.toString(),
+                        //         deviceId: box.read('deviceId'),
+                        //         address: myC.alamatHospitalC.text,
+                        //         files: files
+                        //       );
+                        //     }
+                        //   }
+                        // }
+                      }))
+              // Get.toNamed(Routes.LAYANAN);
+              ,
             ],
           ),
         ),
@@ -725,4 +750,3 @@ class _EditProfileOwnerHospitalViewState extends State<EditProfileOwnerHospitalV
     );
   }
 }
-

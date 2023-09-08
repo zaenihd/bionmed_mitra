@@ -227,7 +227,7 @@ class _RegisterHospitalLanjutanViewState
                 ),
                 InputPrimary(
                   keyboardType: TextInputType.number,
-                  prefixIcon: Icon(Icons.date_range_rounded),
+                  prefixIcon: const Icon(Icons.date_range_rounded),
                   validate: (alamat) => alamat.toString().isEmpty
                       ? "Tahun tidak boleh kosong"
                       : null,
@@ -384,7 +384,7 @@ class _RegisterHospitalLanjutanViewState
                       registerC.latHospital.value = value.latitude;
                       registerC.longHospital.value = value.longitude;
                     });
-                    registerC.getUserLocation();
+                   await registerC.getUserLocation();
 
                     Get.to(() => MapSample(
                           lat: registerC.latHospital.value,

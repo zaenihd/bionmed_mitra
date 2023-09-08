@@ -2,20 +2,19 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bionmed/app/constant/colors.dart';
+import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/controllers/register_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/register/views/maps.dart';
 import 'package:bionmed/app/modules/hospital_app/profile/edit_profile_hospital/controllers/edit_profile_hospital_controller.dart';
-import 'package:bionmed/app/modules/hospital_app/register_hospital/controllers/register_hospital_controller.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/header/header_layanan.dart';
 import 'package:bionmed/app/widget/textform/input_primary1.dart';
+import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,7 +34,6 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
   final box = GetStorage();
 
   // ignore: prefer_typing_uninitialized_variables
-  var filesHospital;
   // ignore: prefer_typing_uninitialized_variables
   var filesStr;
 
@@ -43,13 +41,13 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
     final XFile? image = await _picker.pickImage(source: source);
     // ignore: unnecessary_nullable_for_final_variable_declarations
     final File? file = File(image!.path);
-    filesHospital == file;
-    filesHospital = File(image.path);
+    myC.filesHospital == file;
+    myC.filesHospital = File(image.path);
 
-    myC.imageUrlHospital.value = filesHospital.toString();
+    myC.imageUrlHospital.value = myC.filesHospital.toString();
     log(myC.imageUrlHospital.value.toString());
 
-    setState(() => filesHospital = File(image.path));
+    setState(() => myC.filesHospital = File(image.path));
     return file;
   }
 
@@ -143,7 +141,9 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               myC.imageUrlHospital.isEmpty
-                                  ? "Upload foto"
+                                  ? Get.find<JadwalSayaController>()
+                                      .dataHospital['image']
+                                      .toString()
                                   : myC.imageUrlHospital.value.substring(46),
                               style: greyTextStyle.copyWith(
                                   color: myC.imageUrlHospital.isNotEmpty
@@ -225,7 +225,7 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                 ),
                 InputPrimary(
                   keyboardType: TextInputType.number,
-                  prefixIcon: Icon(Icons.date_range_rounded),
+                  prefixIcon: const Icon(Icons.date_range_rounded),
                   validate: (alamat) => alamat.toString().isEmpty
                       ? "Tahun tidak boleh kosong"
                       : null,
@@ -277,7 +277,9 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 myC.dokumenSuratIjinOperasional.isEmpty
-                                    ? "Upload dokumen"
+                                    ? Get.find<JadwalSayaController>()
+                                        .dataHospital['fileLicense']
+                                        .toString()
                                     : myC.dokumenSuratIjinOperasional.value
                                         .substring(51),
                                 style: greyTextStyle.copyWith(
@@ -342,7 +344,14 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 myC.dokumenPendukung.isEmpty
-                                    ? "Contoh : ISO, KARS, etc"
+                                    ? Get.find<JadwalSayaController>()
+                                                .dataHospital['fileSupport']
+                                                .toString() ==
+                                            ""
+                                        ? "Contoh : ISO, KARS, etc"
+                                        : Get.find<JadwalSayaController>()
+                                            .dataHospital['fileSupport']
+                                            .toString()
                                     : myC.dokumenPendukung.value.substring(51),
                                 style: greyTextStyle.copyWith(
                                     color: myC.dokumenPendukung.isNotEmpty
@@ -382,7 +391,8 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                       registerC.latHospital.value = value.latitude;
                       registerC.longHospital.value = value.longitude;
                     });
-                    registerC.getUserLocation();
+                    log(registerC.latHospital.value.toString());
+                   await registerC.getUserLocation();
 
                     Get.to(() => MapSample(
                           lat: registerC.latHospital.value,
@@ -415,7 +425,17 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                                         ? greyColor
                                         : Colors.black),
                               )
-                            : Row(
+                            :
+                            Get.find<JadwalSayaController>()
+                                        .dataHospital
+                                        .isNotEmpty
+                                    ? Txt(
+                                        text: Get.find<JadwalSayaController>()
+                                                .dataHospital['district'] +
+                                            " " +
+                                            Get.find<JadwalSayaController>()
+                                                .dataHospital['city'])
+                                    : Row(
                                 children: [
                                   Text(
                                     "Masukkan Lokasi anda",
@@ -529,55 +549,56 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                             ? "Simpan Perubahan"
                             : "Loading...",
                         onTap: () async {
-                           showModalBottomSheet(
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30))),
-                                context: context,
-                                builder: (context) {
-                                  return SizedBox(
-                                    height: 290,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              bottom: 18, top: 14),
-                                          width: Get.width / 1.9,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: const Color(0xffEDEDED)),
-                                        ),
-                                        const SizedBox(
-                                          height: 16,
-                                        ),
-                                        Text(
-                                          'Simpan perubahan?',
-                                          style: subtitleTextStyle,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(
-                                          height: 46,
-                                        ),
-                                        ButtomGradient(
-                                            label: 'Simpan',
-                                            onTap: () async {}),
-                                        const SizedBox(
-                                          height: 16,
-                                        ),
-                                        ButtonPrimary(
-                                            title: "Batal",
-                                            onPressed: () {
-                                              Get.back();
-                                            })
-                                      ],
-                                    ),
-                                  );
-                                });
+                          showModalBottomSheet(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(30),
+                                      topRight: Radius.circular(30))),
+                              context: context,
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 290,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            bottom: 18, top: 14),
+                                        width: Get.width / 1.9,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: const Color(0xffEDEDED)),
+                                      ),
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                      Text(
+                                        'Simpan perubahan?',
+                                        style: subtitleTextStyle,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(
+                                        height: 46,
+                                      ),
+                                      ButtomGradient(
+                                          label: 'Simpan', onTap: () async {
+                                            myC.updateProfileHospital();
+                                          }),
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                      ButtonPrimary(
+                                          title: "Batal",
+                                          onPressed: () {
+                                            Get.back();
+                                          })
+                                    ],
+                                  ),
+                                );
+                              });
                           // if (filesHospital == null ||
                           //     myC.namaHopitalC.text == "" ||
                           //     myC.emailHopitalC.text == "" ||
@@ -603,27 +624,27 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                           //   ScaffoldMessenger.of(Get.context!)
                           //       .showSnackBar(snackBar);
                           // } else {
-                           
-                            // myC.registerHospital(
-                            //   latit: registerC.latHospital.value.toString(),
-                            //   longin: registerC.longHospital.value.toString(),
-                            //   districts: registerC.kecamatanHospital.value,
-                            //   city: registerC.city.value,
-                            //   country: registerC.negaraHospital.value,
-                            //   deviceId: box.read('deviceId'),
-                            //   picLat: registerC.lat.value.toString(),
-                            //   picLong: registerC.long.value.toString(),
-                            //   picDistrict: registerC.kecamatan.value,
-                            //   picCity: registerC.city.value,
-                            //   picCountry: registerC.negara.value,
-                            //   filesPhoto: myC.files,
-                            //   filesPhotoKtp: myC.fileDokumenKtp,
-                            //   filesPhotoHospital: filesHospital,
-                            //   filesPhotoDocumentLicence:
-                            //       myC.fileDokumenIjinOperasional,
-                            //   filesPhotoDocumentSupport:
-                            //       myC.fileDokumenPendukung,
-                            // );
+
+                          // myC.registerHospital(
+                          //   latit: registerC.latHospital.value.toString(),
+                          //   longin: registerC.longHospital.value.toString(),
+                          //   districts: registerC.kecamatanHospital.value,
+                          //   city: registerC.city.value,
+                          //   country: registerC.negaraHospital.value,
+                          //   deviceId: box.read('deviceId'),
+                          //   picLat: registerC.lat.value.toString(),
+                          //   picLong: registerC.long.value.toString(),
+                          //   picDistrict: registerC.kecamatan.value,
+                          //   picCity: registerC.city.value,
+                          //   picCountry: registerC.negara.value,
+                          //   filesPhoto: myC.files,
+                          //   filesPhotoKtp: myC.fileDokumenKtp,
+                          //   filesPhotoHospital: filesHospital,
+                          //   filesPhotoDocumentLicence:
+                          //       myC.fileDokumenIjinOperasional,
+                          //   filesPhotoDocumentSupport:
+                          //       myC.fileDokumenPendukung,
+                          // );
                           // }
 
                           // Get.to(()=> EditProfileHospital());
@@ -677,8 +698,7 @@ class _EditProfileHospitalState extends State<EditProfileHospital> {
                           //     }
                           //   }
                           // }
-                        }
-                        )))
+                        })))
                 // Get.toNamed(Routes.LAYANAN);
                 ,
               ],

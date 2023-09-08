@@ -15,22 +15,22 @@ class CardOrderHospital extends StatelessWidget {
   Widget build(BuildContext context) {
     return Cntr(
       radius: BorderRadius.circular(6),
-       boxShadow: [
+       boxShadow: const [
                   BoxShadow(
     blurRadius: 6,
     spreadRadius: 0.4,
     color: Color.fromARGB(255, 222, 221, 221),
                   )
                 ],
-      margin: EdgeInsets.symmetric(horizontal: 24),
+      margin: const EdgeInsets.symmetric(vertical: 7),
       width: Get.width,
       padding:
-          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.person,
                 size: 30,
               ),
@@ -55,7 +55,7 @@ class CardOrderHospital extends StatelessWidget {
           const SizedBox(
             height: 10.0,
           ),
-          Divider(
+          const Divider(
             thickness: 2,
           ),
           const SizedBox(
@@ -79,9 +79,9 @@ class CardOrderHospital extends StatelessWidget {
               ),
               Cntr(
                 radius: BorderRadius.circular(5),
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                     horizontal: 15, vertical: 5),
-                color: Color(0xff2B95DD),
+                color: const Color(0xff2B95DD),
                 child: Txt(
                   text: 'Berlangsung',
                   size: 12,

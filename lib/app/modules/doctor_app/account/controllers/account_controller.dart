@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountController extends GetxController {
-int? selected;
+RxInt selected = 0.obs;
 RxBool selec = false.obs;
 
 Future<dynamic> kebijakanPrivasi(

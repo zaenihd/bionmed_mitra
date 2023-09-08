@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
@@ -23,6 +25,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../widget/card/card_layanan.dart';
+import '../../../hospital_app/lengkapi_data_hospital/controllers/lengkapi_data_hospital_controller.dart';
 import '../../../perawat_app/list_service_nurse/views/list_service_nurse_edit.dart';
 import '../../login/controllers/login_controller.dart';
 import '../controllers/profile_controller.dart';
@@ -44,9 +47,7 @@ class ProfileView extends GetView<ProfileController> {
       Get.find<JadwalSayaController>().loginData(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
     }
-       Get.put(PaketLayananNurseController())
-                                          .isTimHospital
-                                          .value = false;
+    Get.put(PaketLayananNurseController()).isTimHospital.value = false;
 
     // final box = GetStorage();
     // var phone = box.read('phone');
@@ -123,7 +124,7 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                           Visibility(
                             visible: loginC.role.value == 'hospital' ||
-                                loginC.inHospital != "0",
+                                loginC.inHospital.value == "",
                             child: cardNameOwnerHospital(),
                           ),
                           const SizedBox(
@@ -224,7 +225,7 @@ class ProfileView extends GetView<ProfileController> {
                                 ListAktifitas(
                                   iconUrl: 'assets/icon/icon_ativitas.png',
                                   label: loginC.role.value == 'hospital' ||
-                                          loginC.inHospital != "0"
+                                          loginC.inHospital.value == ""
                                       ? "Pengaturan Akun"
                                       : 'Profil',
                                   onTap: () async {
@@ -240,17 +241,15 @@ class ProfileView extends GetView<ProfileController> {
                                     //       .loginData(phoneNumber: phone);
                                     // }
                                     if (loginC.role.value == 'hospital' ||
-                                        loginC.inHospital != "0") {
-                                      Get.to(
-                                          () => const PengaturanAkunHospital());
+                                        loginC.inHospital.value == "") {
+                                      Get.to(() => PengaturanAkunHospital());
                                     } else {
                                       Get.to(() => PengaturanAkun());
                                     }
                                   },
                                 ),
-                                loginC.inHospital != "0" &&
-                                            loginC.role.value != "hospital" ||
-                                        loginC.inHospital != "0"
+                                loginC.role.value == "hospital" ||
+                                        loginC.inHospital.value == ""
                                     ? const SizedBox(
                                         height: 1.0,
                                       )
@@ -288,6 +287,13 @@ class ProfileView extends GetView<ProfileController> {
                                             : 'Paket Layanan',
                                         onTap: () async {
                                           if (loginC.role.value == 'hospital') {
+                                            log('message');
+                                            await Get.find<
+                                                    LengkapiDataHospitalController>()
+                                                .serviceHospital();
+
+                                            Get.toNamed(
+                                                Routes.PAKET_LAYANAN_HOSPITAL);
                                             // Get.to(
                                             //     () => const PengaturanAkunHospital());
                                           } else {
@@ -306,7 +312,8 @@ class ProfileView extends GetView<ProfileController> {
                                     : const SizedBox(
                                         height: 0,
                                       ),
-                                loginC.inHospital == "0"
+                                loginC.inHospital.value == "dokter" ||
+                                        loginC.inHospital.value == "0"
                                     ? ListAktifitas(
                                         iconUrl:
                                             'assets/icon/icon_ativitas2.png',
@@ -336,7 +343,7 @@ class ProfileView extends GetView<ProfileController> {
                                 ListAktifitas(
                                   iconUrl: 'assets/icon/icon_ativitas3.png',
                                   label: loginC.role.value == 'hospital' ||
-                                          loginC.inHospital != "0"
+                                          loginC.inHospital.value == ""
                                       ? "Transaksi & Tarik Saldo"
                                       : 'Riwayat Transaksi',
                                   onTap: () {
