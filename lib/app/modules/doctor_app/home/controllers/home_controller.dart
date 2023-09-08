@@ -815,8 +815,8 @@ class HomeController extends GetxController {
         // ignore: prefer_interpolation_to_compose_strings
       }
       timePeriodic.value = false;
-      // await realtimeApi();
-      // await trimUpdateStatus();
+      await realtimeApi();
+      await trimUpdateStatus();
     });
   }
 

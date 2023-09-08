@@ -1,4 +1,3 @@
-
 import 'package:bionmed/app/constant/colors.dart';
 import 'package:bionmed/app/modules/doctor_app/detail/views/detail_resep.dart';
 import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
@@ -248,9 +247,12 @@ class DetailView extends GetView<DetailController> {
                 ),
               ],
             )),
-        const SizedBox(
-          height: 15.0,
-        ),
+        // const SizedBox(
+        //   height: 15.0,
+        // ),
+        Visibility(
+          visible: dataDetail['nurse']['hospital'] != null,
+          child: namaHospital()),
         dataOrderNurse(),
         const SizedBox(
           height: 20.0,
@@ -264,7 +266,7 @@ class DetailView extends GetView<DetailController> {
           height: 25.0,
         ),
         Cntr(
-          width: Get.width,
+            width: Get.width,
             boxShadow: const [
               BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.grey)
             ],
@@ -310,7 +312,7 @@ class DetailView extends GetView<DetailController> {
                           )
                         : dataDetail['status'] == 6
                             ? Cntr(
-                              alignment: Alignment.center,
+                                alignment: Alignment.center,
                                 width: Get.width,
                                 child: Txt(text: 'Menunggu penilaian pasien'),
                               )
@@ -339,8 +341,7 @@ class DetailView extends GetView<DetailController> {
                                       ],
                                     ),
                                   )
-                                : 
-                                buttonGradient)
+                                : buttonGradient)
       ],
     );
   }
@@ -551,7 +552,7 @@ class DetailView extends GetView<DetailController> {
                               height: 20,
                             ),
                             Cntr(
-                              width: Get.width/1.7,
+                              width: Get.width / 1.7,
                               child: Txt(
                                   text: Get.find<LayananHomeController>()
                                           .packageNurseSops[index]
@@ -566,6 +567,69 @@ class DetailView extends GetView<DetailController> {
               ),
             ),
           ]),
+    );
+  }
+
+  Cntr namaHospital() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+      radius: BorderRadius.circular(10),
+      width: Get.width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      gradient: AppColor.gradient1,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Cntr(
+                        color: Colors.transparent,
+                        height: 40,
+                        width: 40,
+                        image: DecorationImage(
+                            image: NetworkImage(dataDetail['service']['image']),
+                            fit: BoxFit.cover),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Txt(
+                            text: dataDetail['nurse']['name'],
+                            weight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          Txt(
+                            text: dataDetail['nurse']['hospital']['name'],
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Cntr(
+                    radius: BorderRadius.circular(5),
+                    width: Get.width,
+                    padding: const EdgeInsets.all(15),
+                    child: Txt(text: dataDetail['nurse']['description']),
+                  )
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 
@@ -820,16 +884,16 @@ class DetailView extends GetView<DetailController> {
     return Column(
       children: [
         Obx(
-          () =>
-               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      controller.imageRecipe.value == "" ? const SizedBox(
-                      height: 1.0,
-                      ) : 
-                      InkWell(
+          () => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                controller.imageRecipe.value == ""
+                    ? const SizedBox(
+                        height: 1.0,
+                      )
+                    : InkWell(
                         onTap: () {
                           Get.to(Resep());
                         },
@@ -846,7 +910,8 @@ class DetailView extends GetView<DetailController> {
                                     ),
                                     gradient: gradient1),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: const [
                                     Text(
                                       'Lihat Resep',
@@ -865,187 +930,189 @@ class DetailView extends GetView<DetailController> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 7.0,
-                      ),
-                      // Row(
-                      //   children: [
-                      //     Icon(
-                      //       Icons.verified,
-                      //       size: 15,
-                      //       color: greenColor,
-                      //       // color: AppColor.successColor,
-                      //     ),
-                      //     const SizedBox(
-                      //       height: 5.0,
-                      //     ),
-                      //     const Text(
-                      //       " Dokter mengirimkan resep untuk anda",
-                      //     )
-                      //   ],
-                      // ),
+                const SizedBox(
+                  height: 7.0,
+                ),
+                // Row(
+                //   children: [
+                //     Icon(
+                //       Icons.verified,
+                //       size: 15,
+                //       color: greenColor,
+                //       // color: AppColor.successColor,
+                //     ),
+                //     const SizedBox(
+                //       height: 5.0,
+                //     ),
+                //     const Text(
+                //       " Dokter mengirimkan resep untuk anda",
+                //     )
+                //   ],
+                // ),
 
-        const Divider(
-          thickness: 1,
-        ),
-        
-        Text(
-          'Bank Transfer',
-          style: blackTextStyle.copyWith(fontWeight: bold),
-        ),
-        const SizedBox(
-          height: 16.0,
-        ),
-        Container(
-            alignment: Alignment.center,
-            width: Get.width,
-            padding: const EdgeInsets.symmetric(
-                vertical: 17,
-            ),
-            decoration: DottedDecoration(
-                  shape: Shape.box,
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.black),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Image.asset(
-                    controller.paymentName.value == "022"
-                        ? 'assets/icon/icon_bankcimb.png'
-                        : controller.paymentName.value == "014"
-                            ? 'assets/icon/icon_bankbca.png'
-                            : controller.paymentName.value == "002"
-                                ? 'assets/icon/bri.png'
-                                : controller.paymentName.value == "013"
-                                    ? 'assets/icon/icon_bankpermata.png'
-                                    : controller.paymentName.value == "503"
-                                        ? "assets/icon/logo_ovo.png"
-                                        : controller.paymentName.value == "016"
-                                            ? "assets/icon/logo_maybank.png"
-                                            : controller.paymentName.value ==
-                                                    "011"
-                                                ? "assets/icon/logo_danamon.png"
-                                                : controller.paymentName.value ==
-                                                            "008" &&
-                                                        controller
-                                                                .bankName.value ==
-                                                            "MANDIRIATM"
-                                                    ? "assets/icon/logo_mandiri.png"
-                                                    : controller.paymentName
-                                                                    .value ==
-                                                                "008" &&
-                                                            controller.bankName
-                                                                    .value ==
-                                                                "DANAPAY"
-                                                        ? "assets/icon/logo_dana.png"
-                                                        : controller.paymentName
-                                                                    .value ==
-                                                                "157"
-                                                            ? "assets/icon/logo_maspion.png"
-                                                            : controller.paymentName
-                                                                        .value ==
-                                                                    "037"
-                                                                ? "assets/icon/logo_artha.png"
-                                                                : controller.paymentName
-                                                                            .value ==
-                                                                        "200"
-                                                                    ? "assets/icon/logo_btn.png"
-                                                                    : controller.paymentName
-                                                                                .value ==
-                                                                            "213"
-                                                                        ? "assets/icon/logo_btpn.png"
-                                                                        : controller.bankName.value ==
-                                                                                "SHOPEEJUMPPAY"
-                                                                            ? "assets/icon/logo_shopeepay.png"
-                                                                            : controller.bankName.value == "LINKAJAAPPLINK"
-                                                                                ? "assets/icon/logo_linkaja.png"
-                                                                                : 'assets/icon/bni.png',
-                    width: 70,
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Txt(
-                      text: controller.paymentName.value == "022"
-                          ? 'Bank CIMB'
-                          : controller.paymentName.value == "014"
-                              ? 'Bank BCA'
-                              : controller.paymentName.value == "002"
-                                  ? 'Bank BRI'
-                                  : controller.paymentName.value == "013"
-                                      ? 'Bank Permata'
-                                      : controller.paymentName.value == "503"
-                                          ? "OVO"
-                                          : controller.paymentName.value == "016"
-                                              ? "Bank Maybank"
+                const Divider(
+                  thickness: 1,
+                ),
+
+                Text(
+                  'Bank Transfer',
+                  style: blackTextStyle.copyWith(fontWeight: bold),
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    width: Get.width,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 17,
+                    ),
+                    decoration: DottedDecoration(
+                        shape: Shape.box,
+                        borderRadius: BorderRadius.circular(6),
+                        color: Colors.black),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Image.asset(
+                          controller.paymentName.value == "022"
+                              ? 'assets/icon/icon_bankcimb.png'
+                              : controller.paymentName.value == "014"
+                                  ? 'assets/icon/icon_bankbca.png'
+                                  : controller.paymentName.value == "002"
+                                      ? 'assets/icon/bri.png'
+                                      : controller.paymentName.value == "013"
+                                          ? 'assets/icon/icon_bankpermata.png'
+                                          : controller.paymentName.value ==
+                                                  "503"
+                                              ? "assets/icon/logo_ovo.png"
                                               : controller.paymentName.value ==
-                                                      "011"
-                                                  ? "Bank Danamon"
+                                                      "016"
+                                                  ? "assets/icon/logo_maybank.png"
                                                   : controller.paymentName
-                                                                  .value ==
-                                                              "008" &&
-                                                          controller.bankName
-                                                                  .value ==
-                                                              "MANDIRIATM"
-                                                      ? "Bank Mandiri"
+                                                              .value ==
+                                                          "011"
+                                                      ? "assets/icon/logo_danamon.png"
                                                       : controller.paymentName
                                                                       .value ==
                                                                   "008" &&
-                                                              controller.bankName
+                                                              controller
+                                                                      .bankName
                                                                       .value ==
-                                                                  "DANAPAY"
-                                                          ? "DANA"
+                                                                  "MANDIRIATM"
+                                                          ? "assets/icon/logo_mandiri.png"
                                                           : controller.paymentName
-                                                                      .value ==
-                                                                  "157"
-                                                              ? "Bank Maspion"
+                                                                          .value ==
+                                                                      "008" &&
+                                                                  controller
+                                                                          .bankName
+                                                                          .value ==
+                                                                      "DANAPAY"
+                                                              ? "assets/icon/logo_dana.png"
                                                               : controller.paymentName
                                                                           .value ==
-                                                                      "037"
-                                                                  ? "Bank Artha Graha"
+                                                                      "157"
+                                                                  ? "assets/icon/logo_maspion.png"
                                                                   : controller.paymentName
                                                                               .value ==
-                                                                          "200"
-                                                                      ? "Bank BTN"
+                                                                          "037"
+                                                                      ? "assets/icon/logo_artha.png"
                                                                       : controller.paymentName.value ==
-                                                                              "213"
-                                                                          ? "Bank BTPN"
-                                                                          : controller.bankName.value ==
-                                                                                  "SHOPEEJUMPPAY"
-                                                                              ? "ShopeePay"
-                                                                              : controller.bankName.value == "LINKAJAAPPLINK"
-                                                                                  ? "LinkAja"
-                                                                                  : 'BANK',
-                      size: 14,
-                      weight: medium)
-                ],
-            )),
-        const SizedBox(
-          height: 15.0,
-        ),
-        Row(
-          children: [
-            iconPembayaran,
-            const SizedBox(
-                width: 5.0,
+                                                                              "200"
+                                                                          ? "assets/icon/logo_btn.png"
+                                                                          : controller.paymentName.value == "213"
+                                                                              ? "assets/icon/logo_btpn.png"
+                                                                              : controller.bankName.value == "SHOPEEJUMPPAY"
+                                                                                  ? "assets/icon/logo_shopeepay.png"
+                                                                                  : controller.bankName.value == "LINKAJAAPPLINK"
+                                                                                      ? "assets/icon/logo_linkaja.png"
+                                                                                      : 'assets/icon/bni.png',
+                          width: 70,
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Txt(
+                            text: controller.paymentName.value == "022"
+                                ? 'Bank CIMB'
+                                : controller.paymentName.value == "014"
+                                    ? 'Bank BCA'
+                                    : controller.paymentName.value == "002"
+                                        ? 'Bank BRI'
+                                        : controller.paymentName.value == "013"
+                                            ? 'Bank Permata'
+                                            : controller.paymentName.value ==
+                                                    "503"
+                                                ? "OVO"
+                                                : controller.paymentName
+                                                            .value ==
+                                                        "016"
+                                                    ? "Bank Maybank"
+                                                    : controller.paymentName
+                                                                .value ==
+                                                            "011"
+                                                        ? "Bank Danamon"
+                                                        : controller.paymentName
+                                                                        .value ==
+                                                                    "008" &&
+                                                                controller
+                                                                        .bankName
+                                                                        .value ==
+                                                                    "MANDIRIATM"
+                                                            ? "Bank Mandiri"
+                                                            : controller.paymentName
+                                                                            .value ==
+                                                                        "008" &&
+                                                                    controller
+                                                                            .bankName
+                                                                            .value ==
+                                                                        "DANAPAY"
+                                                                ? "DANA"
+                                                                : controller.paymentName
+                                                                            .value ==
+                                                                        "157"
+                                                                    ? "Bank Maspion"
+                                                                    : controller.paymentName.value ==
+                                                                            "037"
+                                                                        ? "Bank Artha Graha"
+                                                                        : controller.paymentName.value ==
+                                                                                "200"
+                                                                            ? "Bank BTN"
+                                                                            : controller.paymentName.value == "213"
+                                                                                ? "Bank BTPN"
+                                                                                : controller.bankName.value == "SHOPEEJUMPPAY"
+                                                                                    ? "ShopeePay"
+                                                                                    : controller.bankName.value == "LINKAJAAPPLINK"
+                                                                                        ? "LinkAja"
+                                                                                        : 'BANK',
+                            size: 14,
+                            weight: medium)
+                      ],
+                    )),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                Row(
+                  children: [
+                    iconPembayaran,
+                    const SizedBox(
+                      width: 5.0,
+                    ),
+                    statusPembayaran
+                  ],
+                ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                statusOrderImage,
+                rating,
+                const SizedBox(
+                  height: 30.0,
+                ),
+              ],
             ),
-            statusPembayaran
-          ],
+          ),
         ),
-        const SizedBox(
-          height: 30.0,
-        ),
-        statusOrderImage,
-        rating,
-        const SizedBox(
-          height: 30.0,
-        ),
-                    
-                    ],
-                  ),
-              ),
-        ),
-        
         Align(
             alignment: Alignment.bottomCenter,
             child: Container(

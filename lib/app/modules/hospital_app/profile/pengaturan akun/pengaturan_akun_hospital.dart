@@ -68,7 +68,7 @@ class PengaturanAkunHospital extends StatelessWidget {
                 if (paketLayananNurseController.isTimHospital.isTrue) {
                   Get.to(() => TimLayananProfile());
                 } else {
-                  await controller.serviceHospital();
+                   controller.serviceHospital();
 
                   Get.toNamed(Routes.LENGKAPI_DATA_HOSPITAL);
 
@@ -105,7 +105,7 @@ class PengaturanAkunHospital extends StatelessWidget {
                   controller.isJadwal.value = false;
 
                   controller.isFromProfile.value = true;
-                  await controller.serviceHospital();
+                   controller.serviceHospital();
                   Get.to(() => ListServiceTimLayanan());
                 }
               },
@@ -130,7 +130,7 @@ class PengaturanAkunHospital extends StatelessWidget {
                   controller.isFromProfile.value = true;
                   controller.isJadwal.value = true;
                   //  controller.isFromProfile.value = true;
-                  await controller.serviceHospital();
+                   controller.serviceHospital();
                   // log('xxxx ${ controller.isJadwal.value.toString()}');
 
                   Get.to(() => ListServiceTimLayanan());

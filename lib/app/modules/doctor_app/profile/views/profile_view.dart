@@ -347,6 +347,9 @@ class ProfileView extends GetView<ProfileController> {
                                       ? "Transaksi & Tarik Saldo"
                                       : 'Riwayat Transaksi',
                                   onTap: () {
+                                    if(loginC.inHospital.value == ""){
+                                      Get.toNamed(Routes.PENDAPATAN_TIM_HOSPITAL);
+                                    }
                                     Get.to(() => RiwayatPesanan());
 
                                     // showPopUp(
