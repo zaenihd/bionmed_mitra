@@ -139,15 +139,16 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
                                 visible: controller.isFromProfile.isFalse,
                                 child: Row(
                                   children: [
-                                    Image.asset(controller.listServiceHospital[index]
+                                    Image.asset(controller
+                                                .listServiceHospital[index]
                                                     ['team']
                                                 .toString() ==
                                             "[]"
                                         ? 'assets/icon/cekoff.png'
                                         : 'assets/icon/cekon.png'),
-                              const SizedBox(
-                                width: 15.0,
-                              ),
+                                    const SizedBox(
+                                      width: 15.0,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -177,7 +178,15 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
                                     height: 5.0,
                                   ),
                                   Txt(
-                                    text: controller.isFromProfile.isTrue ? "${controller.listServiceHospital[index]['team'].length} tim terdaftar" :'Buat tim layanan',
+                                    text: controller.isFromProfile.isTrue
+                                        ? "${controller.listServiceHospital[index]['team'].length} tim terdaftar"
+                                        : controller
+                                                    .listServiceHospital[index]
+                                                        ['team']
+                                                    .length !=
+                                                0
+                                            ? "${controller.listServiceHospital[index]['team'].length} tim terdaftar"
+                                            : 'Buat tim layanan',
                                     weight: medium,
                                     size: 11,
                                     color: Colors.grey,

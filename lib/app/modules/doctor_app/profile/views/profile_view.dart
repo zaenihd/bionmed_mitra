@@ -349,8 +349,10 @@ class ProfileView extends GetView<ProfileController> {
                                   onTap: () {
                                     if(loginC.inHospital.value == ""){
                                       Get.toNamed(Routes.PENDAPATAN_TIM_HOSPITAL);
-                                    }
+                                    }else{
+
                                     Get.to(() => RiwayatPesanan());
+                                    }
 
                                     // showPopUp(
                                     //     onTap: () {
