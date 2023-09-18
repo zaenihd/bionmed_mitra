@@ -59,7 +59,6 @@ class _TambahRekeningState extends State<TambahRekening> {
               onChange: (p0) {
                 controllerDoctor.noRekening.value =
                     controllerDoctor.nomerRekeningController.text;
-                
               },
               controller: controllerDoctor.nomerRekeningController,
               onTap: () {},
@@ -157,7 +156,10 @@ class _TambahRekeningState extends State<TambahRekening> {
                                                               .listBank[index]
                                                           ['bank']),
                                                   onTap: () {
-                                                    controllerDoctor.selectedBank.value =  controllerDoctor
+                                                    controllerDoctor
+                                                            .selectedBank
+                                                            .value =
+                                                        controllerDoctor
                                                                 .listBank[index]
                                                             ['name'];
                                                     selected ==
@@ -224,7 +226,8 @@ class _TambahRekeningState extends State<TambahRekening> {
         padding: const EdgeInsets.only(bottom: 20.0),
         child: Obx(
           () => controllerDoctor.name.isEmpty ||
-                  controllerDoctor.noRekening.isEmpty || controllerDoctor.selectedBank.isEmpty
+                  controllerDoctor.noRekening.isEmpty ||
+                  controllerDoctor.selectedBank.isEmpty
               ? ButtonPrimary(title: 'Simpan', onPressed: () {})
               : ButtomGradient(
                   label: 'Simpan',
@@ -236,7 +239,14 @@ class _TambahRekeningState extends State<TambahRekening> {
                           name: controllerDoctor.namaController.text,
                           bankId: controllerDoctor.bankIdFromList.value);
                       await controllerNurse.listBanknurse();
-                    } else {
+                    } else if (loginC.role.value == "hospital") {
+                      await controllerNurse.addBankHospital(
+                          noRek: controllerDoctor.nomerRekeningController.text,
+                          name: controllerDoctor.namaController.text,
+                          bankId: controllerDoctor.bankIdFromList.value);
+                      await controllerNurse.listBankHospital();
+                    }
+                    {
                       await controllerDoctor.addBankDoctor(
                           noRek: controllerDoctor.nomerRekeningController.text,
                           name: controllerDoctor.namaController.text,

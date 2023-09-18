@@ -4,6 +4,8 @@ import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/controllers/saldo_dan_rekening_doctor_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/controllers/saldo_dan_rekening_nurse_controller.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/buat_pin.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/pendapatan_saldo_controller/pendapatan_saldo_controller.dart';
 import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/other/show_dialog.dart';
@@ -23,8 +25,8 @@ class PenarikanSaldo extends StatelessWidget {
   final controllerDoctor = Get.put(SaldoDanRekeningDoctorController());
   final controllerNurse = Get.put(SaldoDanRekeningNurseController());
   final loginC = Get.put(LoginController());
-  var now = DateTime.now();
   var formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+  var now = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -110,71 +112,122 @@ class PenarikanSaldo extends StatelessWidget {
                                         imageAction: 'assets/json/eror.json',
                                         description: "Saldo Anda\nTidak Cukup");
                                   } else {
-                                    if (loginC.role.value == "nurse") {
-                                      await controllerNurse.sendWithDrawNurse(
-                                          date: formatter
-                                              .format(now.toLocal())
-                                              .toString(),
-                                          nurseBankId:
-                                              controllerDoctor.bankId.value,
-                                          amount: controllerDoctor
-                                              .saldoTarikCurren.value);
-                                              // ignore: prefer_interpolation_to_compose_strings
-                                              log('====> ' + controllerDoctor.bankId.value.toString() + "saldooo " +  controllerDoctor
-                                              .saldoTarikCurren.value.toString() );
-                                      controllerDoctor
-                                          .nominalSaldoTarikController
-                                          .clear();
-                                      final snackBar = SnackBar(
-                                        behavior: SnackBarBehavior.floating,
-                                        duration: const Duration(seconds: 1),
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 24),
-                                        content: const Text(
-                                            'Berhasil Mengirim Permintaan Penarikan Saldo'),
-                                        backgroundColor: (Colors.green),
-                                        action: SnackBarAction(
-                                          label: '',
-                                          onPressed: () {},
-                                        ),
-                                      );
-                                      // ignore: use_build_context_synchronously
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                      Get.back();
-                                      Get.back();
+                                    if (loginC.role.value == "hospital") {
+                                      Get.put(PendapatanSaldoController()).isWithDraw.value = true;
+                                      Get.to(()=> BuatPinSaldo());
                                     } else {
-                                      await controllerDoctor.sendWithDrawDoctor(
-                                          date: formatter
-                                              .format(now.toLocal())
-                                              .toString(),
-                                          doctorBankId:
-                                              controllerDoctor.bankId.value,
-                                          amount: controllerDoctor
-                                              .saldoTarikCurren.value);
-                                      // ignore: avoid_print
-                                      print(formatter.format(now.toLocal()));
-                                      controllerDoctor
-                                          .nominalSaldoTarikController
-                                          .clear();
-                                      final snackBar = SnackBar(
-                                        behavior: SnackBarBehavior.floating,
-                                        duration: const Duration(seconds: 1),
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 24),
-                                        content: const Text(
-                                            'Berhasil Mengirim Permintaan Penarikan Saldo'),
-                                        backgroundColor: (Colors.green),
-                                        action: SnackBarAction(
-                                          label: '',
-                                          onPressed: () {},
-                                        ),
-                                      );
-                                      // ignore: use_build_context_synchronously
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                      Get.back();
-                                      Get.back();
+                                      if (loginC.role.value == "nurse") {
+                                        await controllerNurse.sendWithDrawNurse(
+                                            date: formatter
+                                                .format(now.toLocal())
+                                                .toString(),
+                                            nurseBankId:
+                                                controllerDoctor.bankId.value,
+                                            amount: controllerDoctor
+                                                .saldoTarikCurren.value);
+                                        // ignore: prefer_interpolation_to_compose_strings
+                                        log('====> ' +
+                                            controllerDoctor.bankId.value
+                                                .toString() +
+                                            "saldooo " +
+                                            controllerDoctor
+                                                .saldoTarikCurren.value
+                                                .toString());
+                                        controllerDoctor
+                                            .nominalSaldoTarikController
+                                            .clear();
+                                        final snackBar = SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          duration: const Duration(seconds: 1),
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 24),
+                                          content: const Text(
+                                              'Berhasil Mengirim Permintaan Penarikan Saldo'),
+                                          backgroundColor: (Colors.green),
+                                          action: SnackBarAction(
+                                            label: '',
+                                            onPressed: () {},
+                                          ),
+                                        );
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                        Get.back();
+                                        Get.back();
+                                      } else if (loginC.role.value ==
+                                          "hospital") {
+                                        await controllerNurse
+                                            .sendWithDrawHospital(
+                                                date: formatter
+                                                    .format(now.toLocal())
+                                                    .toString(),
+                                                nurseBankId: controllerDoctor
+                                                    .bankId.value,
+                                                amount: controllerDoctor
+                                                    .saldoTarikCurren.value);
+                                        // ignore: prefer_interpolation_to_compose_strings
+                                        log('====> ZEZEN ' +
+                                            controllerDoctor.bankId.value
+                                                .toString() +
+                                            "saldooo " +
+                                            controllerDoctor
+                                                .saldoTarikCurren.value
+                                                .toString());
+                                        controllerDoctor
+                                            .nominalSaldoTarikController
+                                            .clear();
+                                        final snackBar = SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          duration: const Duration(seconds: 1),
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 24),
+                                          content: const Text(
+                                              'Berhasil Mengirim Permintaan Penarikan Saldo'),
+                                          backgroundColor: (Colors.green),
+                                          action: SnackBarAction(
+                                            label: '',
+                                            onPressed: () {},
+                                          ),
+                                        );
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                        Get.back();
+                                        Get.back();
+                                      } else {
+                                        await controllerDoctor
+                                            .sendWithDrawDoctor(
+                                                date: formatter
+                                                    .format(now.toLocal())
+                                                    .toString(),
+                                                doctorBankId: controllerDoctor
+                                                    .bankId.value,
+                                                amount: controllerDoctor
+                                                    .saldoTarikCurren.value);
+                                        // ignore: avoid_print
+                                        print(formatter.format(now.toLocal()));
+                                        controllerDoctor
+                                            .nominalSaldoTarikController
+                                            .clear();
+                                        final snackBar = SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          duration: const Duration(seconds: 1),
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 24),
+                                          content: const Text(
+                                              'Berhasil Mengirim Permintaan Penarikan Saldo'),
+                                          backgroundColor: (Colors.green),
+                                          action: SnackBarAction(
+                                            label: '',
+                                            onPressed: () {},
+                                          ),
+                                        );
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                        Get.back();
+                                        Get.back();
+                                      }
                                     }
                                   }
                                 }),

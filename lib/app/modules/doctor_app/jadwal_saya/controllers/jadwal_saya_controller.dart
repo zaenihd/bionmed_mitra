@@ -8,6 +8,8 @@ import 'package:bionmed/app/constant/url.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/splash_screen/controllers/splash_screen_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -24,6 +26,7 @@ class JadwalSayaController extends GetxController {
   RxString strNumber = "".obs;
   RxString sipNumber = "".obs;
   RxString address = ''.obs;
+  RxString codeAccess = ''.obs;
   RxString addressPicHospital = ''.obs;
   RxString tanggalLahirPicHospital = ''.obs;
   RxString emailHospital = ''.obs;
@@ -39,8 +42,43 @@ class JadwalSayaController extends GetxController {
   RxList listServiceDataFilter = [].obs;
   RxBool isVerifi = false.obs;
   RxInt serviceId = 0.obs;
+  RxInt idNurse = 0.obs;
+  RxDouble lat = 0.0.obs;
+  RxDouble long = 0.0.obs;
 
-  final loginC = Get.put(LoginController());
+  void getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    lat.value = position.latitude;
+    long.value = position.longitude;
+    // ignore: unused_local_variable
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    log('lat dari profile ${lat.value}');
+    log('long dari profile ${long.value}');
+  }
+
+  final loginC = Get.find<LoginController>();
   final paketLayananNurse = Get.put(PaketLayananNurseController());
 
   Future<dynamic> updateJadwanOnOff({required bool isActive}) async {
@@ -76,6 +114,7 @@ class JadwalSayaController extends GetxController {
       final donors = json.decode(result.toString());
       // if (donors['code'] == 200)
       if (donors['data']['doctor'] != null) {
+        codeAccess.value = "";
         dataDokter.value = donors['data']['doctor']['doctor_schedules'];
         name.value = donors['data']['doctor']['name'];
         birthDay.value = donors['data']['doctor']['brithdayDate'];
@@ -116,8 +155,10 @@ class JadwalSayaController extends GetxController {
       final donors = json.decode(result.toString());
       // if (donors['code'] == 200)
       if (donors['data']['nurse'] != null) {
+        codeAccess.value = "";
         // dataDokter.value = donors['data']['nurse']['nurse_schedules'];
         name.value = donors['data']['nurse']['name'];
+        idNurse.value = donors['data']['nurse']['id'];
         birthDay.value = donors['data']['nurse']['brithday_date'] ?? "";
         // experience.value = donors['data']['nurse']['experience'];
         strNumber.value = donors['data']['nurse']['register_number_nurse'];
@@ -136,6 +177,9 @@ class JadwalSayaController extends GetxController {
         spesialis.value = donors['data']['nurse']['nurse_services'][0]
                 ['service']['name'] ??
             "";
+        Get.find<JadwalSayaController>().serviceId.value =
+            donors['data']['nurse']['nurse_services'][0]['serviceId'];
+        log('coba zen  ${Get.find<JadwalSayaController>().serviceId.value}');
         // isVerifi.value = donors['isVerification'];
 
         // if(isVerifi.value == false){
@@ -149,6 +193,7 @@ class JadwalSayaController extends GetxController {
       // ignore: unused_catch_clause
     } on Exception catch (e) {}
   }
+
   RxMap dataHospital = {}.obs;
 
   Future<dynamic> loginDataHospital({required String phoneNumber}) async {
@@ -164,6 +209,7 @@ class JadwalSayaController extends GetxController {
       // if (donors['code'] == 200)
       if (donors['data']['hospital'] != null) {
         dataHospital.value = donors['data']['hospital'];
+        codeAccess.value = donors['data']['hospital']['codeAccess'] ?? "null";
         // dataDokter.value = donors['data']['hospital']['hospital_schedules'];
         name.value = donors['data']['hospital']['name'];
         namePic.value = donors['data']['hospital']['picName'];
@@ -173,8 +219,10 @@ class JadwalSayaController extends GetxController {
         // strNumber.value = donors['data']['hospital']['register_number_hospital'];
         // sipNumber.value = donors['data']['hospital']['sipNumber'];
         address.value = donors['data']['hospital']['address'] ?? "Alamat";
-        addressPicHospital.value = donors['data']['hospital']['picAddress'] ?? "alamat";
-        tanggalLahirPicHospital.value =donors['data']['hospital']['picBrithday'];
+        addressPicHospital.value =
+            donors['data']['hospital']['picAddress'] ?? "alamat";
+        tanggalLahirPicHospital.value =
+            donors['data']['hospital']['picBrithday'];
         // pengalamanDokter.value = donors['data']['hospital']['hospital_experiences'];
         // pendidikanDokter.value = donors['data']['hospital']['hospital_educations'];
         profileImage.value = donors['data']['hospital']['image'];
@@ -190,7 +238,7 @@ class JadwalSayaController extends GetxController {
         //     // Get.defaultDialog();
         //     lengkapiProfil(Get.context!);
         //   };
-        log(dataHospital.toString());
+        log(codeAccess.toString());
       }
 
       isloading(false);
@@ -210,6 +258,14 @@ class JadwalSayaController extends GetxController {
     return layanan['data'];
   }
 
+  getdata() async {
+    final box = GetStorage();
+    var phone = await box.read('phone');
+    if (phone != null) {
+      await loginData(phoneNumber: phone);
+    }
+  }
+
   Future<dynamic> checkJadwal() async {
     // isloading(true);
     final result = await RestClient().request(
@@ -224,18 +280,10 @@ class JadwalSayaController extends GetxController {
     return jadwal['data'];
   }
 
-  getdata() async {
-    final box = GetStorage();
-    var phone = await box.read('phone');
-    if (phone != null) {
-      await loginData(phoneNumber: phone);
-    }
-  }
-
   Future<dynamic> checkJadwalNurse() async {
-    // isloading(true);
+    isloading(true);
     final result = await RestClient().request(
-        '${MainUrl.urlApi}nurse/data/schedule/${loginC.idLogin}/${Get.find<JadwalSayaController>().serviceId}?lat=${Get.put(SplashScreenController()).lat.value}&long=${Get.put(SplashScreenController()).long.value}',
+        '${MainUrl.urlApi}nurse/data/schedule/${idNurse.value}/${Get.find<JadwalSayaController>().serviceId.value}?lat=${lat.value}&long=${long.value}',
         // /${serviceId.value}',
         Method.GET,
         {});

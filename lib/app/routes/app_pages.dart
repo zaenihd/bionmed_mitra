@@ -46,6 +46,8 @@ import '../modules/hospital_app/paket_hospital_dan_ambulance/bindings/paket_hosp
 import '../modules/hospital_app/paket_hospital_dan_ambulance/views/paket_hospital_dan_ambulance_view.dart';
 import '../modules/hospital_app/paket_layanan_hospital/bindings/paket_layanan_hospital_binding.dart';
 import '../modules/hospital_app/paket_layanan_hospital/views/paket_layanan_hospital_view.dart';
+import '../modules/hospital_app/pendapatan_tim_hospital/bindings/pendapatan_tim_hospital_binding.dart';
+import '../modules/hospital_app/pendapatan_tim_hospital/views/pendapatan_tim_hospital_view.dart';
 import '../modules/hospital_app/profile/edit_profile_hospital/bindings/edit_profile_hospital_binding.dart';
 import '../modules/hospital_app/profile/edit_profile_hospital/views/edit_profile_hospital_view.dart';
 import '../modules/hospital_app/profile/edit_profile_owner_hospital/bindings/edit_profile_owner_hospital_binding.dart';
@@ -58,8 +60,6 @@ import '../modules/hospital_app/tambah_tenaga_medis_atau_ambulance_in_profile/bi
 import '../modules/hospital_app/tambah_tenaga_medis_atau_ambulance_in_profile/views/tambah_tenaga_medis_atau_ambulance_in_profile_view.dart';
 import '../modules/laboratorium_klinik_app/detail_order_laboratorium/bindings/detail_order_laboratorium_binding.dart';
 import '../modules/laboratorium_klinik_app/detail_order_laboratorium/views/detail_order_laboratorium_view.dart';
-import '../modules/hospital_app/pendapatan_tim_hospital/bindings/pendapatan_tim_hospital_binding.dart';
-import '../modules/hospital_app/pendapatan_tim_hospital/views/pendapatan_tim_hospital_view.dart';
 import '../modules/perawat_app/list_service_nurse/bindings/list_service_nurse_binding.dart';
 import '../modules/perawat_app/list_service_nurse/views/list_service_nurse_view.dart';
 import '../modules/perawat_app/paket_layanan_nurse/bindings/paket_layanan_nurse_binding.dart';
@@ -68,6 +68,8 @@ import '../modules/perawat_app/pesanan_masuk_perawat/bindings/pesanan_masuk_pera
 import '../modules/perawat_app/pesanan_masuk_perawat/views/pesanan_masuk_perawat_view.dart';
 import '../modules/perawat_app/register_perawat/bindings/register_perawat_binding.dart';
 import '../modules/perawat_app/register_perawat/views/register_perawat_view.dart';
+import '../modules/hospital_app/pesan_hospital/bindings/pesan_hospital_binding.dart';
+import '../modules/hospital_app/pesan_hospital/views/pesan_hospital_view.dart';
 
 part 'app_routes.dart';
 
@@ -273,6 +275,11 @@ class AppPages {
       name: _Paths.PENDAPATAN_TIM_HOSPITAL,
       page: () => const PendapatanTimHospitalView(),
       binding: PendapatanTimHospitalBinding(),
+    ),
+    GetPage(
+      name: _Paths.PESAN_HOSPITAL,
+      page: () => const PesanHospitalView(),
+      binding: PesanHospitalBinding(),
     ),
   ];
 }

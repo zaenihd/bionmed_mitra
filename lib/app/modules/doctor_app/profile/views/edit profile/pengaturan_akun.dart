@@ -178,18 +178,21 @@ class EditProfileWidget extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.margin
   }) : super(key: key);
 
   Widget imageUrl;
   String title;
   String subtitle;
   Function() onTap;
+  EdgeInsetsGeometry? margin;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
+        margin: margin,
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         width: Get.width,
         decoration: BoxDecoration(

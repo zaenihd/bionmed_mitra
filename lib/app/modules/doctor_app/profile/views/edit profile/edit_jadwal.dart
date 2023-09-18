@@ -39,8 +39,8 @@ class _EditJadwalState extends State<EditJadwal> {
   }
 
   final controller = Get.put(LengkapiProfilController());
-  final loginC = Get.put(JadwalSayaController());
-  final testC = Get.put(LoginController());
+  final loginC = Get.find<JadwalSayaController>();
+  final testC = Get.find<LoginController>();
 
   bool active = false;
   bool tambahJadwal = false;

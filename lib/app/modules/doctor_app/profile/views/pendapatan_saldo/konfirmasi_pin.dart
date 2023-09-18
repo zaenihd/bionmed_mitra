@@ -1,20 +1,18 @@
 import 'dart:developer';
 
+import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
+import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/pendapatan_saldo_controller/pendapatan_saldo_controller.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class KonfirmasiPinSaldo extends StatelessWidget {
-   KonfirmasiPinSaldo({super.key});
+  KonfirmasiPinSaldo({super.key});
   final controller = Get.put(PendapatanSaldoController());
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +37,7 @@ class KonfirmasiPinSaldo extends StatelessWidget {
               const SizedBox(
                 height: 40.0,
               ),
-             Cntr(
+              Cntr(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 margin: const EdgeInsets.symmetric(horizontal: 24),
                 height: 60,
@@ -73,11 +71,14 @@ class KonfirmasiPinSaldo extends StatelessWidget {
                         controller.isHiddenPinKonfirmasi.value =
                             !controller.isHiddenPinKonfirmasi.value;
                       },
-                      child:
-                      Obx(()=> Icon(
-                        Icons.remove_red_eye,
-                        color:controller.isHiddenPinKonfirmasi.isTrue ?  Colors.grey : Colors.blue,
-                      ),),
+                      child: Obx(
+                        () => Icon(
+                          Icons.remove_red_eye,
+                          color: controller.isHiddenPinKonfirmasi.isTrue
+                              ? Colors.grey
+                              : Colors.blue,
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -114,10 +115,10 @@ class KonfirmasiPinSaldo extends StatelessWidget {
                             controller.kodePinKonfirmasi.value.add(index + 1);
                             controller.kodePinViewKonfirmasi.value =
                                 controller.kodePinKonfirmasi.join("");
-                            log(controller.kodePinViewKonfirmasi.value.toString());
+                            log(controller.kodePinViewKonfirmasi.value
+                                .toString());
                           }
-                        }
-                        else {
+                        } else {
                           if (index == 11) {
                             print(index);
                             controller.kodePinKonfirmasi.value.removeLast();
@@ -153,9 +154,41 @@ class KonfirmasiPinSaldo extends StatelessWidget {
               const SizedBox(
                 height: 20.0,
               ),
-              ButtomGradient(label: 'Konfirmasi PIN', onTap: () {
-                popUpBerhasilBuatKodePin(context);
-              }),
+              Obx(() => ButtomGradient(
+                  label: controller.isLoading.isTrue
+                      ? "Loading..."
+                      : 'Konfirmasi PIN',
+                  onTap: () async {
+                    if (controller.isLoading.isTrue) {
+                    } else {
+                      if (controller.kodePinView.value !=
+                              controller.kodePinViewKonfirmasi.value ||
+                          controller.kodePinViewKonfirmasi.value.length != 6) {
+                        final snackBar = SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          duration: const Duration(seconds: 2),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 24),
+                          content: const Text('Pin tidak cocok!'),
+                          backgroundColor: (Colors.red),
+                          action: SnackBarAction(
+                            label: '',
+                            onPressed: () {},
+                          ),
+                        );
+                        ScaffoldMessenger.of(Get.context!)
+                            .showSnackBar(snackBar);
+                      } else {
+                        await controller.buatPin();
+                        popUpBerhasilBuatKodePin(context);
+                        Get.find<JadwalSayaController>().loginDataHospital(
+                            phoneNumber: Get.find<LoginController>()
+                                .phoneNumberUser
+                                .value);
+                        Get.find<JadwalSayaController>().getLocation();
+                      }
+                    }
+                  })),
               const SizedBox(
                 height: 20.0,
               ),
@@ -166,7 +199,7 @@ class KonfirmasiPinSaldo extends StatelessWidget {
     );
   }
 
-  popUpBerhasilBuatKodePin(BuildContext context){
+  popUpBerhasilBuatKodePin(BuildContext context) {
     return showModalBottomSheet(
         isDismissible: false,
         shape: const RoundedRectangleBorder(
@@ -203,7 +236,8 @@ class KonfirmasiPinSaldo extends StatelessWidget {
                           const Text(
                             'Terima kasih',
                             textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
                           ),
                           const SizedBox(
                             height: 10,
@@ -211,7 +245,6 @@ class KonfirmasiPinSaldo extends StatelessWidget {
                           const Text(
                             'Tidak dianjurkan kode PIN anda\ndiketahui kepada seseorang',
                             textAlign: TextAlign.center,
-                          
                           ),
                           const SizedBox(
                             height: 24,
@@ -219,11 +252,17 @@ class KonfirmasiPinSaldo extends StatelessWidget {
                           ButtomGradient(
                             label: "Oke",
                             onTap: () {
+                              controller.kodePinView.value = '';
+                              controller.kodePinViewKonfirmasi.value = '';
+                              // Get.offAll(PendapatanView());
+                              Get.back();
+                              Get.back();
+                              Get.back();
                               Get.back();
                             },
                           ),
                           const SizedBox(
-                          height: 20.0,
+                            height: 20.0,
                           ),
                         ])
                   ]));

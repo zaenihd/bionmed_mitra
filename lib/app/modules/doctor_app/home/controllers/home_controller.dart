@@ -210,6 +210,27 @@ class HomeController extends GetxController {
           params);
       final detailDoctor = json.decode(result.toString());
       pendapatan.value = detailDoctor['data']['balance'] ?? 0;
+      Get.find<LoginController>().rating = detailDoctor['data']['rating'] ?? 0;
+
+      // ignore: empty_catches, unused_catch_clause
+    } on Exception catch (e) {}
+  }
+
+  Future<dynamic> getDetailHospital() async {
+    final params = <String, dynamic>{
+      // "serviceId": serviceId,
+    };
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}hospital/detail/${Get.find<LoginController>().idLogin}',
+          Method.GET,
+          params);
+      final detailHospital = json.decode(result.toString());
+      pendapatan.value = detailHospital['data']['balance'] ?? 0;
+      Get.find<LoginController>().rating =
+          detailHospital['data']['rating'] ?? 0;
+      log('ini saldo hospital ${pendapatan.value}');
       // ignore: empty_catches, unused_catch_clause
     } on Exception catch (e) {}
   }
@@ -224,8 +245,9 @@ class HomeController extends GetxController {
           '${MainUrl.urlApi}nurse/detail/${Get.find<LoginController>().idLogin}',
           Method.GET,
           params);
-      final detailDoctor = json.decode(result.toString());
-      pendapatan.value = detailDoctor['data']['balance'] ?? 0;
+      final detailNurse = json.decode(result.toString());
+      pendapatan.value = detailNurse['data']['balance'] ?? 0;
+      Get.find<LoginController>().rating = detailNurse['data']['rating'] ?? 0;
 
       // ignore: avoid_print
       print('saldo   $pendapatan');
@@ -322,6 +344,9 @@ class HomeController extends GetxController {
   realtimeApi() {
     if (timePeriodic.value == false) {
       Timer.periodic(const Duration(seconds: 3), (timer) async {
+        if (Get.find<LoginController>().role.value == 'hospital') {
+          getDetailHospital();
+        }
         if (Get.find<LoginController>().role.value == 'nurse') {
           await Get.find<LayananHomeController>().listOrderNurse();
           if (reminderNurse.isFalse) {
@@ -518,28 +543,20 @@ class HomeController extends GetxController {
                         // case Event.ACTION_DID_UPDATE_DEVICE_PUSH_TOKEN_VOIP:
                         //   break;
                         case Event.actionDidUpdateDevicePushTokenVoip:
-                          
                           break;
                         case Event.actionCallCallback:
-                          
                           break;
                         case Event.actionCallToggleHold:
-                          
                           break;
                         case Event.actionCallToggleMute:
-                          
                           break;
                         case Event.actionCallToggleDmtf:
-                          
                           break;
                         case Event.actionCallToggleGroup:
-                          
                           break;
                         case Event.actionCallToggleAudioSession:
-                          
                           break;
                         case Event.actionCallCustom:
-                          
                           break;
                       }
                     }));
@@ -797,12 +814,12 @@ class HomeController extends GetxController {
 
     // ignore: prefer_const_constructors
     Timer(Duration(seconds: 2), () async {
-      if(Get.find<LoginController>().role.value != 'hospital'){
-            
-      getDetailDoctor();
-          }
+      if (Get.find<LoginController>().role.value == 'doctor') {
+        getDetailDoctor();
+      } else if (Get.find<LoginController>().role.value == 'hospital') {
+        getDetailHospital();
+      }
       getBanner();
-
 
       // await Get.find<LayananHomeController>().addOrder();
       Get.lazyPut(() => LayananHomeController());
@@ -815,8 +832,8 @@ class HomeController extends GetxController {
         // ignore: prefer_interpolation_to_compose_strings
       }
       timePeriodic.value = false;
-      await realtimeApi();
-      await trimUpdateStatus();
+      // await realtimeApi();
+      // await trimUpdateStatus();
     });
   }
 

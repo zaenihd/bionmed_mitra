@@ -1,7 +1,9 @@
 import 'package:bionmed/app/modules/doctor_app/home/views/home_view.dart';
 import 'package:bionmed/app/modules/doctor_app/layanan_home/views/layanan_home_view.dart';
+import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/pesan/views/pesan_view.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/profile_view.dart';
+import 'package:bionmed/app/modules/hospital_app/pesan_hospital/views/pesan_hospital_view.dart';
 import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,8 @@ import '../controllers/bottom_navigation_controller.dart';
 // ignore: must_be_immutable
 class BottonNavigationView extends GetView<BottomNavigationController> {
   final myC = Get.put(BottomNavigationController());
+  final loginC = Get.put(LoginController());
+  final pesanC = Get.put(PesanController());
 
   Future<bool> showExitPopup() async {
     return await showDialog(
@@ -75,6 +79,7 @@ class BottonNavigationView extends GetView<BottomNavigationController> {
             HomeView(),
             // ignore: prefer_const_constructors
             LayananHomeView(test: false),
+            loginC.role.value == "hospital" ? const PesanHospitalView() :
             PesanView(),
             ProfileView()
           ],

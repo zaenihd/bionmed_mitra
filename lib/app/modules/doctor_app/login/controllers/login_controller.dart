@@ -51,7 +51,7 @@ class LoginController extends GetxController {
   RxString nameHospital = ''.obs;
   RxString nameService = ''.obs;
   RxString imageService = ''.obs;
-  RxString descriptionNurse= ''.obs;
+  RxString descriptionNurse = ''.obs;
   // ignore: prefer_typing_uninitialized_variables
   var dataUser;
   final donors = [].obs;
@@ -229,13 +229,22 @@ class LoginController extends GetxController {
         long.value = dataNurse['data']['nurse']['long'].toString();
         nurseEducation.value = dataNurse['data']['nurse']['nurse_educations'];
         rating = dataNurse['data']['nurse']['rating'] ?? 0;
-        inHospital.value = dataNurse['data']['nurse']['hospital'] == null ? "0" : '';
-        nurseServiceId.value = dataNurse['data']['nurse']['nurse_services'][0]['serviceId'] ?? 0; 
-        nameService.value = dataNurse['data']['nurse']['nurse_services'][0]['service']['name'] ?? ""; 
-        imageService.value = dataNurse['data']['nurse']['nurse_services'][0]['service']['image'] ?? ""; 
-        nameHospital.value = dataNurse['data']['nurse']['hospital'].toString() == "null"
-                ? "" : dataNurse['data']['nurse']['hospital']['name'];
-      descriptionNurse.value = dataNurse['data']['nurse']['description'] ?? "";
+        inHospital.value =
+            dataNurse['data']['nurse']['hospital'] == null ? "0" : '';
+        nurseServiceId.value =
+            dataNurse['data']['nurse']['nurse_services'][0]['serviceId'] ?? 0;
+        nameService.value = dataNurse['data']['nurse']['nurse_services'][0]
+                ['service']['name'] ??
+            "";
+        imageService.value = dataNurse['data']['nurse']['nurse_services'][0]
+                ['service']['image'] ??
+            "";
+        nameHospital.value =
+            dataNurse['data']['nurse']['hospital'].toString() == "null"
+                ? ""
+                : dataNurse['data']['nurse']['hospital']['name'];
+        descriptionNurse.value =
+            dataNurse['data']['nurse']['description'] ?? "";
         Get.put(JadwalSayaController()).profileImagePic.value =
             dataNurse['data']['nurse']['hospital'].toString() == "null"
                 ? ""
@@ -251,6 +260,8 @@ class LoginController extends GetxController {
           if (dataNurse['data']['nurse']['verifiedStatus'] == 0) {
             Get.to(() => MenungguKonfirmasi());
           } else {
+        log('KOK MASUK SINI SIIH? $inHospital');
+            
             box.write('phone', phoneNumber);
             Get.toNamed(Routes.BOTTOM_NAVIGATION);
           }
@@ -266,7 +277,7 @@ class LoginController extends GetxController {
         }
         if (inHospital.value != "0") {
         } else {
-          if (dataNurse['data']['nurse']['nurse_educations'].toString() ==
+          if (dataNurse['data']['nurse']['nurse_educations'].toString() !=
                       "[]" &&
                   dataNurse['data']['nurse']['verifiedStatus'] == 1 ||
               dataNurse['data']['nurse']['nurse_educations'] == null &&
@@ -354,11 +365,8 @@ class LoginController extends GetxController {
             Get.to(() => Ditolak());
           }
         }
-        if (dataHospital['data']['hospital']['hospital_doctors'].toString() ==
-                    "[]" &&
-                dataHospital['data']['hospital']['verifiedStatus'] == 1 ||
-            dataHospital['data']['hospital']['hospital_doctors'] == null &&
-                dataHospital['data']['hospital']['verifiedStatus'] == 1) {
+        if (dataHospital['data']['hospital']['hospital_services'].toString() ==
+            "[]") {
           lengkapiProfil(Get.context!);
         }
       } else {}

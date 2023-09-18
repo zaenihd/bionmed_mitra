@@ -24,18 +24,22 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
     if (loginC.role.value == 'nurse') {
       controllerNurse.listWithDrawnurse();
       log('qwerty ${controllerNurse.listDataWithDrawNurse.length}');
+    } else if (loginC.role.value == 'hospital') {
+      controllerNurse.listWithDrawHospital();
+      log('qwerty ${controllerNurse.listDataWithDrawNurse.length}');
     } else {
       controllerDoctor.listWithDrawDoctor();
       log("CEEK${controllerDoctor.listDataWithDrawDoctor}");
     }
     return Scaffold(
         appBar: appbarGradient('Riwayat Transaksi'),
-        body: Obx(() => controllerDoctor.loading.isTrue
+        body: Obx(() => controllerDoctor.loading.isTrue || controllerNurse.loading.isTrue
             ? loadingIndicator()
             : ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                itemCount: loginC.role.value != 'nurse'
+                itemCount: loginC.role.value != 'nurse' &&
+                        loginC.role.value != 'hospital'
                     ? controllerDoctor.listDataWithDrawDoctor.length
                     : controllerNurse.listDataWithDrawNurse.length,
                 itemBuilder: (context, index) => InkWell(
@@ -44,7 +48,8 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
                         //           .listDataWithDrawDoctor[index]['doctor_bank']['date'].toString());
                         if (loginC.role.value == 'nurse') {
                           Get.to(() => StatusPenarikanSaldo(
-                            bank:   controllerNurse.listDataWithDrawNurse[index]
+                                bank:
+                                    controllerNurse.listDataWithDrawNurse[index]
                                         ['nurse_bank']['bank']['bank'],
                                 tarikSaldo: controllerNurse
                                     .listDataWithDrawNurse[index]['amount'],
@@ -62,10 +67,32 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
                                 status: controllerNurse
                                     .listDataWithDrawNurse[index]['status'],
                               ));
+                        } else if (loginC.role.value == 'hospital') {
+                          Get.to(() => StatusPenarikanSaldo(
+                                bank:
+                                    controllerNurse.listDataWithDrawNurse[index]
+                                        ['hospital_bank']['bank']['bank'],
+                                tarikSaldo: controllerNurse
+                                    .listDataWithDrawNurse[index]['amount'],
+                                namaBank:
+                                    controllerNurse.listDataWithDrawNurse[index]
+                                        ['hospital_bank']['bank']['name'],
+                                norek:
+                                    controllerNurse.listDataWithDrawNurse[index]
+                                        ['hospital_bank']['no_rek'],
+                                penerina:
+                                    controllerNurse.listDataWithDrawNurse[index]
+                                        ['hospital_bank']['name'],
+                                tanggal: controllerNurse
+                                    .listDataWithDrawNurse[index]['date'],
+                                status: controllerNurse
+                                    .listDataWithDrawNurse[index]['status'],
+                              ));
                         } else {
                           Get.to(() => StatusPenarikanSaldo(
-                               bank:   controllerDoctor.listDataWithDrawDoctor[index]
-                                        ['doctor_bank']['bank']['bank'],
+                                bank: controllerDoctor
+                                        .listDataWithDrawDoctor[index]
+                                    ['doctor_bank']['bank']['bank'],
                                 tarikSaldo: controllerDoctor
                                     .listDataWithDrawDoctor[index]['amount'],
                                 namaBank: controllerDoctor
@@ -98,7 +125,8 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
                                 ),
                                 Text(
                                   CurrencyFormat.convertToIdr(
-                                      loginC.role.value != 'nurse'
+                                      loginC.role.value != 'nurse' &&
+                                              loginC.role.value != 'hospital'
                                           ? controllerDoctor
                                                   .listDataWithDrawDoctor[index]
                                               ['amount']
@@ -127,7 +155,8 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
                                       width: 6.0,
                                     ),
                                     Text(
-                                      loginC.role.value != 'nurse'
+                                      loginC.role.value != 'nurse' &&
+                                              loginC.role.value != 'hospital'
                                           ? controllerDoctor
                                               .listDataWithDrawDoctor[index]
                                                   ['date']
@@ -141,52 +170,51 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                loginC.role.value != 'nurse'
-                                          ?
-                                controllerDoctor.listDataWithDrawDoctor[index]
-                                                ['status'] ==
-                                            1 
-                                    ? Text(
-                                        'Berhasil',
-                                        style: greenTextStyle.copyWith(
-                                            color: Colors.green),
-                                      )
-                                    : controllerDoctor.listDataWithDrawDoctor[
-                                                    index]['status'] ==
-                                                0 
+                                loginC.role.value != 'nurse' &&
+                                        loginC.role.value != 'hospital'
+                                    ? controllerDoctor.listDataWithDrawDoctor[
+                                                index]['status'] ==
+                                            1
                                         ? Text(
-                                            'Menuggu',
+                                            'Berhasil',
                                             style: greenTextStyle.copyWith(
-                                                color: Colors.amber),
+                                                color: Colors.green),
                                           )
-                                        : Text(
-                                            'Ditolak',
-                                            style: greenTextStyle.copyWith(
-                                                color: Colors.red),
-                                          )
-
-                                           : 
-                                            controllerNurse.listDataWithDrawNurse[index]
-                                                ['status'] ==
-                                            1 
-                                    ? Text(
-                                        'Berhasil',
-                                        style: greenTextStyle.copyWith(
-                                            color: Colors.green),
-                                      )
+                                        : controllerDoctor
+                                                        .listDataWithDrawDoctor[
+                                                    index]['status'] ==
+                                                0
+                                            ? Text(
+                                                'Menuggu',
+                                                style: greenTextStyle.copyWith(
+                                                    color: Colors.amber),
+                                              )
+                                            : Text(
+                                                'Ditolak',
+                                                style: greenTextStyle.copyWith(
+                                                    color: Colors.red),
+                                              )
                                     : controllerNurse.listDataWithDrawNurse[
-                                                    index]['status'] ==
-                                                0 
+                                                index]['status'] ==
+                                            1
                                         ? Text(
-                                            'Menuggu',
+                                            'Berhasil',
                                             style: greenTextStyle.copyWith(
-                                                color: Colors.amber),
+                                                color: Colors.green),
                                           )
-                                        : Text(
-                                            'Ditolak',
-                                            style: greenTextStyle.copyWith(
-                                                color: Colors.red),
-                                          )
+                                        : controllerNurse.listDataWithDrawNurse[
+                                                    index]['status'] ==
+                                                0
+                                            ? Text(
+                                                'Menuggu',
+                                                style: greenTextStyle.copyWith(
+                                                    color: Colors.amber),
+                                              )
+                                            : Text(
+                                                'Ditolak',
+                                                style: greenTextStyle.copyWith(
+                                                    color: Colors.red),
+                                              )
                               ],
                             )
                           ],

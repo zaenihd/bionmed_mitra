@@ -2,11 +2,14 @@
 import 'dart:developer';
 
 import 'package:bionmed/app/modules/doctor_app/introduction_screen/views/introduction_screen_view.dart';
+import 'package:bionmed/app/modules/doctor_app/lengkapi_profil/controllers/lengkapi_profil_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
+import '../../../perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 
 class SplashScreenController extends GetxController {
   final box = GetStorage();
@@ -17,6 +20,8 @@ class SplashScreenController extends GetxController {
 
   @override
   void onInit() async {
+    Get.put(PaketLayananNurseController());
+    Get.put(LengkapiProfilController());
     getLocation();
     super.onInit();
 

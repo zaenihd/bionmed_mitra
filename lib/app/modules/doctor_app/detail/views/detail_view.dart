@@ -93,7 +93,7 @@ class DetailView extends GetView<DetailController> {
   final Uri whatsapp = Uri.parse('https://wa.me/6282147738240');
   sendEmail() async {
     final Email email = Email(
-      body: 'Test kirim email',
+      body: 'Deskripsi',
       subject: 'Selamat Pagi',
       recipients: ['care@bionmed.id'],
       // cc: ['cc@example.com'],

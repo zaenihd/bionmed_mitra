@@ -524,19 +524,44 @@ class TambahTimLayanan extends GetView<LengkapiDataHospitalController> {
                         if (controller.isloading.isFalse) {
                           if (controller.isEditTim.isTrue) {
                             await controller.updateTimLayananHospital();
+
+                            await controller.serviceHospital();
+                            controller.namaTimController.clear();
+                            controller.nomerHpTimController.clear();
+                            controller.deskripsiTimController.clear();
+                            Get.back();
+                            Get.back();
+                            Get.to(() => TambahTimLayanan(
+                                  dataTim: controller.listServiceHospital[
+                                      controller.index.value]['team'],
+                                ));
                           } else {
-                            await controller.tambahTimLayananHospital();
+                            if (controller.namaTimController.text == "" ||
+                                controller.nomerHpTimController.text == "" ||
+                                controller.deskripsiTimController.text == "") {
+                              // Get.defaultDialog(
+                              //     title: "Terjadi kesalahan",
+                              //     middleText: "Mohon lengkapi data tim");
+                              showPopUp(
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  imageAction: 'assets/json/eror.json',
+                                  description: "Mohon lengkapi data tim");
+                            } else {
+                              await controller.tambahTimLayananHospital();
+                              await controller.serviceHospital();
+                              controller.namaTimController.clear();
+                              controller.nomerHpTimController.clear();
+                              controller.deskripsiTimController.clear();
+                              Get.back();
+                              // Get.back();
+                              Get.to(() => TambahTimLayanan(
+                                    dataTim: controller.listServiceHospital[
+                                        controller.index.value]['team'],
+                                  ));
+                            }
                           }
-                          await controller.serviceHospital();
-                          controller.namaTimController.clear();
-                          controller.nomerHpTimController.clear();
-                          controller.deskripsiTimController.clear();
-                          Get.back();
-                          Get.back();
-                          Get.to(() => TambahTimLayanan(
-                                dataTim: controller.listServiceHospital[
-                                    controller.index.value]['team'],
-                              ));
                         }
                       }),
                 ),

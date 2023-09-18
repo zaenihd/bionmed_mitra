@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
@@ -11,6 +9,7 @@ import 'package:bionmed/app/modules/doctor_app/profile/views/edit%20profile/peng
 import 'package:bionmed/app/modules/doctor_app/profile/views/paket_layanan.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_view.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/profil_login_required.dart';
+import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/controllers/lengkapi_data_hospital_controller.dart';
 import 'package:bionmed/app/modules/hospital_app/profile/pengaturan%20akun/pengaturan_akun_hospital.dart';
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
@@ -25,7 +24,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../widget/card/card_layanan.dart';
-import '../../../hospital_app/lengkapi_data_hospital/controllers/lengkapi_data_hospital_controller.dart';
 import '../../../perawat_app/list_service_nurse/views/list_service_nurse_edit.dart';
 import '../../login/controllers/login_controller.dart';
 import '../controllers/profile_controller.dart';
@@ -40,9 +38,12 @@ class ProfileView extends GetView<ProfileController> {
     if (loginC.role.value == 'nurse') {
       Get.find<JadwalSayaController>().loginDataNurse(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
+      Get.find<JadwalSayaController>().getLocation();
     } else if (loginC.role.value == 'hospital') {
       Get.find<JadwalSayaController>().loginDataHospital(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
+      Get.find<JadwalSayaController>().getLocation();
+
     } else {
       Get.find<JadwalSayaController>().loginData(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
@@ -287,13 +288,20 @@ class ProfileView extends GetView<ProfileController> {
                                             : 'Paket Layanan',
                                         onTap: () async {
                                           if (loginC.role.value == 'hospital') {
-                                            log('message');
-                                            await Get.find<
+                                            // log('message');
+                                             Get.find<
                                                     LengkapiDataHospitalController>()
                                                 .serviceHospital();
-
                                             Get.toNamed(
                                                 Routes.PAKET_LAYANAN_HOSPITAL);
+                                            // showPopUp(
+                                            //     onTap: () {
+                                            //       Get.back();
+                                            //     },
+                                            //     imageAction:
+                                            //         'assets/json/eror.json',
+                                            //     description:
+                                            //         "Under Development");
                                             // Get.to(
                                             //     () => const PengaturanAkunHospital());
                                           } else {
@@ -347,11 +355,11 @@ class ProfileView extends GetView<ProfileController> {
                                       ? "Transaksi & Tarik Saldo"
                                       : 'Riwayat Transaksi',
                                   onTap: () {
-                                    if(loginC.inHospital.value == ""){
-                                      Get.toNamed(Routes.PENDAPATAN_TIM_HOSPITAL);
-                                    }else{
-
-                                    Get.to(() => RiwayatPesanan());
+                                    if (loginC.inHospital.value == "") {
+                                      Get.toNamed(
+                                          Routes.PENDAPATAN_TIM_HOSPITAL);
+                                    } else {
+                                      Get.to(() => RiwayatPesanan());
                                     }
 
                                     // showPopUp(

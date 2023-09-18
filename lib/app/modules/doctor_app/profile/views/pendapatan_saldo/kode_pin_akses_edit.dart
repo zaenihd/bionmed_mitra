@@ -1,6 +1,7 @@
 import 'dart:developer';
 
-import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/konfirmasi_pin.dart';
+import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/buat_pin.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/pendapatan_saldo_controller/pendapatan_saldo_controller.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/container/container.dart';
@@ -9,8 +10,8 @@ import 'package:bionmed/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BuatPinSaldo extends StatelessWidget {
-  BuatPinSaldo({super.key});
+class KodePinAksesEdit extends StatelessWidget {
+  KodePinAksesEdit({super.key});
 
   final controller = Get.put(PendapatanSaldoController());
 
@@ -26,7 +27,7 @@ class BuatPinSaldo extends StatelessWidget {
                 height: 10.0,
               ),
               Txt(
-                text: controller.isWithDraw.isTrue ? 'Kode PIN' : "Buat PIN",
+                text: 'Kode PIN',
                 size: 26,
                 weight: bold,
               ),
@@ -47,9 +48,9 @@ class BuatPinSaldo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Obx(
-                      () => controller.isHiddenPin.isFalse
+                      () => controller.isHiddenPinAksesCheck.isFalse
                           ? Txt(
-                              text: controller.kodePinView.value,
+                              text: controller.kodePinViewAkses.value,
                               size: 26,
                               weight: bold,
                             )
@@ -57,7 +58,7 @@ class BuatPinSaldo extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                   for (var i = 0;
-                                      i < controller.kodePin.length;
+                                      i < controller.kodePinAkses.length;
                                       i++)
                                     Txt(
                                       text: '*',
@@ -68,13 +69,13 @@ class BuatPinSaldo extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        controller.isHiddenPin.value =
-                            !controller.isHiddenPin.value;
+                        controller.isHiddenPinAksesCheck.value =
+                            !controller.isHiddenPinAksesCheck.value;
                       },
                       child: Obx(
                         () => Icon(
                           Icons.remove_red_eye,
-                          color: controller.isHiddenPin.isTrue
+                          color: controller.isHiddenPinAksesCheck.isTrue
                               ? Colors.grey
                               : Colors.blue,
                         ),
@@ -101,32 +102,32 @@ class BuatPinSaldo extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return Cntr(
                       onTap: () {
-                        // controller.isHiddenPin.value = true;
-                        if (controller.kodePin.length != 6) {
+                        // controller.isHiddenPinAksesCheck.value = true;
+                        if (controller.kodePinAkses.length != 6) {
                           if (index == 10) {
-                            controller.kodePin.value.add(0);
-                            controller.kodePinView.value =
-                                controller.kodePin.join("");
+                            controller.kodePinAkses.value.add(0);
+                            controller.kodePinViewAkses.value =
+                                controller.kodePinAkses.join("");
                           } else if (index == 11) {
                             print(index);
-                            controller.kodePin.value.removeLast();
-                            controller.kodePinView.value =
-                                controller.kodePin.join("");
+                            controller.kodePinAkses.value.removeLast();
+                            controller.kodePinViewAkses.value =
+                                controller.kodePinAkses.join("");
                           } else {
-                            controller.kodePin.value.add(index + 1);
-                            controller.kodePinView.value =
-                                controller.kodePin.join("");
-                            log(controller.kodePin.length.toString());
+                            controller.kodePinAkses.value.add(index + 1);
+                            controller.kodePinViewAkses.value =
+                                controller.kodePinAkses.join("");
+                            log(controller.kodePinAkses.length.toString());
                           }
                         } else {
                           if (index == 11) {
                             print(index);
-                            controller.kodePin.value.removeLast();
-                            controller.kodePinView.value =
-                                controller.kodePin.join("");
+                            controller.kodePinAkses.value.removeLast();
+                            controller.kodePinViewAkses.value =
+                                controller.kodePinAkses.join("");
                           }
                         }
-                        log(controller.kodePinView.value.toString());
+                        log(controller.kodePinViewAkses.value.toString());
                       },
                       alignment: Alignment.center,
                       height: 50,
@@ -156,9 +157,9 @@ class BuatPinSaldo extends StatelessWidget {
                 height: 20.0,
               ),
               ButtomGradient(
-                  label: controller.isWithDraw.isTrue ? 'Submit' : "Simpan",
+                  label:'Submit' ,
                   onTap: () async {
-                    if (controller.kodePin.length != 6) {
+                    if (controller.kodePinAkses.length != 6) {
                       final snackBar = SnackBar(
                         behavior: SnackBarBehavior.floating,
                         duration: const Duration(seconds: 2),
@@ -173,11 +174,25 @@ class BuatPinSaldo extends StatelessWidget {
                       );
                       ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
                     } else {
-                      if (controller.isWithDraw.isTrue) {
-                        await controller.checkPin();
+                      if (Get.find<JadwalSayaController>().codeAccess.value == controller.kodePinViewAkses.value) {
+                      controller.kodePinViewAkses.value = "";
+                        Get.to(() => BuatPinSaldo());
                         // controller.isWithDraw.value = false;
                       } else {
-                        Get.to(() => KonfirmasiPinSaldo());
+                        final snackBar = SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        duration: const Duration(seconds: 2),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 24),
+                        content: const Text('PIN tidak cocok'),
+                        backgroundColor: (Colors.red),
+                        action: SnackBarAction(
+                          label: '',
+                          onPressed: () {},
+                        ),
+                      );
+                      ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+
                       }
                     }
                   }),

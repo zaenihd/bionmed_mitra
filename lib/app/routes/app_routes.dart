@@ -44,6 +44,7 @@ abstract class Routes {
   static const EDIT_PROFILE_OWNER_HOSPITAL = _Paths.EDIT_PROFILE_OWNER_HOSPITAL;
   static const PAKET_LAYANAN_HOSPITAL = _Paths.PAKET_LAYANAN_HOSPITAL;
   static const PENDAPATAN_TIM_HOSPITAL = _Paths.PENDAPATAN_TIM_HOSPITAL;
+  static const PESAN_HOSPITAL = _Paths.PESAN_HOSPITAL;
 }
 
 abstract class _Paths {
@@ -86,4 +87,5 @@ abstract class _Paths {
   static const EDIT_PROFILE_OWNER_HOSPITAL = '/edit-profile-owner-hospital';
   static const PAKET_LAYANAN_HOSPITAL = '/paket-layanan-hospital';
   static const PENDAPATAN_TIM_HOSPITAL = '/pendapatan-tim-hospital';
+  static const PESAN_HOSPITAL = '/pesan-hospital';
 }

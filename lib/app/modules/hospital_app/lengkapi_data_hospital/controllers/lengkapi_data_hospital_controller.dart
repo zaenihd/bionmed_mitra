@@ -5,28 +5,29 @@ import 'package:bionmed/app/constant/string.dart';
 import 'package:bionmed/app/constant/url.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
+import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class LengkapiDataHospitalController extends GetxController {
-
   final loginC = Get.find<LoginController>();
   RxBool isJadwal = false.obs;
 
   @override
   void onInit() {
     getService();
-    if(isFromProfile.isFalse){
-    // serviceHospital();
+    if (isFromProfile.isFalse) {
+      // serviceHospital();
     }
     // TODO: implement onInit
     super.onInit();
   }
 
-  getService()async{
+  getService() async {
     await serviceHospital();
   }
+
   RxBool isloading = false.obs;
   RxBool isFromProfile = false.obs;
   RxInt nurseId = 0.obs;
@@ -52,22 +53,24 @@ class LengkapiDataHospitalController extends GetxController {
   TextEditingController hargaPaketController = TextEditingController();
   TextEditingController diskonPaketController = TextEditingController();
   RxInt hospitalId = 0.obs;
-  
 
   //==================LIST SERVICE HOSPITAL========================
   RxList listServiceHospital = [].obs;
+  RxList listTimServiceHospital = [].obs;
   Future<dynamic> serviceHospital() async {
     final params = <String, dynamic>{};
 
     isloading(true);
     try {
       final result = await RestClient().request(
-          '${MainUrl.urlApi}hospital/service/${loginC.idLogin}', Method.GET, params);
+          '${MainUrl.urlApi}hospital/service/${loginC.idLogin}',
+          Method.GET,
+          params);
       final serviceHospital = json.decode(result.toString());
       listServiceHospital.value = serviceHospital['data'];
       if (serviceHospital['code'] == 200) {
-        log("hahhahah$listServiceHospital")
-;      }
+        log("hahhahah$listServiceHospital");
+      }
       isloading(false);
     } on Exception catch (e) {
       isloading(false);
@@ -81,28 +84,35 @@ class LengkapiDataHospitalController extends GetxController {
 
   Future<dynamic> tambahTimLayananHospital() async {
     final params = <String, dynamic>{
-    "hospitalId": loginC.idLogin,
-    "serviceId": serviceId.value,
-    "name": namaTimController.text,
-    "phoneNumber": nomerHpTimController.text,
-    "description": deskripsiTimController.text
-
+      "hospitalId": loginC.idLogin,
+      "serviceId": serviceId.value,
+      "name": namaTimController.text,
+      "phoneNumber": nomerHpTimController.text,
+      "description": deskripsiTimController.text
     };
     isloading(true);
     try {
-      final result = await RestClient().request(
-          '${MainUrl.urlApi}hospital/team',
-          Method.POST,
-          params);
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}hospital/team', Method.POST, params);
       // ignore: unused_local_variable
       final paketLayanan = json.decode(result.toString());
       log("tambah paket ");
       log("tambah paket $paketLayanan");
+      Get.back();
       // jadwalDokter = jadwal['data']['doctor_schedules'];
       // }
 
       isloading(false);
     } on Exception catch (e) {
+      // Get.defaultDialog();
+       showPopUp(
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  imageAction: 'assets/json/eror.json',
+                                  description: "Nomer telah digunakan!");
+      // Get.defaultDialog(
+      //     title: "Terjadi kesalahan", middleText: "Nomer telah digunakan!");
       // ignore: avoid_print
       print(e.toString());
     }
@@ -112,19 +122,16 @@ class LengkapiDataHospitalController extends GetxController {
 
   Future<dynamic> updateTimLayananHospital() async {
     final params = <String, dynamic>{
-    "hospitalId": loginC.idLogin,
-    "serviceId": serviceId.value,
-    "name": namaTimController.text,
-    "phoneNumber": nomerHpTimController.text,
-    "description": deskripsiTimController.text
-
+      "hospitalId": loginC.idLogin,
+      "serviceId": serviceId.value,
+      "name": namaTimController.text,
+      "phoneNumber": nomerHpTimController.text,
+      "description": deskripsiTimController.text
     };
     isloading(true);
     try {
       final result = await RestClient().request(
-          '${MainUrl.urlApi}hospital/team/update/$timId',
-          Method.POST,
-          params);
+          '${MainUrl.urlApi}hospital/team/update/$timId', Method.POST, params);
       // ignore: unused_local_variable
       final paketLayanan = json.decode(result.toString());
       log("ahhahaha $paketLayanan");
@@ -137,17 +144,14 @@ class LengkapiDataHospitalController extends GetxController {
       print(e.toString());
     }
   }
+
   //==================HAPUS TIM LAYANAN HOSPITAL==========================
-   Future<dynamic> deleteTimLayananHospital() async {
-    final params = <String, dynamic>{
-        "serviceId": serviceId.value
-    };
+  Future<dynamic> deleteTimLayananHospital() async {
+    final params = <String, dynamic>{"serviceId": serviceId.value};
     isloading(true);
     try {
       final result = await RestClient().request(
-          '${MainUrl.urlApi}hospital/team/delete/$timId',
-          Method.POST,
-          params);
+          '${MainUrl.urlApi}hospital/team/delete/$timId', Method.POST, params);
       // ignore: unused_local_variable
       final timHospital = json.decode(result.toString());
       log(timHospital.toString());
@@ -161,8 +165,6 @@ class LengkapiDataHospitalController extends GetxController {
     }
   }
 
-
-  
   //==================LIST PAKET TIM HOSPITAL========================
   RxList nursepaketData = [].obs;
   Future<dynamic> paketTimHospital() async {
@@ -216,18 +218,22 @@ class LengkapiDataHospitalController extends GetxController {
       print(e.toString());
     }
   }
+
 //================================EDIT PAKET TIM HOSPITAL===========================
-Future<void> editPaketLayananNurse() async {
-     final params = <String, dynamic>{
+  Future<void> editPaketLayananNurse() async {
+    final params = <String, dynamic>{
       "name": namaPaketController.text,
       "description": deskripsiPaketController.text,
       "price": int.parse(hargaCurrens.value),
-      "discount": diskonPaketController.text == "" ? "0" : diskonPaketController.text,
-      "sop":  Get.find<PaketLayananNurseController>().tampunganNurseId
+      "discount":
+          diskonPaketController.text == "" ? "0" : diskonPaketController.text,
+      "sop": Get.find<PaketLayananNurseController>().tampunganNurseId
     };
 
     final response = await http.put(
-      Uri.parse('${MainUrl.urlApi}package-nurse/update/${ Get.find<PaketLayananNurseController>().idPaket.value}',),
+      Uri.parse(
+        '${MainUrl.urlApi}package-nurse/update/${Get.find<PaketLayananNurseController>().idPaket.value}',
+      ),
       headers: {
         'Content-Type': 'application/json',
         // Add any required headers here
@@ -244,19 +250,21 @@ Future<void> editPaketLayananNurse() async {
   }
 
 //================================ALL TIM HOSPITAL===========================
-RxList listAllTimHospital = [].obs;
+  RxList listAllTimHospital = [].obs;
   Future<dynamic> allTimHospital() async {
     final params = <String, dynamic>{};
 
     isloading(true);
     try {
       final result = await RestClient().request(
-          '${MainUrl.urlApi}hospital/all/team/${loginC.idLogin}', Method.GET, params);
+          '${MainUrl.urlApi}hospital/all/team/${loginC.idLogin}',
+          Method.GET,
+          params);
       final allTimHospital = json.decode(result.toString());
       listAllTimHospital.value = allTimHospital['data'];
       if (allTimHospital['code'] == 200) {
-        log(listAllTimHospital.toString())
-;      }
+        log(listAllTimHospital.toString());
+      }
       isloading(false);
     } on Exception catch (e) {
       isloading(false);
@@ -265,6 +273,4 @@ RxList listAllTimHospital = [].obs;
       print(e.toString());
     }
   }
-
-
 }

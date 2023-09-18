@@ -1,18 +1,38 @@
-import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/input_verifikasi_kode.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/buat_pin.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/pendapatan_saldo_controller/pendapatan_saldo_controller.dart';
 import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
+import 'package:bionmed/app/widget/button/button_gradien.dart';
+import 'package:bionmed/app/widget/container/container.dart';
+import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:bionmed/app/widget/textform/input_primary1.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class BuatKodeAkses extends StatelessWidget {
-  const BuatKodeAkses({super.key});
+  BuatKodeAkses({super.key});
+  final controller = Get.put(PendapatanSaldoController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: Cntr(
+        margin: const EdgeInsets.only(bottom: 20),
+        child: ButtomGradient(
+            label: 'Lanjutkan',
+            onTap: () {
+              if (controller.nomerPhoneCodeAksesC.text == "") {
+                showPopUp(
+                            onTap: () {
+                            Get.back();
+                          },
+                              imageAction: 'assets/json/eror.json',
+                              description: "Mohon isi nomer Handphone");
+              } else {
+                Get.to(() => BuatPinSaldo());
+              }
+            }),
+      ),
       appBar: appbarGradient('Buat kode akases'),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -21,17 +41,13 @@ class BuatKodeAkses extends StatelessWidget {
           children: [
             Txt(text: 'No. Handphone'),
             InputPrimary(
-              hintText: "Masukkan no handphone",
+                hintText: "Masukkan no handphone",
                 onChange: (p0) {},
-                controller: TextEditingController(),
-                onTap: () {
-                  Get.to(()=> InputVerifikasiKode());
-                })
+                controller: controller.nomerPhoneCodeAksesC,
+                onTap: () {})
           ],
         ),
       ),
     );
   }
 }
-
-
