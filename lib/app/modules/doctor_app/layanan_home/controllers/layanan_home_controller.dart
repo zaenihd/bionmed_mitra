@@ -154,6 +154,7 @@ class LayananHomeController extends GetxController {
           '${MainUrl.urlApi}nurse/order/detail/$idOrder', Method.GET, params);
       final servis = json.decode(result.toString());
       dataDetail.value = servis;
+      if(loginC.role.value == "nurse"){
       statusOrderChat.value = servis['data']['status_order'];
       startRingging.value = servis['data']['status_payment'];
       nameCostumer = servis['data']['customer']['name'];
@@ -162,6 +163,17 @@ class LayananHomeController extends GetxController {
       statusOrderDetail.value = servis['data']['status'];
       orderIdNurse.value = servis['data']['id'];
       packageNurseSops.value = servis['data']['service_price_nurse']['package_nurse_sops'];
+      }else{
+      statusOrderChat.value = servis['data']['status_order'];
+      startRingging.value = servis['data']['status_payment'];
+      nameCostumer = servis['data']['customer']['name'];
+      starRating.value = servis['data']['rating'] ?? 0;
+      deskripsiRating.value = servis['data']['description_rating'] ?? "";
+      statusOrderDetail.value = servis['data']['status'];
+      orderIdNurse.value = servis['data']['id'];
+      packageNurseSops.value = servis['data']['service_price_nurse']['package_nurse_sops'];
+
+      }
       
 
       // dataGetOrder = servis['data'];

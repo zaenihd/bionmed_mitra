@@ -155,7 +155,7 @@ class SaldoDanRekeningNurseController extends GetxController {
   }) async {
     // isloading(true);
     final params = <String, dynamic>{
-      "nurseBankId": nurseBankId,
+      "hospitalBankId": nurseBankId,
       "amount": amount,
       "date": date,
     };

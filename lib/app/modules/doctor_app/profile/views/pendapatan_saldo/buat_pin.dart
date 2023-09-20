@@ -38,50 +38,78 @@ class BuatPinSaldo extends StatelessWidget {
                 height: 40.0,
               ),
               Cntr(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
                 margin: const EdgeInsets.symmetric(horizontal: 24),
-                height: 60,
-                width: Get.width,
-                border: Border.all(color: const Color(0xffC1C1C1)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Obx(
-                      () => controller.isHiddenPin.isFalse
-                          ? Txt(
-                              text: controller.kodePinView.value,
-                              size: 26,
-                              weight: bold,
-                            )
-                          : Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                  for (var i = 0;
-                                      i < controller.kodePin.length;
-                                      i++)
-                                    Txt(
-                                      text: '*',
-                                      weight: bold,
-                                      size: 40,
-                                    )
-                                ]),
+                  height: 60,
+                  width: Get.width,
+                  // border: Border.all(color: const Color(0xffC1C1C1)),
+                  child: Obx(
+                    () => TextFormField(
+                      onChanged: (value) {},
+                      controller: controller.kodePinC,
+                      obscureText: controller.isHiddenPin.value,
+                      keyboardType: TextInputType.none,
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold),
+                      decoration: InputDecoration(
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                controller.isHiddenPin.value =
+                                    !controller.isHiddenPin.value;
+                              },
+                              child: Icon(
+                                Icons.remove_red_eye,
+                                color: controller.isHiddenPin.isTrue
+                                    ? Colors.grey
+                                    : Colors.blue,
+                              )),
+                          border: const OutlineInputBorder()),
                     ),
-                    InkWell(
-                      onTap: () {
-                        controller.isHiddenPin.value =
-                            !controller.isHiddenPin.value;
-                      },
-                      child: Obx(
-                        () => Icon(
-                          Icons.remove_red_eye,
-                          color: controller.isHiddenPin.isTrue
-                              ? Colors.grey
-                              : Colors.blue,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                // padding: const EdgeInsets.symmetric(horizontal: 20),
+                // margin: const EdgeInsets.symmetric(horizontal: 24),
+                // height: 60,
+                // width: Get.width,
+                // border: Border.all(color: const Color(0xffC1C1C1)),
+                // child: 
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Obx(
+                //       () => controller.isHiddenPin.isFalse
+                //           ? Txt(
+                //               text: controller.kodePinView.value,
+                //               size: 26,
+                //               weight: bold,
+                //             )
+                //           : Row(
+                //               crossAxisAlignment: CrossAxisAlignment.center,
+                //               children: [
+                //                   for (var i = 0;
+                //                       i < controller.kodePin.length;
+                //                       i++)
+                //                     Txt(
+                //                       text: '*',
+                //                       weight: bold,
+                //                       size: 40,
+                //                     )
+                //                 ]),
+                //     ),
+                //     InkWell(
+                //       onTap: () {
+                //         controller.isHiddenPin.value =
+                //             !controller.isHiddenPin.value;
+                //       },
+                //       child: Obx(
+                //         () => Icon(
+                //           Icons.remove_red_eye,
+                //           color: controller.isHiddenPin.isTrue
+                //               ? Colors.grey
+                //               : Colors.blue,
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
               ),
               const SizedBox(
                 height: 40.0,
@@ -107,16 +135,22 @@ class BuatPinSaldo extends StatelessWidget {
                             controller.kodePin.value.add(0);
                             controller.kodePinView.value =
                                 controller.kodePin.join("");
+                                controller.kodePinC.text =
+                                controller.kodePinView.value;
                           } else if (index == 11) {
                             print(index);
                             controller.kodePin.value.removeLast();
                             controller.kodePinView.value =
                                 controller.kodePin.join("");
+                                controller.kodePinC.text =
+                                controller.kodePinView.value;
                           } else {
                             controller.kodePin.value.add(index + 1);
                             controller.kodePinView.value =
                                 controller.kodePin.join("");
                             log(controller.kodePin.length.toString());
+                            controller.kodePinC.text =
+                                controller.kodePinView.value;
                           }
                         } else {
                           if (index == 11) {
@@ -124,6 +158,8 @@ class BuatPinSaldo extends StatelessWidget {
                             controller.kodePin.value.removeLast();
                             controller.kodePinView.value =
                                 controller.kodePin.join("");
+                                controller.kodePinC.text =
+                                controller.kodePinView.value;
                           }
                         }
                         log(controller.kodePinView.value.toString());
@@ -174,6 +210,7 @@ class BuatPinSaldo extends StatelessWidget {
                       ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
                     } else {
                       if (controller.isWithDraw.isTrue) {
+                        // log(Get.find<SaldoDanRekeningDoctorController>().bankId.value.toString());
                         await controller.checkPin();
                         // controller.isWithDraw.value = false;
                       } else {

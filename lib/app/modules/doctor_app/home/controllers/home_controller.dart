@@ -806,6 +806,66 @@ class HomeController extends GetxController {
     }
   }
 
+//================================HOSPITAL API=======================
+  RxList listIncomeHospital = [].obs;
+  Future<dynamic> incomeHospital() async {
+    final params = <String, dynamic>{
+      "hospitalId": Get.find<LoginController>().idLogin,
+    };
+    // isLoading(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}hospital/home/income', Method.POST, params);
+
+      final incomeHospital = json.decode(result.toString());
+      if (incomeHospital['code'] == 200) {
+        listIncomeHospital.value = incomeHospital['datas'];
+        //  Get.to(()=>BuatPinSaldo());
+      }
+
+      // ignore: avoid_print
+      log("iniiii update $incomeHospital");
+      // isLoading(false);
+
+      return incomeHospital;
+      // }
+    } on Exception catch (e) {
+      // isLoading(false);
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+  RxInt statusOrderHospital = 4.obs;
+  RxList listOrderHospital = [].obs;
+  Future<dynamic> fetchListOrderHospital() async {
+    final params = <String, dynamic>{
+      "hospitalId": Get.find<LoginController>().idLogin,
+      "status" : statusOrderHospital.value
+    };
+    // isLoading(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}hospital/team/order', Method.POST, params);
+
+      final orderTimHospital = json.decode(result.toString());
+      if (orderTimHospital['code'] == 200) {
+        listOrderHospital.value = orderTimHospital['datas'];
+        //  Get.to(()=>BuatPinSaldo());
+      }
+
+      // ignore: avoid_print
+      log("nanana update $listOrderHospital");
+      // isLoading(false);
+
+      return orderTimHospital;
+      // }
+    } on Exception catch (e) {
+      // isLoading(false);
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
   @override
   void onInit() async {
     super.onInit();
@@ -817,8 +877,12 @@ class HomeController extends GetxController {
       if (Get.find<LoginController>().role.value == 'doctor') {
         getDetailDoctor();
       } else if (Get.find<LoginController>().role.value == 'hospital') {
+        // incomeHospital();
         getDetailHospital();
       }
+        incomeHospital();
+        fetchListOrderHospital();
+
       getBanner();
 
       // await Get.find<LayananHomeController>().addOrder();

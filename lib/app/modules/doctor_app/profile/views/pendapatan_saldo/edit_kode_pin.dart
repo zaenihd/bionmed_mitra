@@ -38,7 +38,7 @@ class EditKodeAkses extends StatelessWidget {
                               Get.back();
                             },
                             imageAction: 'assets/json/eror.json',
-                            description: "PIN tidak cocok");
+                            description: "PIN Salah");
                       } else {
                         Get.to(() => KodePinAksesEdit());
                       }
@@ -71,6 +71,8 @@ class EditKodeAkses extends StatelessWidget {
             Txt(text: 'Kode PIN'),
             Obx(()=>
             InputPrimary(
+              keyboardType: TextInputType.number,
+
               suffixIcon: InkWell(
                 onTap: () {
                   controller.isHiddenPinAkses.value = !controller.isHiddenPinAkses.value;
@@ -87,6 +89,7 @@ class EditKodeAkses extends StatelessWidget {
             Txt(text: 'Konfirmasi PIN'),
             Obx(()=>
             InputPrimary(
+              keyboardType: TextInputType.number,
                 validate: (value) {
                   if (value.toString() != controller.kodePinEditC.text) {
                     return "PIN tidak cocok";

@@ -33,7 +33,8 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
     }
     return Scaffold(
         appBar: appbarGradient('Riwayat Transaksi'),
-        body: Obx(() => controllerDoctor.loading.isTrue || controllerNurse.loading.isTrue
+        body: Obx(() => controllerDoctor.loading.isTrue ||
+                controllerNurse.loading.isTrue
             ? loadingIndicator()
             : ListView.builder(
                 padding:
@@ -71,16 +72,34 @@ class RiwayatPenarikanSaldo extends StatelessWidget {
                           Get.to(() => StatusPenarikanSaldo(
                                 bank:
                                     controllerNurse.listDataWithDrawNurse[index]
-                                        ['hospital_bank']['bank']['bank'],
+                                                ['hospital_bank'] ==
+                                            null
+                                        ? "null"
+                                        : controllerNurse
+                                                .listDataWithDrawNurse[index]
+                                            ['hospital_bank']['bank']['bank'],
                                 tarikSaldo: controllerNurse
                                     .listDataWithDrawNurse[index]['amount'],
                                 namaBank:
+                                controllerNurse.listDataWithDrawNurse[index]
+                                                ['hospital_bank'] ==
+                                            null
+                                        ? "null"
+                                        : 
                                     controllerNurse.listDataWithDrawNurse[index]
                                         ['hospital_bank']['bank']['name'],
-                                norek:
+                                norek: controllerNurse.listDataWithDrawNurse[index]
+                                                ['hospital_bank'] ==
+                                            null
+                                        ? "null"
+                                        : 
                                     controllerNurse.listDataWithDrawNurse[index]
                                         ['hospital_bank']['no_rek'],
-                                penerina:
+                                penerina: controllerNurse.listDataWithDrawNurse[index]
+                                                ['hospital_bank'] ==
+                                            null
+                                        ? "null"
+                                        : 
                                     controllerNurse.listDataWithDrawNurse[index]
                                         ['hospital_bank']['name'],
                                 tanggal: controllerNurse

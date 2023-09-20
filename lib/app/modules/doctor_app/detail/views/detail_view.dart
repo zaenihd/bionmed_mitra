@@ -106,7 +106,7 @@ class DetailView extends GetView<DetailController> {
 
   @override
   Widget build(BuildContext context) {
-    if (Get.find<LoginController>().role.value == "nurse") {
+    if (Get.find<LoginController>().role.value == "nurse" || Get.find<LoginController>().role.value == "hospital" ) {
       Get.find<LayananHomeController>().getOrderDetailNurse();
     } else {
       Get.find<LayananHomeController>().getOrderDetail();
@@ -166,7 +166,7 @@ class DetailView extends GetView<DetailController> {
                           // SizedBox(height: 200,)
                         ],
                       ),
-                      Get.find<LoginController>().role.value == "nurse"
+                      Get.find<LoginController>().role.value == "nurse" || Get.find<LoginController>().role.value == "hospital"
                           ? detailPesananNurse(context)
                           : detailPesananDokter(),
                     ],
@@ -247,9 +247,9 @@ class DetailView extends GetView<DetailController> {
                 ),
               ],
             )),
-        // const SizedBox(
-        //   height: 15.0,
-        // ),
+        const SizedBox(
+          height: 15.0,
+        ),
         Visibility(
           visible: dataDetail['nurse']['hospital'] != null,
           child: namaHospital()),
@@ -592,7 +592,7 @@ class DetailView extends GetView<DetailController> {
                         height: 40,
                         width: 40,
                         image: DecorationImage(
-                            image: NetworkImage(dataDetail['service']['image']),
+                            image: NetworkImage(dataDetail['service']['image'] ?? ""),
                             fit: BoxFit.cover),
                       ),
                       const SizedBox(
@@ -602,12 +602,12 @@ class DetailView extends GetView<DetailController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Txt(
-                            text: dataDetail['nurse']['name'],
+                            text: dataDetail['nurse']['name'] ?? "",
                             weight: FontWeight.bold,
                             color: Colors.white,
                           ),
                           Txt(
-                            text: dataDetail['nurse']['hospital']['name'],
+                            text: dataDetail['nurse']['hospital'] == null ? "" :dataDetail['nurse']['hospital']['name'],
                             size: 12,
                             color: Colors.white,
                           ),
@@ -622,7 +622,7 @@ class DetailView extends GetView<DetailController> {
                     radius: BorderRadius.circular(5),
                     width: Get.width,
                     padding: const EdgeInsets.all(15),
-                    child: Txt(text: dataDetail['nurse']['description']),
+                    child: Txt(text: dataDetail['nurse']['description'] ?? ""),
                   )
                 ],
               ),
@@ -1333,7 +1333,7 @@ class Rating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Get.find<LoginController>().role.value != 'nurse') {
+    if (Get.find<LoginController>().role.value != 'nurse' || Get.find<LoginController>().role.value != 'hospital' ) {
       myC.getOrder();
     }
     return Column(

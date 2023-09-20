@@ -38,50 +38,77 @@ class KonfirmasiPinSaldo extends StatelessWidget {
                 height: 40.0,
               ),
               Cntr(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
                 margin: const EdgeInsets.symmetric(horizontal: 24),
-                height: 60,
-                width: Get.width,
-                border: Border.all(color: const Color(0xffC1C1C1)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Obx(
-                      () => controller.isHiddenPinKonfirmasi.isFalse
-                          ? Txt(
-                              text: controller.kodePinViewKonfirmasi.value,
-                              size: 26,
-                              weight: bold,
-                            )
-                          : Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                  for (var i = 0;
-                                      i < controller.kodePinKonfirmasi.length;
-                                      i++)
-                                    Txt(
-                                      text: '*',
-                                      weight: bold,
-                                      size: 40,
-                                    )
-                                ]),
+                  height: 60,
+                  width: Get.width,
+                  // border: Border.all(color: const Color(0xffC1C1C1)),
+                  child: Obx(
+                    () => TextFormField(
+                      onChanged: (value) {},
+                      controller: controller.kodePinKonformasiC,
+                      obscureText: controller.isHiddenPinKonfirmasi.value,
+                      keyboardType: TextInputType.none,
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold),
+                      decoration: InputDecoration(
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                controller.isHiddenPinKonfirmasi.value =
+                                    !controller.isHiddenPinKonfirmasi.value;
+                              },
+                              child: Icon(
+                                Icons.remove_red_eye,
+                                color: controller.isHiddenPinKonfirmasi.isTrue
+                                    ? Colors.grey
+                                    : Colors.blue,
+                              )),
+                          border: const OutlineInputBorder()),
                     ),
-                    InkWell(
-                      onTap: () {
-                        controller.isHiddenPinKonfirmasi.value =
-                            !controller.isHiddenPinKonfirmasi.value;
-                      },
-                      child: Obx(
-                        () => Icon(
-                          Icons.remove_red_eye,
-                          color: controller.isHiddenPinKonfirmasi.isTrue
-                              ? Colors.grey
-                              : Colors.blue,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                // padding: const EdgeInsets.symmetric(horizontal: 20),
+                // margin: const EdgeInsets.symmetric(horizontal: 24),
+                // height: 60,
+                // width: Get.width,
+                // border: Border.all(color: const Color(0xffC1C1C1)),
+                // child: Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Obx(
+                //       () => controller.isHiddenPinKonfirmasiKonfirmasi.isFalse
+                //           ? Txt(
+                //               text: controller.kodePinViewKonfirmasi.value,
+                //               size: 26,
+                //               weight: bold,
+                //             )
+                //           : Row(
+                //               crossAxisAlignment: CrossAxisAlignment.center,
+                //               children: [
+                //                   for (var i = 0;
+                //                       i < controller.kodePinKonfirmasi.length;
+                //                       i++)
+                //                     Txt(
+                //                       text: '*',
+                //                       weight: bold,
+                //                       size: 40,
+                //                     )
+                //                 ]),
+                //     ),
+                //     InkWell(
+                //       onTap: () {
+                //         controller.isHiddenPinKonfirmasi.value =
+                //             !controller.isHiddenPinKonfirmasi.value;
+                //       },
+                //       child: Obx(
+                //         () => Icon(
+                //           Icons.remove_red_eye,
+                //           color: controller.isHiddenPinKonfirmasi.isTrue
+                //               ? Colors.grey
+                //               : Colors.blue,
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
               ),
               const SizedBox(
                 height: 40.0,
@@ -107,16 +134,22 @@ class KonfirmasiPinSaldo extends StatelessWidget {
                             controller.kodePinKonfirmasi.value.add(0);
                             controller.kodePinViewKonfirmasi.value =
                                 controller.kodePinKonfirmasi.join("");
+                                 controller.kodePinKonformasiC.text =
+                                controller.kodePinViewKonfirmasi.value;
                           } else if (index == 11) {
                             controller.kodePinKonfirmasi.value.removeLast();
                             controller.kodePinViewKonfirmasi.value =
                                 controller.kodePinKonfirmasi.join("");
+                                controller.kodePinKonformasiC.text =
+                                controller.kodePinViewKonfirmasi.value;
                           } else {
                             controller.kodePinKonfirmasi.value.add(index + 1);
                             controller.kodePinViewKonfirmasi.value =
                                 controller.kodePinKonfirmasi.join("");
                             log(controller.kodePinViewKonfirmasi.value
                                 .toString());
+                                controller.kodePinKonformasiC.text =
+                                controller.kodePinViewKonfirmasi.value;
                           }
                         } else {
                           if (index == 11) {
@@ -124,6 +157,8 @@ class KonfirmasiPinSaldo extends StatelessWidget {
                             controller.kodePinKonfirmasi.value.removeLast();
                             controller.kodePinViewKonfirmasi.value =
                                 controller.kodePinKonfirmasi.join("");
+                                controller.kodePinKonformasiC.text =
+                                controller.kodePinViewKonfirmasi.value;
                           }
                         }
                       },

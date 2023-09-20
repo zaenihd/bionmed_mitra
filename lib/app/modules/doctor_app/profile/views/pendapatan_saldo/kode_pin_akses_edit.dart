@@ -39,51 +39,75 @@ class KodePinAksesEdit extends StatelessWidget {
                 height: 40.0,
               ),
               Cntr(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                margin: const EdgeInsets.symmetric(horizontal: 24),
-                height: 60,
-                width: Get.width,
-                border: Border.all(color: const Color(0xffC1C1C1)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Obx(
-                      () => controller.isHiddenPinAksesCheck.isFalse
-                          ? Txt(
-                              text: controller.kodePinViewAkses.value,
-                              size: 26,
-                              weight: bold,
-                            )
-                          : Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                  for (var i = 0;
-                                      i < controller.kodePinAkses.length;
-                                      i++)
-                                    Txt(
-                                      text: '*',
-                                      weight: bold,
-                                      size: 40,
-                                    )
-                                ]),
+                  // padding: const EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 24),
+                  height: 60,
+                  width: Get.width,
+                  // border: Border.all(color: const Color(0xffC1C1C1)),
+                  child: Obx(
+                    () => TextFormField(
+                      onChanged: (value) {},
+                      controller: controller.kodePinAksesC,
+                      obscureText: controller.isHiddenPinAksesCheck.value,
+                      keyboardType: TextInputType.none,
+                      style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      decoration: InputDecoration(
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                controller.isHiddenPinAksesCheck.value =
+                                    !controller.isHiddenPinAksesCheck.value;
+                              },
+                              child: Icon(
+                                Icons.remove_red_eye,
+                                color: controller.isHiddenPinAksesCheck.isTrue
+                                    ? Colors.grey
+                                    : Colors.blue,
+                              )),
+                          border: const OutlineInputBorder()),
                     ),
-                    InkWell(
-                      onTap: () {
-                        controller.isHiddenPinAksesCheck.value =
-                            !controller.isHiddenPinAksesCheck.value;
-                      },
-                      child: Obx(
-                        () => Icon(
-                          Icons.remove_red_eye,
-                          color: controller.isHiddenPinAksesCheck.isTrue
-                              ? Colors.grey
-                              : Colors.blue,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                  )
+
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+
+                  //     // Obx(
+                  //     //   () => controller.isHiddenPinAksesCheck.isTrue
+                  //     //       ? Txt(
+                  //     //           text: controller.kodePinViewAkses.value,
+                  //     //           size: 26,
+                  //     //           weight: bold,
+                  //     //         )
+                  //     //       : Row(
+                  //     //           crossAxisAlignment: CrossAxisAlignment.center,
+                  //     //           children: [
+                  //     //               for (var i = 0;
+                  //     //                   i < controller.kodePinAkses.length;
+                  //     //                   i++)
+                  //     //                 Txt(
+                  //     //                   text: '*',
+                  //     //                   weight: bold,
+                  //     //                   size: 40,
+                  //     //                 )
+                  //     //             ]),
+                  //     // ),
+                  //     InkWell(
+                  //       onTap: () {
+                  //         controller.isHiddenPinAksesCheck.value =
+                  //             !controller.isHiddenPinAksesCheck.value;
+                  //       },
+                  //       child: Obx(
+                  //         () => Icon(
+                  //           Icons.remove_red_eye,
+                  //           color: controller.isHiddenPinAksesCheck.isTrue
+                  //               ? Colors.grey
+                  //               : Colors.blue,
+                  //         ),
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
+                  ),
               const SizedBox(
                 height: 40.0,
               ),
@@ -108,16 +132,23 @@ class KodePinAksesEdit extends StatelessWidget {
                             controller.kodePinAkses.value.add(0);
                             controller.kodePinViewAkses.value =
                                 controller.kodePinAkses.join("");
+                                controller.kodePinAksesC.text =
+                                controller.kodePinViewAkses.value;
                           } else if (index == 11) {
                             print(index);
                             controller.kodePinAkses.value.removeLast();
                             controller.kodePinViewAkses.value =
                                 controller.kodePinAkses.join("");
+                            controller.kodePinAksesC.text =
+                                controller.kodePinViewAkses.value;
                           } else {
+                            log("sasas${controller.kodePinAksesC.text}");
                             controller.kodePinAkses.value.add(index + 1);
                             controller.kodePinViewAkses.value =
                                 controller.kodePinAkses.join("");
                             log(controller.kodePinAkses.length.toString());
+                            controller.kodePinAksesC.text =
+                                controller.kodePinViewAkses.value;
                           }
                         } else {
                           if (index == 11) {
@@ -125,6 +156,8 @@ class KodePinAksesEdit extends StatelessWidget {
                             controller.kodePinAkses.value.removeLast();
                             controller.kodePinViewAkses.value =
                                 controller.kodePinAkses.join("");
+                            controller.kodePinAksesC.text =
+                                controller.kodePinViewAkses.value;
                           }
                         }
                         log(controller.kodePinViewAkses.value.toString());
@@ -157,7 +190,7 @@ class KodePinAksesEdit extends StatelessWidget {
                 height: 20.0,
               ),
               ButtomGradient(
-                  label:'Submit' ,
+                  label: 'Submit',
                   onTap: () async {
                     if (controller.kodePinAkses.length != 6) {
                       final snackBar = SnackBar(
@@ -174,25 +207,26 @@ class KodePinAksesEdit extends StatelessWidget {
                       );
                       ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
                     } else {
-                      if (Get.find<JadwalSayaController>().codeAccess.value == controller.kodePinViewAkses.value) {
-                      controller.kodePinViewAkses.value = "";
+                      if (Get.find<JadwalSayaController>().codeAccess.value ==
+                          controller.kodePinViewAkses.value) {
+                        controller.kodePinViewAkses.value = "";
                         Get.to(() => BuatPinSaldo());
                         // controller.isWithDraw.value = false;
                       } else {
                         final snackBar = SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        duration: const Duration(seconds: 2),
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 24),
-                        content: const Text('PIN tidak cocok'),
-                        backgroundColor: (Colors.red),
-                        action: SnackBarAction(
-                          label: '',
-                          onPressed: () {},
-                        ),
-                      );
-                      ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
-
+                          behavior: SnackBarBehavior.floating,
+                          duration: const Duration(seconds: 2),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 24),
+                          content: const Text('PIN tidak cocok'),
+                          backgroundColor: (Colors.red),
+                          action: SnackBarAction(
+                            label: '',
+                            onPressed: () {},
+                          ),
+                        );
+                        ScaffoldMessenger.of(Get.context!)
+                            .showSnackBar(snackBar);
                       }
                     }
                   }),

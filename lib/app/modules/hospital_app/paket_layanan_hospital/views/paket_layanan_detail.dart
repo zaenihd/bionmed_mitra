@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/controllers/lengkapi_data_hospital_controller.dart';
 import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/views/lengkapi_data_hospital_view.dart';
 import 'package:bionmed/app/modules/hospital_app/paket_layanan_hospital/views/detail_pendapatan_hospital.dart';
+import 'package:bionmed/app/modules/hospital_app/profile/pengaturan%20akun/pengaturan_akun_hospital.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
@@ -18,7 +19,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../constant/colors.dart';
 import '../../../../widget/card/card_layanan.dart';
-import '../../../../widget/other/show_dialog.dart';
 import '../controllers/paket_layanan_hospital_controller.dart';
 
 class PaketLayananHospitalDetail
@@ -63,7 +63,7 @@ class PaketLayananHospitalDetail
                                         .listServiceHospital[
                                     lengkapiDataHospitalC.index.value]['team'],
                               ));
-                              log(lengkapiDataHospitalC.serviceId.value.toString());
+                          log(lengkapiDataHospitalC.serviceId.value.toString());
 
                           // Get.toNamed(Routes.LENGKAPI_DATA_HOSPITAL);
                         }),
@@ -83,11 +83,13 @@ class PaketLayananHospitalDetail
                         ButtomGradient(
                             label: 'Kelola layanan',
                             onTap: () {
-                              showPopUp(
-                                  onTap: () {},
-                                  imageAction: 'assets/json/eror.json',
-                                  description:
-                                      "Sedang dalam proses\npengembangan");
+                              Get.to(() => PengaturanAkunHospital());
+
+                              // showPopUp(
+                              //     onTap: () {},
+                              //     imageAction: 'assets/json/eror.json',
+                              //     description:
+                              //         "Sedang dalam proses\npengembangan");
                             }),
                         const SizedBox(
                           height: 20.0,

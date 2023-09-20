@@ -14,6 +14,13 @@ class BottomNavigationController extends GetxController {
   void changeTabIndex(int index) async {
     onChange = index;
     update();
+    if (loginC.role.value == 'hospital') {
+      if (index == 0) {
+        Get.find<HomeController>().listOrderHospital.clear();
+        Get.find<HomeController>().statusOrderHospital.value = 4;
+        Get.find<HomeController>().fetchListOrderHospital();
+      }
+    }
     if (index == 1 || index == 0) {
       if (loginC.role.value == 'nurse') {
         layananHomeC.listOrderNurse();

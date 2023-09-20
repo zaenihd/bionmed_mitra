@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/layanan_home/controllers/layanan_home_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/layanan_home/views/riwayat_pesanan.dart';
 import 'package:bionmed/app/modules/doctor_app/layanan_home/views/widget/card_layanan_tab.dart';
@@ -26,15 +27,17 @@ class LayananHomeView extends StatefulWidget {
 class _LayananHomeViewState extends State<LayananHomeView>
     with SingleTickerProviderStateMixin {
   final myC = Get.put(LayananHomeController());
-  final loginC = Get.put(LayananHomeController());
+  // final loginC = Get.put(LayananHomeController());
   String title = "Pesanan anda";
   String callId = "TestCallId";
 
   late TabController _tabController;
 
   final List<Tab> myTabs = <Tab>[
-    const Tab(
-      text: "Hari Ini",
+    Tab(
+      text: Get.find<LoginController>().role.value == 'hospital'
+          ? "Berlangsung"
+          : "Hari Ini",
     ),
     const Tab(
       text: "Terjadwalkan",
@@ -132,6 +135,18 @@ class _LayananHomeViewState extends State<LayananHomeView>
               unselectedLabelColor: AppColor.bodyColor.shade700,
               tabs: myTabs,
               onTap: (val) {
+                log(val.toString());
+                if (Get.find<LoginController>().role.value == 'hospital') {
+                  if (val == 1) {
+                     Get.find<HomeController>().listOrderHospital.clear();
+                    Get.find<HomeController>().statusOrderHospital.value = 2;
+                    Get.find<HomeController>().fetchListOrderHospital();
+                  } else {
+                     Get.find<HomeController>().listOrderHospital.clear();
+                    Get.find<HomeController>().statusOrderHospital.value = 4;
+                    Get.find<HomeController>().fetchListOrderHospital();
+                  }
+                }
                 if (val == 0 || val == 1 || val == 2 || val == 3 || val == 4) {
                   if (Get.find<LoginController>().role.value == 'nurse') {
                     myC.listOrderNurse();
@@ -147,117 +162,207 @@ class _LayananHomeViewState extends State<LayananHomeView>
             child: TabBarView(
               controller: _tabController,
               children: [
-                Get.find<LoginController>().role.value !=
-                                            'nurse'
-                                        ? 
-                Obx(
-                  () => myC.dataListOrder.isNotEmpty
-                      ? RefreshIndicator(
-                          onRefresh: () {
-                            myC.orderListToday();
-                            return Future.delayed(const Duration(seconds: 1));
-                          },
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              // reverse : Get.find<LoginController>().role.value == 'nurse' ? true : false,
-                              // physics: NeverScrollableScrollPhysics(),
-                              itemCount: myC.dataListOrderToday.length,
-                              itemBuilder: (context, index) {
-                                var layanan = Get.find<LoginController>().role.value ==
-                                            'nurse'
-                                        ? "" : myC.dataListOrderToday[index]
-                                    ['order']['service_price']['name'];
-                                var dataService = Get.find<LoginController>().role.value ==
-                                            'nurse'
-                                        ? "" :myC.dataListOrderToday[index]
-                                    ['order']['service']['name'];
-                                var dataLayanan = Get.find<LoginController>().role.value ==
-                                            'nurse'
-                                        ? "" :myC.dataListOrderToday[index]
-                                    ['order']['status'];
+                Get.find<LoginController>().role.value != 'nurse'
+                    ? Obx(
+                        () => myC.dataListOrder.isNotEmpty ||
+                                Get.find<HomeController>()
+                                    .listOrderHospital
+                                    .isNotEmpty
+                            ? RefreshIndicator(
+                                onRefresh: () {
+                                  myC.orderListToday();
+                                  return Future.delayed(
+                                      const Duration(seconds: 1));
+                                },
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    // reverse : Get.find<LoginController>().role.value == 'nurse' ? true : false,
+                                    // physics: NeverScrollableScrollPhysics(),
+                                    itemCount: Get.find<LoginController>()
+                                                .role
+                                                .value ==
+                                            'hospital'
+                                        ? Get.find<HomeController>()
+                                            .listOrderHospital
+                                            .length
+                                        : myC.dataListOrderToday.length,
+                                    itemBuilder: (context, index) {
+                                      var layanan = Get.find<LoginController>()
+                                                  .role
+                                                  .value ==
+                                              'nurse'
+                                          ? ""
+                                          : Get.find<LoginController>()
+                                                      .role
+                                                      .value ==
+                                                  'hospital'
+                                              ? ""
+                                              : myC.dataListOrderToday[index]
+                                                      ['order']['service_price']
+                                                  ['name'];
+                                      var dataService = Get.find<
+                                                      LoginController>()
+                                                  .role
+                                                  .value ==
+                                              'nurse'
+                                          ? ""
+                                          : Get.find<LoginController>()
+                                                      .role
+                                                      .value ==
+                                                  'hospital'
+                                              ? ""
+                                              : myC.dataListOrderToday[index]
+                                                  ['order']['service']['name'];
+                                      var dataLayanan =
+                                          Get.find<LoginController>()
+                                                      .role
+                                                      .value ==
+                                                  'nurse'
+                                              ? ""
+                                              : Get.find<LoginController>()
+                                                          .role
+                                                          .value ==
+                                                      'hospital'
+                                                  ? ""
+                                                  : myC.dataListOrderToday[
+                                                      index]['order']['status'];
 
-                                    //LAYANAN NURSE
-                                var statusOrderNurse =
-                                    Get.find<LoginController>().role.value !=
-                                            'nurse'
-                                        ? ""
-                                        : myC.dataListOrder[index]['order']
-                                            ['status_order'];
-                                // ignore: unused_local_variable
-                                var serviceName =
-                                    Get.find<LoginController>().role.value !=
-                                            'nurse'
-                                        ? ""
-                                        : myC.dataListOrder[index]['order']['service']
-                                            ['name'];
-                                // ignore: unused_local_variable
-                                var servicePriceName =
-                                    Get.find<LoginController>().role.value !=
-                                            'nurse'
-                                        ? ""
-                                        : myC.dataListOrder[index]
-                                            ['service_price_nurse']['order']['name'];
-                                return Get.find<LoginController>().role.value !=
-                                            'nurse' 
-                                            ? 
-                                        dataLayanan == 2 ||
-                                        dataLayanan == 3 ||
-                                        dataLayanan == 4 ||
-                                        dataLayanan == 1 
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 24),
-                                        child: 
-                                        HomeView().CardLayananOrder(
-                                            layanan,
-                                            index,
-                                            dataLayanan,
-                                            dataService,
-                                            context)
+                                      //LAYANAN NURSE
+                                      var statusOrderNurse =
+                                          Get.find<LoginController>()
+                                                      .role
+                                                      .value !=
+                                                  'nurse'
+                                              ? ""
+                                              : Get.find<LoginController>()
+                                                          .role
+                                                          .value ==
+                                                      'hospital'
+                                                  ? ""
+                                                  : myC.dataListOrder[index]
+                                                      ['order']['status_order'];
+                                      // ignore: unused_local_variable
+                                      var serviceName =
+                                          Get.find<LoginController>()
+                                                      .role
+                                                      .value !=
+                                                  'nurse'
+                                              ? ""
+                                              : Get.find<LoginController>()
+                                                          .role
+                                                          .value ==
+                                                      'hospital'
+                                                  ? ""
+                                                  : myC.dataListOrder[index]
+                                                          ['order']['service']
+                                                      ['name'];
+                                      // ignore: unused_local_variable
+                                      var servicePriceName =
+                                          Get.find<LoginController>()
+                                                      .role
+                                                      .value !=
+                                                  'nurse'
+                                              ? ""
+                                              : Get.find<LoginController>()
+                                                          .role
+                                                          .value ==
+                                                      'hospital'
+                                                  ? ""
+                                                  : myC.dataListOrder[index][
+                                                          'service_price_nurse']
+                                                      ['order']['name'];
+                                      return Get.find<LoginController>().role.value ==
+                                              'hospital'
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20.0),
+                                              child: HomeView()
+                                                  .cardLayananHospitalOrder(
+                                                      index),
                                             )
-                                    : const SizedBox(
-                                    height: 1.0,
-                                    ) : statusOrderNurse == 2 ||
-                                        statusOrderNurse == 3 ||
-                                        statusOrderNurse == 4 ||
-                                        statusOrderNurse == 1 
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 24),
-                                        child: HomeView().CardLayananNurseOrder(
-                                            layanan,
-                                            index,
-                                            dataLayanan,
-                                            dataService,
-                                            context))
-                                    : const SizedBox(
-                                        width: 1.0,
-                                      ) ;
-                              }),
-                        )
-                      : const Center(child: Text("Belum ada pesanan")),
-                ) : CardServiceNurse(
-                  myC: myC,
-                  statusList: 3,
-                  statusList1: 4,
-                  statusList2: 2,
-                  statusList3: 6,
-                ),
+                                          : Get.find<LoginController>().role.value != 'nurse' ||
+                                                  Get.find<LoginController>().role.value !=
+                                                      'hospital'
+                                              ? dataLayanan == 2 ||
+                                                      dataLayanan == 3 ||
+                                                      dataLayanan == 4 ||
+                                                      dataLayanan == 1
+                                                  ? Padding(
+                                                      padding: const EdgeInsets.symmetric(
+                                                          vertical: 10.0,
+                                                          horizontal: 24),
+                                                      child: HomeView().CardLayananOrder(
+                                                          layanan,
+                                                          index,
+                                                          dataLayanan,
+                                                          dataService,
+                                                          context))
+                                                  : const SizedBox(
+                                                      height: 1.0,
+                                                    )
+                                              : statusOrderNurse == 2 ||
+                                                      statusOrderNurse == 3 ||
+                                                      statusOrderNurse == 4 ||
+                                                      statusOrderNurse == 1
+                                                  ? Padding(
+                                                      padding: const EdgeInsets.symmetric(
+                                                          vertical: 10.0,
+                                                          horizontal: 24),
+                                                      child: HomeView()
+                                                          .CardLayananNurseOrder(
+                                                              layanan,
+                                                              index,
+                                                              dataLayanan,
+                                                              dataService,
+                                                              context))
+                                                  : const SizedBox(
+                                                      width: 1.0,
+                                                    );
+                                    }),
+                              )
+                            : const Center(child: Text("Belum ada pesanan")),
+                      )
+                    : CardServiceNurse(
+                        myC: myC,
+                        statusList: 3,
+                        statusList1: 4,
+                        statusList2: 2,
+                        statusList3: 6,
+                      ),
 
-                //TAB TERJADWALKAN 
+                //TAB TERJADWALKAN
 
-                Get.find<LoginController>().role.value !=
-                                            'nurse' ?
-                CardService1(
-                  myC: myC,
-                  statusList: 2,
-                  statusList1: 2,
-                )
-                : CardServiceNurse(
-                  myC: myC,
-                  statusList: 2,
-                  statusList1: 2,
-                )
+                Get.find<LoginController>().role.value == 'nurse'
+                    ? CardServiceNurse(
+                        myC: myC,
+                        statusList: 2,
+                        statusList1: 2,
+                      )
+                    : Get.find<LoginController>().role.value == 'hospital'
+                        ? 
+                        Obx(()=>
+                        Get.find<HomeController>()
+                                .listOrderHospital.isEmpty ? const SizedBox(
+                                height: 1.0,
+                                ) :
+                        
+                        ListView.builder(
+                            itemCount: Get.find<HomeController>()
+                                .listOrderHospital
+                                .length,
+                            itemBuilder: (context, index) =>
+                                Padding(
+                                  padding: const EdgeInsets.symmetric( horizontal : 20.0),
+                                  child: HomeView().cardLayananHospitalOrder(index),
+                                ),
+                          ))
+                        : CardService1(
+                            myC: myC,
+                            statusList: 2,
+                            statusList1: 2,
+                          )
+
                 // CardService1(
                 //   myC: myC,
                 //   statusList: 1,
@@ -317,4 +422,3 @@ class _LayananHomeViewState extends State<LayananHomeView>
 }
 
 // ignore: must_be_immutable
-

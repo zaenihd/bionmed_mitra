@@ -15,17 +15,21 @@ class PendapatanSaldoController extends GetxController {
   //BUAT PIN
   RxString kodePinView = ''.obs;
   RxList kodePin = [].obs;
-  RxBool isHiddenPin = false.obs;
-  //BUAT PIN
+  RxBool isHiddenPin = true.obs;
+  TextEditingController kodePinC = TextEditingController();
+  //BUAT PIN AKSES
   RxString kodePinViewAkses = ''.obs;
   RxList kodePinAkses = [].obs;
-  RxBool isHiddenPinAksesCheck = false.obs;
+  RxBool isHiddenPinAksesCheck = true.obs;
+  TextEditingController kodePinAksesC = TextEditingController();
+
   //KONFIRMASI PIN
   RxString kodePinViewKonfirmasi = ''.obs;
   RxList kodePinKonfirmasi = [].obs;
-  RxBool isHiddenPinKonfirmasi = false.obs;
+  RxBool isHiddenPinKonfirmasi = true.obs;
+  TextEditingController kodePinKonformasiC = TextEditingController();
   //
-  RxBool isHiddenPinAkses = false.obs;
+  RxBool isHiddenPinAkses = true.obs;
   RxBool isLoading = false.obs;
   RxBool isWithDraw = false.obs;
   TextEditingController nomerPhoneCodeAksesC = TextEditingController(
