@@ -277,10 +277,10 @@ class LoginController extends GetxController {
         }
         if (inHospital.value != "0") {
         } else {
-          if (dataNurse['data']['nurse']['nurse_educations'].toString() !=
+          if (dataNurse['data']['nurse']['nurse_educations'].toString() ==
                       "[]" &&
                   dataNurse['data']['nurse']['verifiedStatus'] == 1 ||
-              dataNurse['data']['nurse']['nurse_educations'] == null &&
+              dataNurse['data']['nurse']['nurse_educations'].toString() == "[]" &&
                   dataNurse['data']['nurse']['verifiedStatus'] == 1) {
             lengkapiProfil(Get.context!);
           }

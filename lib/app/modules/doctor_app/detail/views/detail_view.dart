@@ -114,7 +114,10 @@ class DetailView extends GetView<DetailController> {
     return Scaffold(
         backgroundColor: backgroundColorC,
         appBar: AppBar(
-          title: InkWell(onTap: () {}, child: const Text("Detail Order")),
+          title: InkWell(onTap: () {
+            // actionUploadBuktiSample();
+            // popUpJadwalPengambilanTest();
+          }, child: const Text("Detail Order")),
           leading: IconButton(
               onPressed: () {
                 controller.stop = true;
@@ -166,6 +169,10 @@ class DetailView extends GetView<DetailController> {
                           // SizedBox(height: 200,)
                         ],
                       ),
+                          // jadwalPengambilanTes(),
+                          // const SizedBox(
+                          // height: 20.0,
+                          // ),
                       Get.find<LoginController>().role.value == "nurse" || Get.find<LoginController>().role.value == "hospital"
                           ? detailPesananNurse(context)
                           : detailPesananDokter(),
@@ -261,10 +268,32 @@ class DetailView extends GetView<DetailController> {
         const SizedBox(
           height: 20.0,
         ),
-        detailPaketNurse(),
-        const SizedBox(
-          height: 25.0,
-        ),
+        // detailPaketNurse(),
+        // const SizedBox(
+        //   height: 25.0,
+        // ),
+        // InkWell(
+        //         onTap: () {
+        //           popUpLihatGambar(Get.context!);
+        //         },
+        //         child: Cntr(
+        //           margin: const EdgeInsets.symmetric(horizontal: 24),
+        //           alignment: Alignment.center,
+        //           radius: BorderRadius.circular(10),
+        //           color: Colors.transparent,
+        //           height: 40,
+        //           width: Get.width,
+        //           border: Border.all(color: Colors.blue),
+        //           child: Txt(
+        //             text: "Lihat bukti selesai",
+        //             color: Colors.blue,
+        //           ),
+        //         ),
+        //       ),
+        // tujuanAmbulance(),
+        // const SizedBox(
+        // height: 20.0,
+        // ),
         Cntr(
             width: Get.width,
             boxShadow: const [
@@ -1253,6 +1282,769 @@ class DetailView extends GetView<DetailController> {
               ),
             ))
       ],
+    );
+  }
+
+Cntr tujuanAmbulance() {
+    return Cntr(
+     margin: const EdgeInsets.symmetric(horizontal: 25),
+      alignment: Alignment.centerLeft,
+      width: Get.width,
+      color: const Color(0xffF4F4F4),
+      radius: BorderRadius.circular(10),
+      child: ExpansionTile(
+        title:  Txt(
+              text: 'Tujuan Anda',
+              weight: bold,
+            ),
+        children:[
+          Padding(
+            padding: const EdgeInsets.only(left :10.0, right: 10, bottom: 20),
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+             
+              const SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Txt(text: 'Alamat :'),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: 'Jl.Padjajaran',
+                        weight: bold,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Txt(text: 'Tujuan :'),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: 'Jl.Padjajaran',
+                        weight: bold,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+        ),
+          ),]
+      ),
+    );
+  }
+
+ popUpkirimLaporanSelesaiAmbulance(BuildContext context) {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 280,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 18, top: 14),
+                            width: Get.width / 1.9,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffEDEDED)),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Txt(
+                            text:
+                                'Apakah pesanan ambulance\ntelah anda nyatakan selesai?',
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 22.0,
+                          ),
+
+                          // ignore: avoid_unnecessary_containers
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: InkWell(
+                              onTap: () {
+                                // if (controller
+                                //     .nurseScopeData.isEmpty) {
+                                //   controller.getNurseWorkScope();
+                                // }
+                                controller.pickerFilesImage(context);
+                              },
+                              child: Cntr(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                height: 50,
+                                alignment: Alignment.centerLeft,
+                                width: Get.width,
+                                color: AppColor.bgForm,
+                                radius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.grey[300]!),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        // Obx(
+                                        //   () =>
+                                        Icon(
+                                          Icons.upload,
+                                          color: AppColor.bodyColor.shade500,
+                                          size: 20,
+                                        ),
+                                        const SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        //    controller
+                                        //           .tampunganNurseId
+                                        //           .isNotEmpty
+                                        //       ? Txt(
+                                        //           text:
+                                        //               '${controller.tampunganNurseId.length} Dipilih')
+                                        //       :
+                                        Txt(
+                                          text: 'Upload foto bukti',
+                                          color: AppColor.bodyColor.shade500,
+                                        ),
+                                      ],
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios_sharp,
+                                      size: 20,
+                                      color: AppColor.bodyColor.shade500,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25.0,
+                          ),
+                          ButtomGradient(
+                            label: "Kirim laporan",
+                            onTap: () {
+                              Get.back();
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30.0,
+                          ),
+                        ])
+                  ]));
+        });
+  }
+ 
+ popUpSelesaiKonfirmasi(BuildContext context) {
+    showModalBottomSheet(
+        isDismissible: false,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 280,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 18, top: 14),
+                            width: Get.width / 1.9,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffEDEDED)),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          const Text(
+                            'Terima kasih, telah mengkonfirmasi',
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Image.asset('assets/images/berhasil.png'),
+                          const SizedBox(
+                            height: 22.0,
+                          ),
+                          ButtomGradient(
+                            label: "Oke",
+                            onTap: () {
+                              Get.back();
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                        ])
+                  ]));
+        });
+  }
+
+popUpLihatGambar(BuildContext context) {
+    showModalBottomSheet(
+        isDismissible: false,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 500,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 18, top: 14),
+                            width: Get.width / 1.9,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffEDEDED)),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Cntr(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            height: 260,
+                            width: Get.width,
+                            image: const DecorationImage(
+                              image: NetworkImage(
+                                  'https://picsum.photos/200/300/?blur'),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 22.0,
+                          ),
+                          ButtomGradient(
+                            margin: 20,
+                            label: "Kembali",
+                            onTap: () {
+                              Get.back();
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30.0,
+                          ),
+                        ])
+                  ]));
+        });
+  }
+
+actionUploadBuktiSample() {
+    Get.bottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        Cntr(
+          padding: const EdgeInsets.all(20),
+          radius: const BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          height: Get.height,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+               Cntr(
+                    // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    height: 10,
+                    width: 200,
+                    color: Colors.grey[300],
+                    radius: BorderRadius.circular(20),
+                  ),
+                
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Txt(text: 'Upload bukti pengambilan sample tes'),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                 InkWell(
+                  onTap: () {
+                    controller.pickerFilesImage(Get.context!);
+                  },
+                  child: 
+                Cntr(
+                  radius: BorderRadius.circular(10),
+                  width: Get.width,
+                  padding: EdgeInsets.zero,
+                  border: Border.all(color: Colors.grey[300]!),
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.upload,
+                    ),
+                    title: Obx(()=>Txt(
+                      maxLines: 1,
+                      textOverFlow: TextOverflow.ellipsis,
+                      text: controller.imageUrl.isEmpty ? 'Upload bukti foto' : controller.imageUrl.value,
+                      color:controller.imageUrl.isEmpty ? Colors.grey[500] : Colors.black,
+                    ),),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                ),),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                InkWell(
+                  onTap: () {
+                    controller.pickDate();
+                  },
+                  child: Cntr(
+                    radius: BorderRadius.circular(10),
+                    width: Get.width,
+                    padding: EdgeInsets.zero,
+                    border: Border.all(color: Colors.grey[300]!),
+                    child: ListTile(
+                      // ignore: prefer_const_constructors
+                      leading: Icon(
+                        Icons.date_range,
+                      ),
+                      title: Obx(
+                        () => Txt(
+                          text: controller.tanggalRiset.isEmpty
+                              ? 'Masukkan estimasi selesai riset lab'
+                              : controller.tanggalRiset.value,
+                          color: controller.tanggalRiset.isEmpty
+                              ? Colors.grey[500]
+                              : Colors.black,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Cntr(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
+                    width: Get.width,
+                    height: 130,
+                    radius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey[300]!),
+                    child: TextFormField(
+                      maxLines: 10,
+                      decoration: const InputDecoration(
+                          hintText: 'Berikan alasan jika ada',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none)),
+                    )),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                ButtomGradient(
+                  margin: 0,
+                  label: 'Kirim & Lanjtukan proses lab',
+                  onTap: () {
+                    Get.back();
+                    Get.bottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))),
+                        Cntr(
+                            padding: const EdgeInsets.all(20),
+                            radius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30)),
+                            height: Get.height /2.6,
+                            child: Column(
+                              children: [
+                                Cntr(
+                                  // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                  height: 10,
+                                  width: 200,
+                                  color: Colors.grey[300],
+                                  radius: BorderRadius.circular(20),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Txt(
+                                    textAlign: TextAlign.center,
+                                    text:
+                                        'Terima kasih, telah memberikan\nbukti pengambilan tes'),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Image.asset('assets/images/berhasil.png'),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+                                ButtomGradient(
+                                  label: 'Oke',
+                                  onTap: () {Get.back();},
+                                )
+                              ],
+                            )));
+                  },
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
+
+popUpJadwalPengambilanTest() {
+    Get.bottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        Cntr(
+          padding: const EdgeInsets.all(20),
+          radius: const BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          height: Get.height,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+               Cntr(
+                    // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    height: 10,
+                    width: 200,
+                    color: Colors.grey[300],
+                    radius: BorderRadius.circular(20),
+                  ),
+                
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Txt(text: 'Jadwalkan Pengambilan Sampel Tes'),
+                const SizedBox(
+                  height: 20.0,
+                ),
+
+                Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                width: Get.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey[300]!)),
+                // dropdown below..
+                child: DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.zero,
+                      fillColor: AppColor.bgForm,
+                      filled: true,
+                      hintText: "Tipe pengambilan sample tes",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(borderSide: BorderSide.none)),
+                  validator: (jKelamin) => jKelamin == null
+                      ? "Tipe pengambilan sample tes tidak boleh kosong"
+                      : null,
+                  items: controller.lokasiPengambilan
+                      .map((e) => DropdownMenuItem(
+                          onTap: () {
+                            controller.pilihLokasi.value =
+                                e.toString();
+                          },
+                          value: e,
+                          child: Text(e.toString())))
+                      .toList(),
+                  onChanged: (value) {},
+                ),
+              ),const SizedBox(
+              height: 10.0,
+              ),
+              
+              // ignore: avoid_unnecessary_containers
+              InkWell(
+                onTap: () {
+                  // Get.defaultDialog();
+                  showModalBottomSheet(
+                      isDismissible: false,
+                      context: Get.context!,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            controller.buildTimePickerMulai(),
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: const Text('Pilih Jam'),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                          ],
+                        );
+                      });
+                },
+                child: Cntr(
+                  // padding: const EdgeInsets.symmetric(horizontal: 10),
+                  width: Get.width,
+                  height: 55,
+                  color: AppColor.bgForm,
+                  radius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey[300]!),
+                  child: ListTile(
+                        leading :const Icon(
+                            Icons.access_time,
+                            color: Colors.grey,
+                          ),
+                          title :
+                      Obx(() => Txt(
+                            text: controller.jamTerpilih.isEmpty
+                                ? 'Masukkan jam'
+                                : controller.jamTerpilih.value,
+                            color: controller.jamTerpilih.isEmpty
+                                ? Colors.grey
+                                : Colors.black,
+                          )),
+                          trailing :
+                         const Icon(Icons.arrow_forward_ios),
+                    
+                  ),
+                ),
+              ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                InkWell(
+                  onTap: () {
+                    controller.pickDate();
+                  },
+                  child: Cntr(
+                    radius: BorderRadius.circular(10),
+                    width: Get.width,
+                    padding: EdgeInsets.zero,
+                    border: Border.all(color: Colors.grey[300]!),
+                    child: ListTile(
+                      // ignore: prefer_const_constructors
+                      leading: Icon(
+                        Icons.date_range,
+                      ),
+                      title: Obx(
+                        () => Txt(
+                          text: controller.tanggalJadwalAmbilTes.isEmpty
+                              ? 'Masukan jadwal'
+                              : controller.tanggalJadwalAmbilTes.value,
+                          color: controller.tanggalJadwalAmbilTes.isEmpty
+                              ? Colors.grey[500]
+                              : Colors.black,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                ButtomGradient(
+                  margin: 0,
+                  label: 'Kirim & Lanjtukan',
+                  onTap: () {
+                    Get.back();
+                    Get.bottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))),
+                        Cntr(
+                            padding: const EdgeInsets.all(20),
+                            radius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30)),
+                            height: Get.height /2.6,
+                            child: Column(
+                              children: [
+                                Cntr(
+                                  // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                  height: 10,
+                                  width: 200,
+                                  color: Colors.grey[300],
+                                  radius: BorderRadius.circular(20),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Txt(
+                                    textAlign: TextAlign.center,
+                                    text:
+                                        'Terima kasih, telah memberikan\nbukti pengambilan tes'),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Image.asset('assets/images/berhasil.png'),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+                                ButtomGradient(
+                                  label: 'Oke',
+                                  onTap: () {Get.back();},
+                                )
+                              ],
+                            )));
+                  },
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
+
+Cntr jadwalPengambilanTes() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      radius: BorderRadius.circular(10),
+      width: Get.width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 26),
+      gradient: gradient1,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Txt(
+                        text: 'Terjadwalkan',
+                        weight: bold,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: 'Pengambilan Sample Tes',
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                  const Icon(
+                    Icons.access_time_filled_outlined,
+                    color: Colors.white,
+                    size: 40,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Txt(
+                    text: 'Jenis',
+                    color: Colors.white,
+                  ),
+                  Txt(
+                    text: 'Datang Kerumah',
+                    weight: bold,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Txt(
+                    text: 'Tanggal',
+                    color: Colors.white,
+                  ),
+                  Txt(
+                    text: '19 Juni 2023',
+                    weight: bold,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Txt(
+                    text: 'Jadwal',
+                    color: Colors.white,
+                  ),
+                  Txt(
+                    text: '14.00 WIB',
+                    weight: bold,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

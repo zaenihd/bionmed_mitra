@@ -113,6 +113,7 @@ class PenarikanSaldo extends StatelessWidget {
                                         description: "Saldo Anda\nTidak Cukup");
                                   } else {
                                     if (loginC.role.value == "hospital") {
+                                      Get.back();
                                       Get.put(PendapatanSaldoController()).isWithDraw.value = true;
                                       Get.to(()=> BuatPinSaldo());
                                     } else {

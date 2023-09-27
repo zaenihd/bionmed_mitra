@@ -43,7 +43,6 @@ class ProfileView extends GetView<ProfileController> {
       Get.find<JadwalSayaController>().loginDataHospital(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
       Get.find<JadwalSayaController>().getLocation();
-
     } else {
       Get.find<JadwalSayaController>().loginData(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
@@ -289,9 +288,14 @@ class ProfileView extends GetView<ProfileController> {
                                         onTap: () async {
                                           if (loginC.role.value == 'hospital') {
                                             // log('message');
-                                             Get.find<
+                                            Get.find<
+                                                    LengkapiDataHospitalController>()
+                                                .isFromProfile
+                                                .value = false;
+                                            Get.find<
                                                     LengkapiDataHospitalController>()
                                                 .serviceHospital();
+
                                             Get.toNamed(
                                                 Routes.PAKET_LAYANAN_HOSPITAL);
                                             // showPopUp(
@@ -358,6 +362,9 @@ class ProfileView extends GetView<ProfileController> {
                                     if (loginC.inHospital.value == "") {
                                       Get.toNamed(
                                           Routes.PENDAPATAN_TIM_HOSPITAL);
+                                    } else if (loginC.role.value ==
+                                        "hospital") {
+                                      Get.to(() => PendapatanView());
                                     } else {
                                       Get.to(() => RiwayatPesanan());
                                     }

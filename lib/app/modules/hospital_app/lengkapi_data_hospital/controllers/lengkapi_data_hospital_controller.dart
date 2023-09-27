@@ -68,6 +68,16 @@ class LengkapiDataHospitalController extends GetxController {
           params);
       final serviceHospital = json.decode(result.toString());
       listServiceHospital.value = serviceHospital['data'];
+      if (isFromProfile.isTrue) {
+        listServiceHospital.value = listServiceHospital
+            .where(
+              (p0) => p0['team'].length != 0,
+            )
+            .toList();
+        log("filter :${listServiceHospital.where(
+              (p0) => p0['team'].length != 0,
+            ).toList()}");
+      }
       if (serviceHospital['code'] == 200) {
         log("hahhahah$listServiceHospital");
       }
@@ -105,12 +115,12 @@ class LengkapiDataHospitalController extends GetxController {
       isloading(false);
     } on Exception catch (e) {
       // Get.defaultDialog();
-       showPopUp(
-                                  onTap: () {
-                                    Get.back();
-                                  },
-                                  imageAction: 'assets/json/eror.json',
-                                  description: "Nomer telah digunakan!");
+      showPopUp(
+          onTap: () {
+            Get.back();
+          },
+          imageAction: 'assets/json/eror.json',
+          description: "Nomer telah digunakan!");
       // Get.defaultDialog(
       //     title: "Terjadi kesalahan", middleText: "Nomer telah digunakan!");
       // ignore: avoid_print
