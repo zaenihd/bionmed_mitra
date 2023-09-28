@@ -16,6 +16,8 @@ import 'package:search_map_location/utils/google_search/place.dart';
 import 'package:search_map_location/utils/google_search/place_type.dart';
 import 'package:search_map_location/widget/search_widget.dart';
 
+import '../../../perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
+
 class Maps extends StatefulWidget {
   const Maps({super.key});
 
@@ -183,10 +185,10 @@ class MapSampleState extends State<MapSample> {
                 markers: [
                   Marker(
                     markerId: const MarkerId("1"),
-                    position:
-                    registerC.city.isNotEmpty ?
-                     LatLng(registerC.lat.value, registerC.long.value) :
-                     LatLng(registerC.latHospital.value, registerC.longHospital.value),
+                    position: registerC.city.isNotEmpty
+                        ? LatLng(registerC.lat.value, registerC.long.value)
+                        : LatLng(registerC.latHospital.value,
+                            registerC.longHospital.value),
                     //  LatLng(registerC.lat.value, registerC.long.value),
                     // position: LatLng(-6.5693770, 106.6710462),
                     draggable: true,
@@ -198,17 +200,20 @@ class MapSampleState extends State<MapSample> {
                       registerC.kabupaten.value = placemark.administrativeArea!;
                       registerC.lat.value = e.latitude;
                       registerC.long.value = e.longitude;
-                       registerC.cityHospital.value = placemark.subAdministrativeArea!;
-                      registerC.kabupatenHospital.value = placemark.administrativeArea!;
+                      registerC.cityHospital.value =
+                          placemark.subAdministrativeArea!;
+                      registerC.kabupatenHospital.value =
+                          placemark.administrativeArea!;
                       registerC.latHospital.value = e.latitude;
                       registerC.longHospital.value = e.longitude;
                     },
                   ),
                   Marker(
                     markerId: const MarkerId("2"),
-                    position:registerC.city.isNotEmpty ?
-                     LatLng(registerC.lat.value, registerC.long.value) :
-                     LatLng(registerC.latHospital.value, registerC.longHospital.value),
+                    position: registerC.city.isNotEmpty
+                        ? LatLng(registerC.lat.value, registerC.long.value)
+                        : LatLng(registerC.latHospital.value,
+                            registerC.longHospital.value),
                     // position: LatLng(-6.5693770, 106.6710462),
                     draggable: true,
                     onDragEnd: (e) async {
@@ -219,8 +224,10 @@ class MapSampleState extends State<MapSample> {
                       registerC.kabupaten.value = placemark.administrativeArea!;
                       registerC.lat.value = e.latitude;
                       registerC.long.value = e.longitude;
-                      registerC.cityHospital.value = placemark.subAdministrativeArea!;
-                      registerC.kabupatenHospital.value = placemark.administrativeArea!;
+                      registerC.cityHospital.value =
+                          placemark.subAdministrativeArea!;
+                      registerC.kabupatenHospital.value =
+                          placemark.administrativeArea!;
                       registerC.latHospital.value = e.latitude;
                       registerC.longHospital.value = e.longitude;
 
@@ -231,9 +238,10 @@ class MapSampleState extends State<MapSample> {
                 ].toSet(),
                 mapType: MapType.terrain,
                 initialCameraPosition: CameraPosition(
-                  target:registerC.city.isNotEmpty ?
-                     LatLng(registerC.lat.value, registerC.long.value) :
-                     LatLng(registerC.latHospital.value, registerC.longHospital.value),
+                  target: registerC.city.isNotEmpty
+                      ? LatLng(registerC.lat.value, registerC.long.value)
+                      : LatLng(registerC.latHospital.value,
+                          registerC.longHospital.value),
                   zoom: 14.4746,
                 ),
                 onMapCreated: (GoogleMapController controller) {
@@ -267,22 +275,19 @@ class MapSampleState extends State<MapSample> {
                             ['lng']),
                   ),
                 );
-                if(registerC.isHospital.isFalse){
-
-                registerC.lat.value = geolocation.fullJSON['geometry']['bounds']
-                    ['northeast']['lat'];
-                registerC.long.value = geolocation.fullJSON['geometry']
-                    ['bounds']['northeast']['lng'];
-                }else{
-                  registerC.latHospital.value = geolocation.fullJSON['geometry']['bounds']
-                    ['northeast']['lat'];
-                registerC.longHospital.value = geolocation.fullJSON['geometry']
-                    ['bounds']['northeast']['lng'];
+                if (registerC.isHospital.isFalse) {
+                  registerC.lat.value = geolocation.fullJSON['geometry']
+                      ['bounds']['northeast']['lat'];
+                  registerC.long.value = geolocation.fullJSON['geometry']
+                      ['bounds']['northeast']['lng'];
+                } else {
+                  registerC.latHospital.value = geolocation.fullJSON['geometry']
+                      ['bounds']['northeast']['lat'];
+                  registerC.longHospital.value = geolocation
+                      .fullJSON['geometry']['bounds']['northeast']['lng'];
                 }
-               await registerC.getUserLocationSearch();
-               await registerC.getUserLocation();
-
-
+                // await registerC.getUserLocationSearch();
+                await registerC.getUserLocation();
 
                 // controller.animateCamera(
                 //     CameraUpdate.newLatLng(geolocation!.coordinates));
@@ -325,32 +330,50 @@ class MapSampleState extends State<MapSample> {
                                 ),
                                 SizedBox(
                                   width: 180,
-                                  child: 
-                                  registerC.city.isEmpty ?   AutoSizeText(
-                                    '${registerC.cityHospital}, ${registerC.kabupatenHospital}',
-                                    maxLines: 1,
-                                  ) :
-                                  AutoSizeText(
-                                    '${registerC.city}, ${registerC.kabupaten}',
-                                    maxLines: 1,
-                                  ),
+                                  child: registerC.city.isEmpty
+                                      ? AutoSizeText(
+                                          '${registerC.cityHospital}, ${registerC.kabupatenHospital}',
+                                          maxLines: 1,
+                                        )
+                                      : AutoSizeText(
+                                          '${registerC.city}, ${registerC.kabupaten}',
+                                          maxLines: 1,
+                                        ),
                                 ),
                               ],
                             )),
                       ),
                       ElevatedButton(
                           onPressed: () async {
+                            final controllerPaket =
+                                Get.put(PaketLayananNurseController());
                             final GoogleMapController controller =
                                 await _controller.future;
                             controller.animateCamera(CameraUpdate.newLatLng(
-                              registerC.city.isNotEmpty ?
-                     LatLng(registerC.lat.value, registerC.long.value) :
-                     LatLng(registerC.latHospital.value, registerC.longHospital.value),));
+                              registerC.city.isNotEmpty
+                                  ? LatLng(
+                                      registerC.lat.value, registerC.long.value)
+                                  : LatLng(registerC.latHospital.value,
+                                      registerC.longHospital.value),
+                            ));
                             await registerC.getUserLocation();
-                            // registerC.getUserLocationSearch();
+                            if (controllerPaket.isFromPaketAmbulance.isTrue) {
+                              controllerPaket.zonaCsr.add(
+                                {
+                                  "lat": "${registerC.lat.value}",
+                                  "long": "1${registerC.long.value}",
+                                  "districts": registerC.kecamatan.value,
+                                  "city": registerC.city.value,
+                                  "country": registerC.negara.value
+                                },
+                              );
+                            } // registerC.getUserLocationSearch();
                             Get.back();
                             // ignore: prefer_interpolation_to_compose_strings
-                            log('lat lat' + registerC.lat.toString() +" " +  registerC.long.toString());
+                            log('lat lat' +
+                                registerC.lat.toString() +
+                                " " +
+                                registerC.long.toString());
                           },
                           child: const Text('Pilih Lokasi'))
                     ],
@@ -359,15 +382,20 @@ class MapSampleState extends State<MapSample> {
                     onTap: () async {
                       final GoogleMapController controller =
                           await _controller.future;
-                      controller.animateCamera(CameraUpdate.newLatLng(registerC.city.isNotEmpty ?
-                     LatLng(registerC.lat.value, registerC.long.value) :
-                     LatLng(registerC.latHospital.value, registerC.longHospital.value),));
+                      controller.animateCamera(CameraUpdate.newLatLng(
+                        registerC.city.isNotEmpty
+                            ? LatLng(registerC.lat.value, registerC.long.value)
+                            : LatLng(registerC.latHospital.value,
+                                registerC.longHospital.value),
+                      ));
                       controller.animateCamera(CameraUpdate.newCameraPosition(
                           CameraPosition(
                               // bearing: 192.8334901395799,
-                              target: registerC.city.isNotEmpty ?
-                     LatLng(registerC.lat.value, registerC.long.value) :
-                     LatLng(registerC.latHospital.value, registerC.longHospital.value),
+                              target: registerC.city.isNotEmpty
+                                  ? LatLng(
+                                      registerC.lat.value, registerC.long.value)
+                                  : LatLng(registerC.latHospital.value,
+                                      registerC.longHospital.value),
                               // tilt: 59.440717697143555,
                               zoom: 19.151926040649414)));
                     },

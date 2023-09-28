@@ -28,7 +28,7 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbarBack(),
+      appBar: appbarBack(title: "Paket tim hospital"),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -37,23 +37,26 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
               child: HeaderLengkapiDataHospital(
                   imageUrl: 'assets/icon/icon_harga.png',
                   title: 'Harga paket',
-                  subtitle: 'Buat paket harga layanan tim\nanda pada rumah sakit',
+                  subtitle:
+                      'Buat paket harga layanan tim\nanda pada rumah sakit',
                   stepper: 'assets/icon/stepper2.png'),
             ),
             const SizedBox(
               height: 30.0,
             ),
-            Obx(()=>
-            controller.isloading.isTrue ? Center(child: loadingIndicator()) :
-            Cntr(
-              height:controller.isFromProfile.isFalse ? Get.height / 2.1 : Get.height /1.2,
-              child: ListView.builder(
-                itemCount: controller.listAllTimHospital.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) =>
-                    cardHargaPaketTimHospital(index),
-              ),
-            ))
+            Obx(() => controller.isloading.isTrue
+                ? Center(child: loadingIndicator())
+                : Cntr(
+                    height: controller.isFromProfile.isFalse
+                        ? Get.height / 2.1
+                        : Get.height / 1.2,
+                    child: ListView.builder(
+                      itemCount: controller.listAllTimHospital.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) =>
+                          cardHargaPaketTimHospital(index),
+                    ),
+                  ))
           ],
         ),
       ),
@@ -109,7 +112,10 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
           const SizedBox(
             height: 20.0,
           ),
-          dataPaketlistName(title: 'Rumah sakit', data: '${controller.listAllTimHospital[index]['team']['hospital']['name']}'),
+          dataPaketlistName(
+              title: 'Rumah sakit',
+              data:
+                  '${controller.listAllTimHospital[index]['team']['hospital']['name']}'),
           const SizedBox(
             height: 12.0,
           ),
@@ -131,16 +137,30 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
             height: 15.0,
           ),
           ButtonPrimary(
-            title: controller.isFromProfile.isFalse  ?'Buat paket harga' :"Lihat atau buat paket baru",
+            title: controller.isFromProfile.isFalse
+                ? 'Buat paket harga'
+                : "Lihat atau buat paket baru",
             onPressed: () {
-               Get.put(PaketLayananNurseController()).isHospital.value = true;
-             Get.put(PaketLayananNurseController()).idTimHospital.value = controller.listAllTimHospital[index]['team']['id'];
-               Get.put(PaketLayananNurseController())
-                                .serviceIdNurse
-                                .value = controller.listAllTimHospital[index]['team']['nurse_services'][0]['serviceId']
-                            ;
-              // controller.paketTimHospital();
-              Get.to(() => PaketLayananNurseView());
+              if (controller.listAllTimHospital[index]['service']['id'] == 8) {
+                Get.put(PaketLayananNurseController()).isHospital.value = true;
+                Get.put(PaketLayananNurseController()).idTimHospital.value =
+                    controller.listAllTimHospital[index]['team']['id'];
+                Get.put(PaketLayananNurseController()).serviceIdNurse.value =
+                    controller.listAllTimHospital[index]['service']['id'];
+                // controller.paketTimHospital();
+                Get.to(() => PaketLayananNurseView());
+                // Get.to()
+                // Get.defaultDialog();
+              } else {
+                Get.put(PaketLayananNurseController()).isHospital.value = true;
+                Get.put(PaketLayananNurseController()).idTimHospital.value =
+                    controller.listAllTimHospital[index]['team']['id'];
+                Get.put(PaketLayananNurseController()).serviceIdNurse.value =
+                    controller.listAllTimHospital[index]['team']
+                        ['nurse_services'][0]['serviceId'];
+                // controller.paketTimHospital();
+                Get.to(() => PaketLayananNurseView());
+              }
             },
             backgroundColor: const Color(0xffFFC93F),
             marginLeft: 0,
@@ -149,26 +169,31 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
           const SizedBox(
             height: 10.0,
           ),
-          Obx(()=>
-          Visibility(
-            visible: controller.listAllTimHospital[index]['team']['service_price_nurses'].toString() != "[]",
-            child:  Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.check_circle,
-                color: Color(0xff50FF61),
-              ),
-              const SizedBox(
-                width: 5.0,
-              ),
-              Txt(
-                text: '${controller.listAllTimHospital[index]['team']['service_price_nurses'].length} Paket didaftarkan',
-                color: Colors.white,
-              )
-            ],
-          )))
-         
+          Obx(() => Visibility(
+              visible: controller.listAllTimHospital[index]['team']
+                          ['service_price_nurses']
+                      .toString() !=
+                  "[]",
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.check_circle,
+                    color: Color(0xff50FF61),
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Txt(
+                    text: controller.listAllTimHospital[index]['team']
+                                ['service_price_nurses'] ==
+                            null
+                        ? ""
+                        : '${controller.listAllTimHospital[index]['team']['service_price_nurses'].length} Paket didaftarkan',
+                    color: Colors.white,
+                  )
+                ],
+              )))
         ],
       ),
     );

@@ -88,7 +88,10 @@ class LengkapiDataHospitalView extends GetView<LengkapiDataHospitalController> {
                               "Mother Care" ||
                           controller.listServiceHospital[index]['service']
                                   ['name'] ==
-                              "Baby Care") {
+                              "Baby Care"  ||
+                          controller.listServiceHospital[index]['service']
+                                  ['name'] ==
+                              "Ambulance Online") {
                         // dataTim.value = controller.listServiceHospital[index]['team'] ?? [];
                         controller.serviceName.value =
                             controller.listServiceHospital[index]['service']

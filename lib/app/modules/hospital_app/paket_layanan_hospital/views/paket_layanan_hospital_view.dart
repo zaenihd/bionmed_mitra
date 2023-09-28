@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../widget/other/show_dialog.dart';
 import '../controllers/paket_layanan_hospital_controller.dart';
 
 class PaketLayananHospitalView extends GetView<PaketLayananHospitalController> {
@@ -29,16 +30,25 @@ class PaketLayananHospitalView extends GetView<PaketLayananHospitalController> {
                   itemCount: myC.listServiceHospital.length,
                   itemBuilder: (context, index) => Cntr(
                     onTap: () async {
+                      if(myC.listServiceHospital[index]['service']['id'] == 5 || myC.listServiceHospital[index]['service']['id'] == 6 || myC.listServiceHospital[index]['service']['id'] == 8 ){
+
                       myC.index.value =index;
-                      
                       controller.seviceId.value =
                           myC.listServiceHospital[index]['service']['id'];
                       myC.listTimServiceHospital.value =
                           myC.listServiceHospital[index]['team'];
                       Get.put(PaketLayananHospitalController());
                       controller.hospitalIncome();
-
                       Get.to(() => PaketLayananHospitalDetail());
+                      }else{
+                        showPopUp(
+                              onTap: () {
+                                Get.back();
+                              },
+                              imageAction: 'assets/json/eror.json',
+                              description: "Sedang dalam proses\npengembangan");
+
+                      }
                     },
                     boxShadow: const [
                       BoxShadow(

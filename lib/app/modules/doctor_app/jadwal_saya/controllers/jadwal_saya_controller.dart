@@ -305,6 +305,19 @@ class JadwalSayaController extends GetxController {
     log('haha +$jadwal');
     return jadwal['data'];
   }
+  
+  Future<dynamic> checkJadwalTimAmbulance() async {
+    // isloading(true);
+    final result = await RestClient().request(
+        '${MainUrl.urlApi}ambulance/data/schedule/${paketLayananNurse.idTimHospital.value}/${Get.find<JadwalSayaController>().serviceId}?lat=${Get.put(SplashScreenController()).lat.value}&long=${Get.put(SplashScreenController()).long.value}',
+        // /${serviceId.value}',
+        Method.GET,
+        {});
+    final jadwal = json.decode(result.toString());
+    // isloading(false);
+    log('haha +$jadwal');
+    return jadwal['data'];
+  }
 
   getdataNurse() async {
     final box = GetStorage();

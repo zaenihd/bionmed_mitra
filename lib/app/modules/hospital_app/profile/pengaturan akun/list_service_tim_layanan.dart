@@ -29,7 +29,7 @@ class ListServiceTimLayanan extends StatelessWidget {
     //       (p0) => p0['team'].length != 0,
     //     ).toList()}");
     return Scaffold(
-      appBar: appbarBack(),
+      appBar: appbarBack(title: "Tim layanan"),
       body: Obx(
         () => controller.isloading.isTrue
             ? loadingIndicator()
@@ -53,6 +53,23 @@ class ListServiceTimLayanan extends StatelessWidget {
                         } else {
                           Get.to(() => TambahHargaPaketHospital());
                         }
+                      }
+                    } else if (controller.listServiceHospital[index]['service']
+                            ['name'] ==
+                        "Ambulance Online") {
+                      await controller.allTimHospital();
+                      controller.listAllTimHospital.value = controller
+                          .listAllTimHospital
+                          .where((p0) =>
+                              p0['service']['name'] == "Ambulance Online")
+                          .toList();
+                      if (Get.put(LengkapiDataHospitalController())
+                              .isJadwal
+                              .value ==
+                          true) {
+                        Get.to(() => const TambahJadwalTimHospital());
+                      } else {
+                        Get.to(() => TambahHargaPaketHospital());
                       }
                     } else {
                       if (controller.isFromProfile.isTrue) {

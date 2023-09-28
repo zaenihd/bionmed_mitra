@@ -19,6 +19,8 @@ class LengkapiProfilController extends GetxController {
   RxList listPendidikan = [].obs;
   RxBool isloading = false.obs;
   final loginC = Get.put(LoginController());
+  final paketLayananNurse = Get.put(PaketLayananNurseController());
+
 
   Future<dynamic> tambahPendidikan({required List education}) async {
     final params = <String, dynamic>{
@@ -121,6 +123,37 @@ class LengkapiProfilController extends GetxController {
     try {
       final result = await RestClient().request(
           '${MainUrl.urlApi}doctor/schedule/${loginC.idLogin}/${Get.find<JadwalSayaController>().serviceId}',
+          Method.POST,
+          params);
+      // ignore: unused_local_variable
+      final jadwal = json.decode(result.toString());
+      // jadwalDokter = jadwal['data']['doctor_schedules'];
+       if(jadwal['code'] == 200){
+      // Get.back();
+      }
+      // }
+      // Get.back();
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      Get.defaultDialog(title: 'Error', middleText: e.toString());
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+  Future<dynamic> tambahJadwalAmbulance({
+    required List scheduler,
+  }) async {
+    final params = <String, dynamic>{
+      "request": scheduler
+
+      // "serviceId": serviceId,
+    };
+    isloading(true);
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/schedule/${paketLayananNurse.idTimHospital.value}/${Get.find<JadwalSayaController>().serviceId}',
           Method.POST,
           params);
       // ignore: unused_local_variable

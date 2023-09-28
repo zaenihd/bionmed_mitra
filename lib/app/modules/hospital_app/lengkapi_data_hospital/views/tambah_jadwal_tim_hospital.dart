@@ -37,17 +37,19 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
             const SizedBox(
               height: 30.0,
             ),
-        Obx(()=>
-            controller.isloading.isTrue ? loadingIndicator() :
-            Cntr(
-              height:controller.isFromProfile.isFalse? Get.height / 2.1 : Get.height/1.2,
-              child: ListView.builder(
-                itemCount: controller.listAllTimHospital.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) =>
-                    cardHargaPaketTimHospital(index),
-              ),
-            ))
+            Obx(() => controller.isloading.isTrue
+                ? loadingIndicator()
+                : Cntr(
+                    height: controller.isFromProfile.isFalse
+                        ? Get.height / 2.1
+                        : Get.height / 1.2,
+                    child: ListView.builder(
+                      itemCount: controller.listAllTimHospital.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) =>
+                          cardHargaPaketTimHospital(index),
+                    ),
+                  ))
           ],
         ),
       ),
@@ -124,13 +126,21 @@ class TambahJadwalTimHospital extends GetView<LengkapiDataHospitalController> {
             height: 15.0,
           ),
           ButtonPrimary(
-            title:controller.isFromProfile.isFalse ? 'Buat Jadwal': "Lihat atau buat jadwal baru",
+            title: controller.isFromProfile.isFalse
+                ? 'Buat Jadwal'
+                : "Lihat atau buat jadwal baru",
             onPressed: () {
               Get.put(PaketLayananNurseController()).idTimHospital.value =
                   controller.listAllTimHospital[index]['team']['id'];
-              Get.put(JadwalSayaController()).serviceId.value =
-                  controller.listAllTimHospital[index]['team']['nurse_services']
-                      [0]['serviceId'];
+              if (controller.listAllTimHospital[index]['service']['id'] == 8) {
+                Get.put(JadwalSayaController()).serviceId.value =
+                    controller.listAllTimHospital[index]['service']['id'];
+              } else {
+                Get.put(JadwalSayaController()).serviceId.value =
+                    controller.listAllTimHospital[index]['team']
+                        ['nurse_services'][0]['serviceId'];
+              }
+              print(Get.put(PaketLayananNurseController()).idTimHospital.value.toString());
               Get.to(() => const EditJadwal());
             },
             backgroundColor: const Color(0xffFFC93F),

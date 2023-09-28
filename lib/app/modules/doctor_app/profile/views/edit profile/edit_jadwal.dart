@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bionmed/app/constant/colors.dart';
 import 'package:bionmed/app/constant/styles.dart';
 import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_saya_controller.dart';
@@ -30,8 +32,12 @@ class _EditJadwalState extends State<EditJadwal> {
   void initState() {
     if (testC.role.value == 'nurse') {
       schedulSetNurser();
-    } else if (testC.role.value == 'hospital') {
+    } else if (testC.role.value == 'hospital' &&
+        Get.find<JadwalSayaController>().serviceId.value != 8) {
       schedulSetHospital();
+    } else if (Get.find<JadwalSayaController>().serviceId.value == 8) {
+      log('zeen masuk');
+      schedulSetAmbulance();
     } else {
       schedulSet();
     }
@@ -54,6 +60,13 @@ class _EditJadwalState extends State<EditJadwal> {
 
   schedulSet() async {
     var data = await loginC.checkJadwal();
+    setState(() {
+      dataSchedul = data;
+    });
+  }
+
+  schedulSetAmbulance() async {
+    var data = await loginC.checkJadwalTimAmbulance();
     setState(() {
       dataSchedul = data;
     });
@@ -133,8 +146,13 @@ class _EditJadwalState extends State<EditJadwal> {
             }
             if (testC.role.value == "nurse") {
               await controller.tambahJadwalNurse(scheduler: dataSchedulSubmit);
-            } else if (testC.role.value == "hospital") {
+            } else if (testC.role.value == "hospital" &&
+                Get.find<JadwalSayaController>().serviceId.value != 8) {
               await controller.tambahJadwalHospital(
+                  scheduler: dataSchedulSubmit);
+            } else if (Get.find<JadwalSayaController>().serviceId.value == 8) {
+              log('zen masuk');
+              await controller.tambahJadwalAmbulance(
                   scheduler: dataSchedulSubmit);
             } else {
               await controller.tambahJadwal(scheduler: dataSchedulSubmit);

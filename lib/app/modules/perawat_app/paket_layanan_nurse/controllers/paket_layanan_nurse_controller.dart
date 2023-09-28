@@ -17,14 +17,22 @@ class PaketLayananNurseController extends GetxController {
   RxDouble totalHargaPaket = 0.0.obs;
   RxBool tambahDiskon = false.obs;
   RxBool isloading = false.obs;
+  RxBool isCstActive = false.obs;
+  RxBool isFromPaketAmbulance = false.obs;
+  RxBool isEditPaketAmbulance = false.obs;
+  RxBool isLoadingMaps = false.obs;
   RxInt serviceIdNurse = 0.obs;
+  RxInt ambulanceId = 0.obs;
 
   RxList nursepaketData = [].obs;
+  RxList zonaCsr = [].obs;
+  RxList servicePriceZonaAmbulances = [].obs;
 
   RxString namaPaket = ''.obs;
   RxString deskripsiPaket = ''.obs;
   RxString hargaPaket = ''.obs;
   RxString hargaCurrens = ''.obs;
+  RxString selectedTypeAmbulance = ''.obs;
 
   RxInt idPaket = 0.obs;
   RxInt idTimHospital = 0.obs;
@@ -51,6 +59,7 @@ class PaketLayananNurseController extends GetxController {
       print("Cek error pesan haha $e");
     }
   }
+
   Future<dynamic> getTimHospitalPket() async {
     isloading(true);
     final params = <String, dynamic>{};
@@ -72,6 +81,68 @@ class PaketLayananNurseController extends GetxController {
     }
   }
 
+  Future<dynamic> getTimAmbulan() async {
+    isloading(true);
+    final params = <String, dynamic>{};
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}service-price-ambulance/$idTimHospital/$serviceIdNurse',
+          Method.GET,
+          params);
+      var nursePaket = json.decode(result.toString());
+      nursepaketData.value = nursePaket['data'];
+      log(nursepaketData.toString());
+
+      isloading(false);
+    } on Exception catch (e) {
+      isloading(false);
+      nursepaketData.clear();
+      // ignore: avoid_print
+      print("Cek error pesan haha $e");
+    }
+  }
+
+  Future<dynamic> getDataEditPaketTimAmbulan() async {
+    isloading(true);
+    final params = <String, dynamic>{};
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}package-ambulance/edit/${idPaket.value}',
+          Method.GET,
+          params);
+      var ambulancePaket = json.decode(result.toString());
+      servicePriceZonaAmbulances.value = ambulancePaket['data']['service_price_zona_ambulances'];
+
+      // nursepaketData.value = nursePaket['data'];
+      for (var i = 0;
+          i < ambulancePaket['data']['service_price_zona_ambulances'].length;
+          i++) {
+        zonaCsr.add(
+          {
+            "lat":
+                "${ambulancePaket['data']['service_price_zona_ambulances'][i]['lat']}",
+            "long":
+                "1${ambulancePaket['data']['service_price_zona_ambulances'][i]['long']}",
+            "districts": ambulancePaket['data']['service_price_zona_ambulances']
+                [i]['districts'],
+            "city": ambulancePaket['data']['service_price_zona_ambulances'][i]
+                ['city'],
+            "country": ambulancePaket['data']['service_price_zona_ambulances']
+                [i]['country']
+          },
+        );
+      }
+      log("haha zen $zonaCsr");
+
+      isloading(false);
+    } on Exception catch (e) {
+      isloading(false);
+      nursepaketData.clear();
+      // ignore: avoid_print
+      print("Cek error pesan haha $e");
+    }
+  }
+
   final dio = Dio();
 
   Future<dynamic> deleteNursePket() async {
@@ -81,6 +152,29 @@ class PaketLayananNurseController extends GetxController {
       // ignore: unused_local_variable
       final response = await dio.delete(
         '${MainUrl.urlApi}package-nurse/delete/${idPaket.value}',
+        options: Options(
+          headers: {
+            // Add any headers required for your API
+          },
+          // Add any other options like query parameters, authentication, etc.
+        ),
+      );
+
+      // Handle the response
+    } catch (error) {
+      // Handle the error
+      // ignore: avoid_print
+      print("Cek error pesan hahaha $error");
+    }
+  }
+
+  Future<dynamic> deleteAmbulancePket() async {
+    isloading(true);
+    // final params = <String, dynamic>{};
+    try {
+      // ignore: unused_local_variable
+      final response = await dio.delete(
+        '${MainUrl.urlApi}package-ambulance/delete/${idPaket.value}',
         options: Options(
           headers: {
             // Add any headers required for your API
@@ -120,6 +214,63 @@ class PaketLayananNurseController extends GetxController {
     } on Exception catch (e) {
       // ignore: avoid_print
       print(e.toString());
+    }
+  }
+
+  Future<dynamic> tambahPaketLayananAmbulance() async {
+    final params = <String, dynamic>{
+      "name": namaPaketC.text,
+      "type": selectedTypeAmbulance.value,
+      "description": deskripsiPaketC.text,
+      "price": int.parse(hargaCurrens.value),
+      "discount": diskonPaket.text == "" ? "0" : diskonPaket.text,
+      "zonaCsr": zonaCsr
+    };
+    isloading(true);
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}package-ambulance/${idTimHospital.value}/$serviceIdNurse',
+          Method.POST,
+          params);
+      // ignore: unused_local_variable
+      final paketLayanan = json.decode(result.toString());
+      log('berhasil anjaay $paketLayanan');
+      // jadwalDokter = jadwal['data']['doctor_schedules'];
+      // }
+
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
+  Future<void> updatePaketLayananAmbulance() async {
+    final params = <String, dynamic>{
+      "name": namaPaketC.text,
+      "type": selectedTypeAmbulance.value,
+      "description": deskripsiPaketC.text,
+      "price": int.parse(hargaCurrens.value),
+      "discount": diskonPaket.text == "" ? "0" : diskonPaket.text,
+      "zonaCsr": zonaCsr
+    };
+
+    final response = await http.put(
+      Uri.parse(
+        '${MainUrl.urlApi}package-ambulance/update/${idPaket.value}',
+      ),
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any required headers here
+      },
+      body: jsonEncode(params),
+    );
+
+    if (response.statusCode == 200) {
+      // PUT request was successful
+      log('Response: ${response.body}');
+    } else {
+      // Error occurred during PUT request
     }
   }
 
@@ -178,7 +329,7 @@ class PaketLayananNurseController extends GetxController {
   // }
 
   Future<void> editPaketLayananNurse() async {
-     final params = <String, dynamic>{
+    final params = <String, dynamic>{
       "name": namaPaketC.text,
       "description": deskripsiPaketC.text,
       "price": int.parse(hargaCurrens.value),
@@ -187,7 +338,9 @@ class PaketLayananNurseController extends GetxController {
     };
 
     final response = await http.put(
-      Uri.parse('${MainUrl.urlApi}package-nurse/update/${idPaket.value}',),
+      Uri.parse(
+        '${MainUrl.urlApi}package-nurse/update/${idPaket.value}',
+      ),
       headers: {
         'Content-Type': 'application/json',
         // Add any required headers here
@@ -238,6 +391,4 @@ class PaketLayananNurseController extends GetxController {
       print("Cek error pesan$e");
     }
   }
-
-  
 }
