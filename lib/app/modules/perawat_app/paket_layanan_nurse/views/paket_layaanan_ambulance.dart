@@ -333,6 +333,7 @@ class InputPaketAmbulance extends StatelessWidget {
                               await controller.updatePaketLayananAmbulance();
                             } else {
                               await controller.tambahPaketLayananAmbulance();
+                              controller.zonaCsr.clear();
                             }
                           }
                           controller.namaPaketC.clear();

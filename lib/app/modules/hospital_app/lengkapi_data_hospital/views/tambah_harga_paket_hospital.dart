@@ -177,6 +177,12 @@ class TambahHargaPaketHospital extends GetView<LengkapiDataHospitalController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                   
+                  controller.listAllTimHospital[index]['team']
+                                ['service_price_nurses'] ==
+                            null ? const SizedBox(
+                            height: 1.0,
+                            ) :
                   const Icon(
                     Icons.check_circle,
                     color: Color(0xff50FF61),

@@ -112,6 +112,7 @@ class PaketLayananNurseController extends GetxController {
           params);
       var ambulancePaket = json.decode(result.toString());
       servicePriceZonaAmbulances.value = ambulancePaket['data']['service_price_zona_ambulances'];
+      zonaCsr.clear();
 
       // nursepaketData.value = nursePaket['data'];
       for (var i = 0;

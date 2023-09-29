@@ -160,68 +160,73 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                 ),
               ),
       ),
-      bottomSheet:
-          Get.put(PaketLayananNurseController()).isTimHospital.value == true
-              ? const SizedBox(
-                  height: 1.0,
-                )
-              : Cntr(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  width: Get.width,
-                  height: Get.put(LengkapiDataHospitalController()).isFromProfile.isTrue ?80 :120,
-                  child: Column(
-                    children: [
-                      //INIBUAT
-                      InkWell(
-                        onTap: () {
-                          controller.tambahDiskon.value = false;
-                          controller.namaPaketC.clear();
-                          controller.deskripsiPaketC.clear();
-                          controller.nurseScopeData.clear();
-                          controller.diskonPaket.clear();
-                          controller.hargaPaketC.clear();
-                            controller.isEditPaketAmbulance.value = false;
-                          if (controller.serviceIdNurse.value == 8) {
-
-                            Get.to(() => InputPaketAmbulance());
-                          } else {
-                            actionBuatPaketLayananPopUp();
-                          }
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 24, right: 24),
-                          width: Get.width,
-                          height: 55,
-                          decoration: DottedDecoration(
-                              shape: Shape.box,
-                              borderRadius: BorderRadius.circular(6),
-                              color: const Color(0xffCCCCCC)),
-                          alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                color: blueColor,
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Text(
-                                'Buat Paket Layanan',
-                                style: greyTextStyle,
-                              )
-                            ],
+      bottomSheet: Get.put(PaketLayananNurseController()).isTimHospital.value ==
+              true
+          ? const SizedBox(
+              height: 1.0,
+            )
+          : Cntr(
+              margin: const EdgeInsets.only(bottom: 20),
+              width: Get.width,
+              height:
+                  Get.put(LengkapiDataHospitalController()).isFromProfile.isTrue
+                      ? 80
+                      : 120,
+              child: Column(
+                children: [
+                  //INIBUAT
+                  InkWell(
+                    onTap: () {
+                      controller.isCstActive.value = false;
+                      controller.zonaCsr.clear();
+                      controller.tambahDiskon.value = false;
+                      controller.namaPaketC.clear();
+                      controller.deskripsiPaketC.clear();
+                      controller.nurseScopeData.clear();
+                      controller.diskonPaket.clear();
+                      controller.hargaPaketC.clear();
+                      controller.isEditPaketAmbulance.value = false;
+                      if (controller.serviceIdNurse.value == 8) {
+                        Get.to(() => InputPaketAmbulance());
+                      } else {
+                        actionBuatPaketLayananPopUp();
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 24, right: 24),
+                      width: Get.width,
+                      height: 55,
+                      decoration: DottedDecoration(
+                          shape: Shape.box,
+                          borderRadius: BorderRadius.circular(6),
+                          color: const Color(0xffCCCCCC)),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add,
+                            color: blueColor,
                           ),
-                        ),
+                          const SizedBox(
+                            width: 10.0,
+                          ),
+                          Text(
+                            'Buat Paket Layanan',
+                            style: greyTextStyle,
+                          )
+                        ],
                       ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Get.put(LengkapiDataHospitalController()).isFromProfile.isTrue ? const SizedBox(
-                      height: 1.0,
-                      ) :
-                      ButtomGradient(
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Get.put(LengkapiDataHospitalController()).isFromProfile.isTrue
+                      ? const SizedBox(
+                          height: 1.0,
+                        )
+                      : ButtomGradient(
                           label: loginC.isVerifikasiNurse.value == 1 &&
                                   loginC.nurseEducation.isEmpty
                               ? 'Lanjutkan'
@@ -236,9 +241,9 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                 ? Get.to(() => ListJadwal())
                                 : Get.back();
                           }),
-                    ],
-                  ),
-                ),
+                ],
+              ),
+            ),
     );
   }
 
@@ -557,9 +562,10 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                         ),
                         // INIEDIT
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
                             controller.isEditPaketAmbulance.value = true;
-                            controller.selectedTypeAmbulance.value = controller.nursepaketData[index]['type'];
+                            controller.selectedTypeAmbulance.value =
+                                controller.nursepaketData[index]['type'];
                             controller.idPaket.value =
                                 controller.nursepaketData[index]['id'];
                             controller.namaPaketC.text =
@@ -579,10 +585,16 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                                 0) {
                               controller.tambahDiskon.value = true;
                             }
-                            controller.getDataEditPaketTimAmbulan();
+                            await controller.getDataEditPaketTimAmbulan();
+                            if (controller.zonaCsr.isEmpty) {
+                              controller.isCstActive.value = false;
+                            } else {
+                              controller.isCstActive.value = true;
+                            }
+
                             print('hahaaaa${controller.idPaket.value}');
                             // actionEditPaketLayananPopUp(index);
-                            Get.to(()=> InputPaketAmbulance());
+                            Get.to(() => InputPaketAmbulance());
                           },
                           child: const Icon(
                             Icons.edit_note_rounded,
