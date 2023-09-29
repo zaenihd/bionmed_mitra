@@ -65,6 +65,7 @@ class InputPaketAmbulance extends StatelessWidget {
                     border: Border.all(color: Colors.grey[350]!)),
                 // dropdown below..
                 child: DropdownButtonFormField(
+                  hint: controller.selectedTypeAmbulance.isEmpty ? null : Txt(text: controller.selectedTypeAmbulance.value),
                   decoration: const InputDecoration(
                       contentPadding: EdgeInsets.zero,
                       fillColor: AppColor.bgForm,
@@ -515,7 +516,7 @@ class ZonaCsr extends StatelessWidget {
                   registerC.lat.value = value.latitude;
                   registerC.long.value = value.longitude;
                 });
-                registerC.getUserLocation();
+                await registerC.getUserLocation();
                 Get.to(() => MapSample(
                       lat: registerC.lat.value,
                       long: registerC.long.value,

@@ -365,7 +365,7 @@ class LoginController extends GetxController {
             Get.to(() => Ditolak());
           }
         }
-        if (dataHospital['data']['hospital']['hospital_services'].toString() ==
+        if (dataHospital['data']['hospital']['hospital_services'].toString() !=
             "[]") {
           lengkapiProfil(Get.context!);
         }

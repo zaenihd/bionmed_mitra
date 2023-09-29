@@ -186,6 +186,7 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                       controller.diskonPaket.clear();
                       controller.hargaPaketC.clear();
                       controller.isEditPaketAmbulance.value = false;
+                      controller.selectedTypeAmbulance.value = "";
                       if (controller.serviceIdNurse.value == 8) {
                         Get.to(() => InputPaketAmbulance());
                       } else {
@@ -329,6 +330,10 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                         // INIEDIT
                         InkWell(
                           onTap: () {
+                             double price = double.parse(controller.nursepaketData[index]['price'].toString());
+                            double diskon = double.parse(controller.nursepaketData[index]['discount'].toString());
+                            double priceAfterDiskon = price - (price * diskon) / 100;
+                            controller.totalHargaPaket.value = priceAfterDiskon;
                             controller.idPaket.value =
                                 controller.nursepaketData[index]['id'];
                             controller.namaPaketC.text =
@@ -563,6 +568,10 @@ class PaketLayananNurseView extends GetView<PaketLayananNurseController> {
                         // INIEDIT
                         InkWell(
                           onTap: () async {
+                            double price = double.parse(controller.nursepaketData[index]['price'].toString());
+                            double diskon = double.parse(controller.nursepaketData[index]['discount'].toString());
+                            double priceAfterDiskon = price - (price * diskon) / 100;
+                            controller.totalHargaPaket.value = priceAfterDiskon;
                             controller.isEditPaketAmbulance.value = true;
                             controller.selectedTypeAmbulance.value =
                                 controller.nursepaketData[index]['type'];
