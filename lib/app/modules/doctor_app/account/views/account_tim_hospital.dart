@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed/app/modules/doctor_app/account/controllers/account_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
-import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/appbar/appbar_back.dart';
 import 'package:bionmed/app/widget/other/show_dialog.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,14 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../../../theme.dart';
+import '../../../../routes/app_pages.dart';
 import '../../../../widget/container/container.dart';
 
 class AccountTimHospital extends StatelessWidget {
   AccountTimHospital({super.key});
   final myC = Get.put(AccountController());
   final loginC = Get.put(LoginController());
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +96,13 @@ class AccountTimHospital extends StatelessWidget {
                         }
                         if (myC.selected.value == 3 ||
                             myC.selected.value == 4 ||
-                            myC.selected.value == 1) {
+                            myC.selected.value == 1 ||
+                            myC.selected.value == 2 ||
+                            myC.selected.value == 6) {
                           Get.toNamed(Routes.LOGIN);
+                           box.write('idAccountFromHospital', myC.selected.value);
+                          log(myC.selected.value.toString());
+
                           // showPopUp(
                           //   onTap: () {\
                           //   Get.back();
@@ -113,59 +121,55 @@ class AccountTimHospital extends StatelessWidget {
                         GetStorage().write('idAccount', loginC.idAccount.value);
                       },
                       child: Container(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.all(23),
-                          decoration: BoxDecoration(
-                              boxShadow: const [
-                                BoxShadow(
-                                    blurRadius: 3,
-                                    spreadRadius: 1,
-                                    color: Colors.grey)
-                              ],
-                              border: Border.all(
-                                  color: 
-                                       whiteColor!,
-                                  width: 2),
-                              borderRadius: BorderRadius.circular(12),
-                              color: textFieldC),
-                          child: Row(
-                            children: [
-                              Image.asset("${loginBy[index]['imageUrl']}"),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    // width: 200,
-                                    width: Get.width / 1.8,
-                                    // color: Colors.amber,
-                                    child: AutoSizeText(
-                                      '${loginBy[index]['title']}',
-                                      maxLines: 1,
-                                      style: blackTextStyle.copyWith(
-                                          fontWeight: semiBold, fontSize: 16),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 3,
-                                  ),
-                                  SizedBox(
-                                    width: Get.width / 1.8,
-                                    child: AutoSizeText(
-                                      '${loginBy[index]['subtitle']}',
-                                      style: blackTextStyle.copyWith(
-                                          fontWeight: medium,
-                                          fontSize: 11,
-                                          color: const Color(0xff555555)),
-                                    ),
-                                  )
-                                ],
-                              )
+                        margin: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.all(23),
+                        decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                  blurRadius: 3,
+                                  spreadRadius: 1,
+                                  color: Colors.grey)
                             ],
-                          ),
-                        
+                            border: Border.all(color: whiteColor!, width: 2),
+                            borderRadius: BorderRadius.circular(12),
+                            color: textFieldC),
+                        child: Row(
+                          children: [
+                            Image.asset("${loginBy[index]['imageUrl']}"),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  // width: 200,
+                                  width: Get.width / 1.8,
+                                  // color: Colors.amber,
+                                  child: AutoSizeText(
+                                    '${loginBy[index]['title']}',
+                                    maxLines: 1,
+                                    style: blackTextStyle.copyWith(
+                                        fontWeight: semiBold, fontSize: 16),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                SizedBox(
+                                  width: Get.width / 1.8,
+                                  child: AutoSizeText(
+                                    '${loginBy[index]['subtitle']}',
+                                    style: blackTextStyle.copyWith(
+                                        fontWeight: medium,
+                                        fontSize: 11,
+                                        color: const Color(0xff555555)),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ))),
             ),
             const SizedBox(

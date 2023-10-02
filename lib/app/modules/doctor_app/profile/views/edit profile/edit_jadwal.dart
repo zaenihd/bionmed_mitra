@@ -39,6 +39,8 @@ class _EditJadwalState extends State<EditJadwal> {
       log('zeen masuk');
       schedulSetAmbulance();
     } else {
+      log('message${Get.find<JadwalSayaController>().serviceId.value}');
+      
       schedulSet();
     }
     super.initState();

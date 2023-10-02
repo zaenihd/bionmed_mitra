@@ -314,8 +314,9 @@ class JadwalSayaController extends GetxController {
         Method.GET,
         {});
     final jadwal = json.decode(result.toString());
+    log('zaa${paketLayananNurse.idTimHospital.value}');
     // isloading(false);
-    log('haha +$jadwal');
+    // log('haha +$jadwal${paketLayananNurse.idTimHospital.value}');
     return jadwal['data'];
   }
 

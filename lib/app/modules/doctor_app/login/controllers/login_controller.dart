@@ -8,6 +8,7 @@ import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_sa
 import 'package:bionmed/app/modules/doctor_app/login/views/disclamer.dart';
 import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/ditolak.dart';
 import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/menunggu_konfirmasi.dart';
+import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/theme.dart';
@@ -369,6 +370,95 @@ class LoginController extends GetxController {
             "[]") {
           lengkapiProfil(Get.context!);
         }
+      } else {}
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("JAJAJAJAJAJA$e");
+
+      isloading(false);
+      if (isSplash == true) {
+        Get.offAllNamed(Routes.ACCOUNT);
+      } else {
+        showPopUp(
+            onTap: () {
+              Get.back();
+            },
+            imageAction: 'assets/json/eror.json',
+            description: "Nomer tidak ditemukan\n Daftarkan nomer anda",
+            onPress: () {
+              Get.toNamed(Routes.REGISTER_HOSPITAL);
+              // if (idAccount.value == 1) {
+              //   Get.toNamed(Routes.REGISTER);
+              // } else {
+              //   Get.toNamed(Routes.REGISTER_PERAWAT);
+              // }
+            });
+      }
+    }
+  }
+
+  //------------------------------------------LOGIN APP HOSPITAL -------------------------------------------
+  // RxInt isVerifikasiNurse = 0.obs;
+  // RxList nurseEducation = [].obs;
+  Future<dynamic> loginAmbulance(
+      {required String phoneNumber, bool? isSplash}) async {
+    final map = <String, dynamic>{};
+    map['page'] = page;
+    isloading(true);
+    Get.put(LengkapiDataHospitalController()).isFromProfile.value = false;
+
+    final box = GetStorage();
+
+    final params = <String, dynamic>{"phoneNumber": phoneNumber};
+    try {
+      var result = await RestClient()
+          .request('${MainUrl.urlApi}login/ambulance', Method.POST, params);
+      final dataAmbulance = json.decode(result.toString());
+
+      if (dataAmbulance['code'] == 200) {
+        Get.put(JadwalSayaController()).serviceId.value = dataAmbulance['data']['ambulance']['serviceId'];
+         nurseServiceId.value  = dataAmbulance['data']['ambulance']['serviceId'];
+        // log('service ID ${Get.put(JadwalSayaController()).serviceId.value}');÷
+        log('service ID ${Get.put(PaketLayananNurseController()).serviceIdNurse.value}');
+        inHospital.value = "ambulance";
+        id = dataAmbulance['data']['id'];
+        cHome.dataUser = dataAmbulance['data'];
+        dataUser = dataAmbulance['data'];
+        name.value = dataAmbulance['data']['ambulance']['name'];
+        role.value = dataAmbulance['data']['role'];
+        idLogin = dataAmbulance['data']['ambulance']['id'];
+        userIdLogin = dataAmbulance['data']['ambulance']['userId'];
+        phoneNumberUser.value = dataAmbulance['data']['phoneNumber'];
+        address.value = dataAmbulance['data']['ambulance']['address'];
+        lat.value = dataAmbulance['data']['ambulance']['lat'].toString();
+        long.value = dataAmbulance['data']['ambulance']['long'].toString();
+        rating = dataAmbulance['data']['ambulance']['rating'];
+         inHospital.value =
+            dataAmbulance['data']['ambulance']['hospital'] == null ? "0" : '';
+        var setuju = await box.read('rememberme');
+
+        if (setuju == true) {
+          if (dataAmbulance['data']['ambulance']['verifiedStatus'] == 0) {
+            Get.to(() => MenungguKonfirmasi());
+          } else {
+            box.write('phone', phoneNumber);
+            Get.toNamed(Routes.BOTTOM_NAVIGATION);
+          }
+        } else {
+          if (dataAmbulance['data']['ambulance']['hospital']['verifiedStatus'] == 0) {
+            Get.to(() => MenungguKonfirmasi());
+          } else if (dataAmbulance['data']['ambulance']['hospital']['verifiedStatus'] == 1) {
+            box.write('phone', phoneNumber);
+            Get.to(() => Disclamer());
+          } else {
+            Get.to(() => Ditolak());
+          }
+        }
+        // if (dataAmbulance['data']['ambulance']['hospital_services'].toString() !=
+        //     "[]") {
+        //   lengkapiProfil(Get.context!);
+        // }
       } else {}
       isloading(false);
     } on Exception catch (e) {
