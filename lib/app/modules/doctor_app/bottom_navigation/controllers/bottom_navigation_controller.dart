@@ -24,6 +24,8 @@ class BottomNavigationController extends GetxController {
     if (index == 1 || index == 0) {
       if (loginC.role.value == 'nurse') {
         layananHomeC.listOrderNurse();
+      } else if (loginC.role.value == 'ambulance') {
+        layananHomeC.listOrderAmbulance();
       } else {
         if (loginC.role.value == 'hospital') {
         } else {

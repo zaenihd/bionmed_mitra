@@ -142,6 +142,56 @@ class LayananHomeController extends GetxController {
     }
   }
 
+  Future<dynamic> getOrderDetailAmbulance() async {
+    final params = <String, dynamic>{};
+
+    isLoadingDetail.value =true;
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/order/detail/$idOrder', Method.GET, params);
+      final servis = json.decode(result.toString());
+       dataDetail.value = servis;
+      orderIdNurse.value = servis['data']['id'];
+
+      // statusOrderChat.value = servis['data']['statusOrder'];
+      // startRingging.value = servis['data']['statusPayment'];
+      // nameCostumer = servis['data']['customer']['name'];
+      // starRating.value = servis['data']['rating'] ?? 0;
+      // deskripsiRating.value = servis['data']['description_rating'] ?? "";
+      // statusOrderDetail.value = servis['data']['status'];
+
+      log('Id Order == $dataDetail');
+
+
+      // dataGetOrder = servis['data'];
+      // ignore: avoid_print
+      print('Id Order == $idOrder');
+
+      if (servis['code'] == 200) {
+        // print("cek data order get DariAPI =======" + name.toString());
+        isLoadingDetail(false);
+      }
+      isloading(false);
+    } on Exception catch (e) {
+      isloading(false);
+      final snackBar = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+        content: const Text('Tidak Ada Koneksi Internet'),
+        backgroundColor: (Colors.grey),
+        action: SnackBarAction(
+          label: '',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
   RxInt orderIdNurse = 0.obs;
   RxList packageNurseSops = [].obs;
   RxMap dataDetail = {}.obs;
@@ -303,6 +353,35 @@ class LayananHomeController extends GetxController {
     }
   }
 
+  Future<dynamic> listOrderAmbulance() async {
+    final params = <String, dynamic>{
+      // "serviceId": serviceId,
+    };
+    isloading(true);
+
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}ambulance/order?ambulanceId=${loginC.idLogin}', Method.GET, params);
+      final order = json.decode(result.toString());
+      if (order['code'] == 200) {
+        dataListOrder.value = order['data'];
+        // ignore: invalid_use_of_protected_member
+        log('object ${dataListOrder.value}' );
+        // statusOrder.value = order['data']['order']['statusOrder'];
+      } else {
+        // dataListOrder.clear();
+      }
+
+      // ignore: avoid_print, invalid_use_of_protected_member
+      print("List Order == ${dataListOrder.value}");
+      // }
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
   Future<dynamic> orderListToday() async {
     final params = <String, dynamic>{
       "filter": [
@@ -368,6 +447,45 @@ class LayananHomeController extends GetxController {
           '${MainUrl.urlApi}nurse/update/order/$orderId', Method.POST, params);
       final status = json.decode(result.toString());
       ratingDoctor.value = status['data']['rating'];
+
+      // }
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error =-=-=$e");
+    }
+  }
+
+  Future<dynamic> updateStatusAmbulance(
+      {required int status, required int orderId}) async {
+    final params = <String, dynamic>{"status": status};
+    isloading(true);
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/update/order/$orderId', Method.POST, params);
+      final status = json.decode(result.toString());
+      ratingDoctor.value = status['data']['rating'];
+
+      // }
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error =-=-=$e");
+    }
+  }
+
+  Future<dynamic> updateStatusTravelAmbulance(
+      {required int status, required int orderId}) async {
+    final params = <String, dynamic>{"status_travel": status};
+    isloading(true);
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/update/order/$orderId', Method.POST, params);
+      final status = json.decode(result.toString());
+      // ratingDoctor.value = status['data']['rating'];
+      log('zen ini ya$status');
 
       // }
       isloading(false);

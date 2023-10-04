@@ -144,4 +144,62 @@ RxList dataPesan = [].obs;
   }
 
   
+  //-------------------------------------PESAN AMBULANCE-------------------------------------
+   Future<dynamic> notificationAmbulance(
+  ) async {
+    isloading(true);
+    final params = <String, dynamic>{};
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}inbox/ambulance/${loginC.idLogin}', Method.POST, params);
+      var pesan = json.decode(result.toString());
+      dataPesan.value = pesan['data'] ?? [];
+      activeNotif.value =
+          dataPesan.where((d) => d['status'] == 1).toList().length;
+
+
+      // }
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error pesan$e");
+    }
+  }
+
+  Future<dynamic> readPesanAmbulance(
+  ) async {
+    final params = <String, dynamic>{};
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}inbox/ambulance/read/$inboxId', Method.POST, params);
+      var bacaPesan = json.decode(result.toString());
+      read.value = bacaPesan;
+      // readInbox.value = bacaPesan['status'];
+      log(read.toString()); 
+
+
+      // }
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error pesan$e");
+    }
+  }
+
+  Future<dynamic> hapusPesanAmbulance(
+  ) async {
+    // isloading(true);
+    final params = <String, dynamic>{};
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}inbox/ambulance/delete/$inboxId)', Method.POST, params);
+      // ignore: unused_local_variable
+      var hapus = json.decode(result.toString());
+
+      // }
+      // isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error pesan$e");
+    }
+  }
 }

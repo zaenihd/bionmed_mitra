@@ -283,7 +283,7 @@ class HomeController extends GetxController {
       // ignore: empty_catches, unused_catch_clause
     } on Exception catch (e) {
       // ignore: avoid_print
-      print('zaee $e');
+      print('zaeetttt $e');
     }
   }
 
@@ -320,6 +320,39 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<dynamic> reminderOrderAmbulance() async {
+    final params = <String, dynamic>{};
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/catch/order/${Get.find<LoginController>().idLogin}',
+          Method.GET,
+          params);
+      final order = json.decode(result.toString());
+      if (order['code'] == 200) {
+        statusCode.value = order['code'];
+        nurseReceiveStatus.value = order['data']['ambulance_receive_status'];
+        dataReminderNurse.value = order['data'];
+        log('zeen $order');
+      } else {
+        // dataReminderNurse.clear();
+      }
+
+      if (dataReminderNurse['ambulance_receive_status'] == 0) {
+        // dataListOrder.value = order['data'];
+        // statusOrder.value = order['data']['order']['statusOrder'];
+      } else {
+        // dataListOrder.clear();
+      }
+      // ignore: empty_catches, unused_catch_clause
+    } on Exception catch (e) {
+      dataReminderNurse['ambulance_receive_status'] = 1;
+
+      // ignore: avoid_print
+      print('zeenhaha $e');
+    }
+  }
+
   Future<dynamic> automaticUpdateStatus() async {
     final params = <String, dynamic>{};
     try {
@@ -350,7 +383,11 @@ class HomeController extends GetxController {
         if (Get.find<LoginController>().role.value == 'nurse') {
           await Get.find<LayananHomeController>().listOrderNurse();
           if (reminderNurse.isFalse) {
-            await reminderOrderNurse();
+            if (Get.find<LoginController>().role.value == 'nurse') {
+              await reminderOrderNurse();
+            } else {
+              await reminderOrderAmbulance();
+            }
             if (dataReminderNurse['nurse_receive_status'] == 0 &&
                 reminderNurse.isFalse) {
               notifPesananMasukNurse();
@@ -358,6 +395,14 @@ class HomeController extends GetxController {
             }
           }
           getDetailNurse();
+        } else if (Get.find<LoginController>().role.value == 'ambulance') {
+          await Get.find<LayananHomeController>().listOrderAmbulance();
+          await reminderOrderAmbulance();
+          if (dataReminderNurse['ambulance_receive_status'] == 0 &&
+              reminderNurse.isFalse) {
+            notifPesananMasukNurse();
+            Get.toNamed(Routes.PESANAN_MASUK_PERAWAT);
+          }
         } else {
           await Get.find<LayananHomeController>().addOrder();
           await Get.find<LayananHomeController>().orderListToday();
@@ -835,17 +880,18 @@ class HomeController extends GetxController {
       print(e.toString());
     }
   }
+
   RxInt statusOrderHospital = 4.obs;
   RxList listOrderHospital = [].obs;
   Future<dynamic> fetchListOrderHospital() async {
     final params = <String, dynamic>{
       "hospitalId": Get.find<LoginController>().idLogin,
-      "status" : statusOrderHospital.value
+      "status": statusOrderHospital.value
     };
     // isLoading(true);
     try {
-      final result = await RestClient().request(
-          '${MainUrl.urlApi}hospital/team/order', Method.POST, params);
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}hospital/team/order', Method.POST, params);
 
       final orderTimHospital = json.decode(result.toString());
       if (orderTimHospital['code'] == 200) {
@@ -880,8 +926,8 @@ class HomeController extends GetxController {
         // incomeHospital();
         getDetailHospital();
       }
-        incomeHospital();
-        fetchListOrderHospital();
+      incomeHospital();
+      fetchListOrderHospital();
 
       getBanner();
 

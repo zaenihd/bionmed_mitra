@@ -20,6 +20,7 @@ import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../theme.dart';
+import '../../../../widget/other/show_dialog.dart';
 import '../controllers/detail_controller.dart';
 
 // ignore: must_be_immutable
@@ -106,18 +107,23 @@ class DetailView extends GetView<DetailController> {
 
   @override
   Widget build(BuildContext context) {
-    if (Get.find<LoginController>().role.value == "nurse" || Get.find<LoginController>().role.value == "hospital" ) {
+    if (Get.find<LoginController>().role.value == "nurse" ||
+        Get.find<LoginController>().role.value == "hospital") {
       Get.find<LayananHomeController>().getOrderDetailNurse();
+    } else if (Get.find<LoginController>().role.value == "ambulance") {
+      Get.find<LayananHomeController>().getOrderDetailAmbulance();
     } else {
       Get.find<LayananHomeController>().getOrderDetail();
     }
     return Scaffold(
         backgroundColor: backgroundColorC,
         appBar: AppBar(
-          title: InkWell(onTap: () {
-            // actionUploadBuktiSample();
-            // popUpJadwalPengambilanTest();
-          }, child: const Text("Detail Order")),
+          title: InkWell(
+              onTap: () {
+                // actionUploadBuktiSample();
+                // popUpJadwalPengambilanTest();
+              },
+              child: const Text("Detail Order")),
           leading: IconButton(
               onPressed: () {
                 controller.stop = true;
@@ -169,17 +175,352 @@ class DetailView extends GetView<DetailController> {
                           // SizedBox(height: 200,)
                         ],
                       ),
-                          // jadwalPengambilanTes(),
-                          // const SizedBox(
-                          // height: 20.0,
-                          // ),
-                      Get.find<LoginController>().role.value == "nurse" || Get.find<LoginController>().role.value == "hospital"
+                      // jadwalPengambilanTes(),
+                      // const SizedBox(
+                      // height: 20.0,
+                      // ),
+                      Get.find<LoginController>().role.value == "nurse" ||
+                              Get.find<LoginController>().role.value ==
+                                  "hospital"
                           ? detailPesananNurse(context)
-                          : detailPesananDokter(),
+                          : Get.find<LoginController>().role.value ==
+                                  "ambulance"
+                              ? detailPesananAmbulance(context)
+                              : detailPesananDokter(),
                     ],
                   ),
                 ),
         ));
+  }
+
+  Column detailPesananAmbulance(BuildContext context) {
+    return Column(
+      children: [
+        dataDetail['status'] != 2 ? const SizedBox(
+        height: 1.0,
+        ) :
+        jadwalPesananAmbulance(),
+        nameAmbulance(),
+
+          dataDetail['image_ambulance'] == null ||   dataDetail['image_ambulance'] == "" ?const SizedBox(
+        height: 1.0,
+        ) :
+        detailAmbulance(),
+        const SizedBox(
+        height: 15.0,
+        ),
+        dataDetail['status'] != 6 && dataDetail['status'] != 5 ?
+         Cntr(
+            onTap: () {
+              // popUpLihatGambar(context);
+            },
+          radius: BorderRadius.circular(10),
+          alignment: Alignment.center,
+          margin: const EdgeInsets.symmetric(horizontal:  24),
+          width: Get.width,
+          border: Border.all(color: Colors.blue),
+          padding: const EdgeInsets.all(15),child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.chat, color: Colors.blue,), const SizedBox(
+              width: 20.0,
+              ),
+              Txt(text: 'Forum Chatting', color: Colors.blue,),
+            ],
+          ),) :
+
+        dataDetail['image_proof_travel'] == "" || dataDetail['image_proof_travel'] == null ? const SizedBox(
+        height: 1.0,
+        ) :
+          Cntr(
+            onTap: () {
+              popUpLihatGambar(context);
+            },
+          radius: BorderRadius.circular(10),
+          alignment: Alignment.center,
+          margin: const EdgeInsets.symmetric(horizontal:  24),
+          width: Get.width,
+          border: Border.all(color: Colors.blue),
+          padding: const EdgeInsets.all(15),child: Txt(text: 'Lihat bukti selesai', color: Colors.blue,),),
+          const SizedBox(
+          height: 10.0,
+          ),
+        dataOrderNurse(),
+        const SizedBox(
+          height: 10.0,
+        ),
+      
+        tujuanAmbulance(),
+        const SizedBox(
+          height: 20.0,
+        ),
+        Cntr(
+          
+          width: Get.width,
+          boxShadow: const [
+            BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.grey)
+          ],
+          padding: const EdgeInsets.only(top: 30, bottom: 20),
+          color: Colors.white,
+          child: dataDetail['status'] == 4 && dataDetail['status_travel'] == 1
+              ? Column(
+                  children: [
+                    ButtomGradient(
+                        label: 'Konfirmasi penjemputan',
+                        onTap: () async {
+                          await Get.find<LayananHomeController>()
+                              .updateStatusTravelAmbulance(
+                                  status: 2,
+                                  orderId: Get.find<LayananHomeController>()
+                                      .orderIdNurse
+                                      .value);
+                          Get.back();
+                          // actionUploadBuktiSample();
+                          // actionUploadInformasiAmbulance();
+                        }),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+                    actionLaporkan(context)
+                  ],
+                )
+              : dataDetail['status'] == 4 && dataDetail['status_travel'] == 2
+                  ? Column(
+                      children: [
+                        ButtomGradient(
+                            label: 'Selesai Antar',
+                            onTap: () async {
+                              actionUploadBuktiPenjemputanAmbulance();
+                              // actionUploadBuktiSample();
+                              // actionUploadInformasiAmbulance();
+                            }),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        actionLaporkan(context)
+                      ],
+                    )
+                  : dataDetail['status'] == 99
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: Txt(
+                                text:
+                                    'Menunggu pemesan mengatur ulang jadwal atau mebatalkan pesanan',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15.0,
+                            ),
+                            actionLaporkan(context)
+                          ],
+                        )
+                      : dataDetail['status'] == 98
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: Txt(
+                                text:
+                                    'Mohon maaf pesanan ini telah dibatalkan oleh pemesan',
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : dataDetail['status'] == 6
+                              ? Cntr(
+                                  alignment: Alignment.center,
+                                  width: Get.width,
+                                  child: Txt(text: 'Pesanan telah selesai, menunggu penilaian dari pemesan'),
+                                )
+                              : dataDetail['status'] == 5
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24.0),
+                                      child: Column(
+                                        children: [
+                                          Txt(
+                                            text: 'Penilaian',
+                                            weight: bold,
+                                          ),
+                                          const SizedBox(
+                                            height: 6.0,
+                                          ),
+                                          Txt(
+                                            text: 'Penilaian untuk anda',
+                                            weight: normal,
+                                            size: 12,
+                                          ),
+                                          const SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          rating,
+                                        ],
+                                      ),
+                                    )
+                                  : dataDetail['status'] == 2
+                                      ? ButtomGradient(
+                                          label:
+                                              'Konfirmasi Keberangkatan Ambulance',
+                                          onTap: () {
+                                            // actionUploadBuktiSample();
+                                            actionUploadInformasiAmbulance();
+                                          })
+                                      : const SizedBox(
+                                          height: 1.0,
+                                        ),
+        )
+      ],
+    );
+  }
+
+  Cntr jadwalPesananAmbulance() {
+    return Cntr(
+        margin: const EdgeInsets.symmetric(horizontal: 25),
+        radius: BorderRadius.circular(10),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
+        gradient: gradient1,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Txt(
+              text: 'Jadwal Pesanan',
+              weight: bold,
+              color: Colors.white,
+              size: 16,
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Layanan',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+                Text(
+                  dataDetail['service_price_ambulance']['name'],
+                  style: blackTextStyle.copyWith(
+                      fontWeight: bold, color: Colors.white),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 6.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Mulai Order',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      'Selesai Order',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      DateFormat('d MMMM y, kk:mm', "id_ID")
+                          .format(DateTime.parse(jamMulai)),
+                      // CurrencyFormat.convertToIdr(discount, 0),
+                      style: blackTextStyle.copyWith(
+                          fontWeight: bold, color: Colors.white),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      DateFormat('d MMMM y, kk:mm', "id_ID")
+                          .format(DateTime.parse(jamSelesai)),
+                      // CurrencyFormat.convertToIdr(discount, 0),
+                      style: blackTextStyle.copyWith(
+                          fontWeight: bold, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ));
+  }
+
+  Cntr nameAmbulance() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+      radius: BorderRadius.circular(10),
+      width: Get.width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      gradient: AppColor.gradient1,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Cntr(
+                        color: Colors.transparent,
+                        height: 40,
+                        width: 40,
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                dataDetail['service']['image'] ?? ""),
+                            fit: BoxFit.cover),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Txt(
+                            text: dataDetail['ambulance']['name'] ?? "",
+                            weight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          Txt(
+                            text: dataDetail['ambulance']['hospital'] == null
+                                ? ""
+                                : dataDetail['ambulance']['hospital']['name'],
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Cntr(
+                    radius: BorderRadius.circular(5),
+                    width: Get.width,
+                    padding: const EdgeInsets.all(15),
+                    child:
+                        Txt(text: dataDetail['ambulance']['description'] ?? ""),
+                  )
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Column detailPesananNurse(BuildContext context) {
@@ -258,8 +599,8 @@ class DetailView extends GetView<DetailController> {
           height: 15.0,
         ),
         Visibility(
-          visible: dataDetail['nurse']['hospital'] != null,
-          child: namaHospital()),
+            visible: dataDetail['nurse']['hospital'] != null,
+            child: namaHospital()),
         dataOrderNurse(),
         const SizedBox(
           height: 20.0,
@@ -621,7 +962,8 @@ class DetailView extends GetView<DetailController> {
                         height: 40,
                         width: 40,
                         image: DecorationImage(
-                            image: NetworkImage(dataDetail['service']['image'] ?? ""),
+                            image: NetworkImage(
+                                dataDetail['service']['image'] ?? ""),
                             fit: BoxFit.cover),
                       ),
                       const SizedBox(
@@ -636,7 +978,9 @@ class DetailView extends GetView<DetailController> {
                             color: Colors.white,
                           ),
                           Txt(
-                            text: dataDetail['nurse']['hospital'] == null ? "" :dataDetail['nurse']['hospital']['name'],
+                            text: dataDetail['nurse']['hospital'] == null
+                                ? ""
+                                : dataDetail['nurse']['hospital']['name'],
                             size: 12,
                             color: Colors.white,
                           ),
@@ -700,7 +1044,11 @@ class DetailView extends GetView<DetailController> {
                   const SizedBox(
                     height: 12.0,
                   ),
-                  Row(
+                  Get.find<LoginController>().role.value == "ambulance" && dataDetail['is_csr'] == 1 ? const SizedBox(
+                  height: 1.0,
+                  ):
+                  Column(children: [
+                     Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Txt(
@@ -788,6 +1136,9 @@ class DetailView extends GetView<DetailController> {
                       ),
                     ],
                   ),
+
+                  ],),
+                 
                   const SizedBox(
                     height: 5.0,
                   ),
@@ -1285,87 +1636,88 @@ class DetailView extends GetView<DetailController> {
     );
   }
 
-Cntr tujuanAmbulance() {
+  Cntr tujuanAmbulance() {
     return Cntr(
-     margin: const EdgeInsets.symmetric(horizontal: 25),
+      margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.centerLeft,
       width: Get.width,
       color: const Color(0xffF4F4F4),
       radius: BorderRadius.circular(10),
       child: ExpansionTile(
-        title:  Txt(
-              text: 'Tujuan Anda',
-              weight: bold,
+          title: Txt(
+            text: 'Tujuan Anda',
+            weight: bold,
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Txt(text: 'Alamat :'),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Txt(
+                            text:
+                                "${dataDetail['start_districts']}, ${dataDetail['start_city']}, ${dataDetail['start_province']}, ",
+                            weight: bold,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Txt(text: 'Tujuan :'),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Txt(
+                            text:
+                                "${dataDetail['end_districts']}, ${dataDetail['end_city']}, ${dataDetail['end_province']}, ",
+                            weight: bold,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
-        children:[
-          Padding(
-            padding: const EdgeInsets.only(left :10.0, right: 10, bottom: 20),
-            child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-             
-              const SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.location_on,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Txt(text: 'Alamat :'),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Txt(
-                        text: 'Jl.Padjajaran',
-                        weight: bold,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.location_on,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Txt(text: 'Tujuan :'),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Txt(
-                        text: 'Jl.Padjajaran',
-                        weight: bold,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ],
-        ),
-          ),]
-      ),
+          ]),
     );
   }
 
- popUpkirimLaporanSelesaiAmbulance(BuildContext context) {
+  popUpkirimLaporanSelesaiAmbulance(BuildContext context) {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -1476,8 +1828,8 @@ Cntr tujuanAmbulance() {
                   ]));
         });
   }
- 
- popUpSelesaiKonfirmasi(BuildContext context) {
+
+  popUpSelesaiKonfirmasi(BuildContext context) {
     showModalBottomSheet(
         isDismissible: false,
         shape: const RoundedRectangleBorder(
@@ -1529,7 +1881,7 @@ Cntr tujuanAmbulance() {
         });
   }
 
-popUpLihatGambar(BuildContext context) {
+  popUpLihatGambar(BuildContext context) {
     showModalBottomSheet(
         isDismissible: false,
         shape: const RoundedRectangleBorder(
@@ -1560,9 +1912,9 @@ popUpLihatGambar(BuildContext context) {
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             height: 260,
                             width: Get.width,
-                            image: const DecorationImage(
+                            image:  DecorationImage(
                               image: NetworkImage(
-                                  'https://picsum.photos/200/300/?blur'),
+                                dataDetail['image_proof_travel']),
                             ),
                           ),
                           const SizedBox(
@@ -1583,7 +1935,61 @@ popUpLihatGambar(BuildContext context) {
         });
   }
 
-actionUploadBuktiSample() {
+   popUpLihatGambarAmbulance(BuildContext context) {
+    showModalBottomSheet(
+        isDismissible: false,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 500,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 18, top: 14),
+                            width: Get.width / 1.9,
+                            height: 10,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffEDEDED)),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Cntr(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            height: 260,
+                            width: Get.width,
+                            image:  DecorationImage(
+                              image: NetworkImage(
+                                dataDetail['image_ambulance']),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 22.0,
+                          ),
+                          ButtomGradient(
+                            margin: 20,
+                            label: "Kembali",
+                            onTap: () {
+                              Get.back();
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30.0,
+                          ),
+                        ])
+                  ]));
+        });
+  }
+
+  actionUploadBuktiSample() {
     Get.bottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -1596,14 +2002,13 @@ actionUploadBuktiSample() {
           child: SingleChildScrollView(
             child: Column(
               children: [
-               Cntr(
-                    // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                    height: 10,
-                    width: 200,
-                    color: Colors.grey[300],
-                    radius: BorderRadius.circular(20),
-                  ),
-                
+                Cntr(
+                  // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  height: 10,
+                  width: 200,
+                  color: Colors.grey[300],
+                  radius: BorderRadius.circular(20),
+                ),
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -1611,29 +2016,35 @@ actionUploadBuktiSample() {
                 const SizedBox(
                   height: 20.0,
                 ),
-                 InkWell(
+                InkWell(
                   onTap: () {
                     controller.pickerFilesImage(Get.context!);
                   },
-                  child: 
-                Cntr(
-                  radius: BorderRadius.circular(10),
-                  width: Get.width,
-                  padding: EdgeInsets.zero,
-                  border: Border.all(color: Colors.grey[300]!),
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.upload,
+                  child: Cntr(
+                    radius: BorderRadius.circular(10),
+                    width: Get.width,
+                    padding: EdgeInsets.zero,
+                    border: Border.all(color: Colors.grey[300]!),
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.upload,
+                      ),
+                      title: Obx(
+                        () => Txt(
+                          maxLines: 1,
+                          textOverFlow: TextOverflow.ellipsis,
+                          text: controller.imageUrl.isEmpty
+                              ? 'Upload bukti foto'
+                              : controller.imageUrl.value,
+                          color: controller.imageUrl.isEmpty
+                              ? Colors.grey[500]
+                              : Colors.black,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
                     ),
-                    title: Obx(()=>Txt(
-                      maxLines: 1,
-                      textOverFlow: TextOverflow.ellipsis,
-                      text: controller.imageUrl.isEmpty ? 'Upload bukti foto' : controller.imageUrl.value,
-                      color:controller.imageUrl.isEmpty ? Colors.grey[500] : Colors.black,
-                    ),),
-                    trailing: const Icon(Icons.arrow_forward_ios),
                   ),
-                ),),
+                ),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -1703,7 +2114,7 @@ actionUploadBuktiSample() {
                             radius: const BorderRadius.only(
                                 topLeft: Radius.circular(30),
                                 topRight: Radius.circular(30)),
-                            height: Get.height /2.6,
+                            height: Get.height / 2.6,
                             child: Column(
                               children: [
                                 Cntr(
@@ -1729,7 +2140,9 @@ actionUploadBuktiSample() {
                                 ),
                                 ButtomGradient(
                                   label: 'Oke',
-                                  onTap: () {Get.back();},
+                                  onTap: () {
+                                    Get.back();
+                                  },
                                 )
                               ],
                             )));
@@ -1744,7 +2157,311 @@ actionUploadBuktiSample() {
         ));
   }
 
-popUpJadwalPengambilanTest() {
+  actionUploadInformasiAmbulance() {
+    Get.bottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        Cntr(
+          padding: const EdgeInsets.all(20),
+          radius: const BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          height: 300,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Cntr(
+                  // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  height: 10,
+                  width: 200,
+                  color: Colors.grey[300],
+                  radius: BorderRadius.circular(20),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Txt(text: 'Masukkan informasi ambulance'),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                InkWell(
+                  onTap: () {
+                    controller.pickerFilesImage(Get.context!);
+                  },
+                  child: Cntr(
+                    radius: BorderRadius.circular(10),
+                    width: Get.width,
+                    padding: EdgeInsets.zero,
+                    border: Border.all(color: Colors.grey[300]!),
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.upload,
+                      ),
+                      title: Obx(
+                        () => Txt(
+                          maxLines: 1,
+                          textOverFlow: TextOverflow.ellipsis,
+                          text: controller.imageUrl.isEmpty
+                              ? 'Upload bukti foto'
+                              : controller.imageUrl.value,
+                          color: controller.imageUrl.isEmpty
+                              ? Colors.grey[500]
+                              : Colors.black,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Cntr(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
+                    width: Get.width,
+                    // height: 50,
+                    radius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey[300]!),
+                    child: TextFormField(
+                      controller: controller.platNomerAmbulanceC,
+                      // maxLines: 10,
+                      decoration: const InputDecoration(
+                          hintText:
+                              'Masukkan No. kendaraan (contoh B 1234 UIX)',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none)),
+                    )),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                ButtomGradient(
+                  margin: 0,
+                  label: 'Konfirmasi',
+                  onTap: () async {
+                    if (controller.files == null ||
+                        controller.platNomerAmbulanceC.text == "") {
+                      showPopUp(
+                          onTap: () {
+                            Get.back();
+                          },
+                          imageAction: 'assets/json/eror.json',
+                          description: "Mohon lengkapi data");
+                    } else {
+                      await controller.updaloadAmbulance(
+                          controller.files,
+                          Get.find<LayananHomeController>()
+                              .orderIdNurse
+                              .value
+                              .toString());
+                      await Get.find<LayananHomeController>()
+                          .updateStatusAmbulance(
+                              status: 4,
+                              orderId: Get.find<LayananHomeController>()
+                                  .orderIdNurse
+                                  .value);
+                      Get.back();
+                      Get.back();
+                    }
+                    // Get.bottomSheet(
+                    //     shape: const RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.only(
+                    //             topLeft: Radius.circular(30),
+                    //             topRight: Radius.circular(30))),
+                    //     Cntr(
+                    //         padding: const EdgeInsets.all(20),
+                    //         radius: const BorderRadius.only(
+                    //             topLeft: Radius.circular(30),
+                    //             topRight: Radius.circular(30)),
+                    //         height: Get.height / 2.6,
+                    //         child: Column(
+                    //           children: [
+                    //             Cntr(
+                    //               // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    //               height: 10,
+                    //               width: 200,
+                    //               color: Colors.grey[300],
+                    //               radius: BorderRadius.circular(20),
+                    //             ),
+                    //             const SizedBox(
+                    //               height: 20.0,
+                    //             ),
+                    //             Txt(
+                    //                 textAlign: TextAlign.center,
+                    //                 text:
+                    //                     'Terima kasih, telah memberikan\nbukti pengambilan tes'),
+                    //             const SizedBox(
+                    //               height: 20.0,
+                    //             ),
+                    //             Image.asset('assets/images/berhasil.png'),
+                    //             const SizedBox(
+                    //               height: 30.0,
+                    //             ),
+                    //             ButtomGradient(
+                    //               label: 'Oke',
+                    //               onTap: () {
+                    //                 Get.back();
+                    //               },
+                    //             )
+                    //           ],
+                    //         )));
+                  },
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  actionUploadBuktiPenjemputanAmbulance() {
+    Get.bottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        Cntr(
+          padding: const EdgeInsets.all(20),
+          radius: const BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          height: 250,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Cntr(
+                  // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  height: 10,
+                  width: 200,
+                  color: Colors.grey[300],
+                  radius: BorderRadius.circular(20),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Txt(text: 'Kirim bukti selesai antar anda'),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                InkWell(
+                  onTap: () {
+                    controller.pickerFilesImage(Get.context!);
+                  },
+                  child: Cntr(
+                    radius: BorderRadius.circular(10),
+                    width: Get.width,
+                    padding: EdgeInsets.zero,
+                    border: Border.all(color: Colors.grey[300]!),
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.upload,
+                      ),
+                      title: Obx(
+                        () => Txt(
+                          maxLines: 1,
+                          textOverFlow: TextOverflow.ellipsis,
+                          text: controller.imageUrl.isEmpty
+                              ? 'Upload bukti foto'
+                              : controller.imageUrl.value,
+                          color: controller.imageUrl.isEmpty
+                              ? Colors.grey[500]
+                              : Colors.black,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                ButtomGradient(
+                  margin: 0,
+                  label: 'Kirim & Selesai',
+                  onTap: () async {
+                    if (controller.files == null) {
+                      showPopUp(
+                          onTap: () {
+                            Get.back();
+                          },
+                          imageAction: 'assets/json/eror.json',
+                          description: "Mohon lengkapi data");
+                    } else {
+                      await controller.updaloadbuktiPenjemputan(
+                          controller.files,
+                          Get.find<LayananHomeController>()
+                              .orderIdNurse
+                              .value
+                              .toString());
+                      await Get.find<LayananHomeController>()
+                          .updateStatusAmbulance(
+                              status: 6,
+                              orderId: Get.find<LayananHomeController>()
+                                  .orderIdNurse
+                                  .value);
+                      Get.back();
+                      controller.files = null;
+                      Get.bottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))),
+                        Cntr(
+                            padding: const EdgeInsets.all(20),
+                            radius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30)),
+                            height: Get.height / 2.6,
+                            child: Column(
+                              children: [
+                                Cntr(
+                                  // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                  height: 10,
+                                  width: 200,
+                                  color: Colors.grey[300],
+                                  radius: BorderRadius.circular(20),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Txt(
+                                    textAlign: TextAlign.center,
+                                    text:
+                                        'Terima kasih, telah mengkonfirmasi'),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Image.asset('assets/images/berhasil.png'),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+                                ButtomGradient(
+                                  label: 'Oke',
+                                  onTap: () {
+                                    Get.back();
+                                    Get.back();
+                                  },
+                                )
+                              ],
+                            )));
+                    }
+                    
+                  },
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
+
+
+  popUpJadwalPengambilanTest() {
     Get.bottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -1757,14 +2474,14 @@ popUpJadwalPengambilanTest() {
           child: SingleChildScrollView(
             child: Column(
               children: [
-               Cntr(
-                    // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                    height: 10,
-                    width: 200,
-                    color: Colors.grey[300],
-                    radius: BorderRadius.circular(20),
-                  ),
-                
+                Cntr(
+                  // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  height: 10,
+                  width: 200,
+                  color: Colors.grey[300],
+                  radius: BorderRadius.circular(20),
+                ),
+
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -1774,77 +2491,77 @@ popUpJadwalPengambilanTest() {
                 ),
 
                 Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                width: Get.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey[300]!)),
-                // dropdown below..
-                child: DropdownButtonFormField(
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.zero,
-                      fillColor: AppColor.bgForm,
-                      filled: true,
-                      hintText: "Tipe pengambilan sample tes",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(borderSide: BorderSide.none)),
-                  validator: (jKelamin) => jKelamin == null
-                      ? "Tipe pengambilan sample tes tidak boleh kosong"
-                      : null,
-                  items: controller.lokasiPengambilan
-                      .map((e) => DropdownMenuItem(
-                          onTap: () {
-                            controller.pilihLokasi.value =
-                                e.toString();
-                          },
-                          value: e,
-                          child: Text(e.toString())))
-                      .toList(),
-                  onChanged: (value) {},
-                ),
-              ),const SizedBox(
-              height: 10.0,
-              ),
-              
-              // ignore: avoid_unnecessary_containers
-              InkWell(
-                onTap: () {
-                  // Get.defaultDialog();
-                  showModalBottomSheet(
-                      isDismissible: false,
-                      context: Get.context!,
-                      builder: (context) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            controller.buildTimePickerMulai(),
-                            ElevatedButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: const Text('Pilih Jam'),
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                          ],
-                        );
-                      });
-                },
-                child: Cntr(
-                  // padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   width: Get.width,
-                  height: 55,
-                  color: AppColor.bgForm,
-                  radius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey[300]!),
-                  child: ListTile(
-                        leading :const Icon(
-                            Icons.access_time,
-                            color: Colors.grey,
-                          ),
-                          title :
-                      Obx(() => Txt(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey[300]!)),
+                  // dropdown below..
+                  child: DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        fillColor: AppColor.bgForm,
+                        filled: true,
+                        hintText: "Tipe pengambilan sample tes",
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border:
+                            OutlineInputBorder(borderSide: BorderSide.none)),
+                    validator: (jKelamin) => jKelamin == null
+                        ? "Tipe pengambilan sample tes tidak boleh kosong"
+                        : null,
+                    items: controller.lokasiPengambilan
+                        .map((e) => DropdownMenuItem(
+                            onTap: () {
+                              controller.pilihLokasi.value = e.toString();
+                            },
+                            value: e,
+                            child: Text(e.toString())))
+                        .toList(),
+                    onChanged: (value) {},
+                  ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+
+                // ignore: avoid_unnecessary_containers
+                InkWell(
+                  onTap: () {
+                    // Get.defaultDialog();
+                    showModalBottomSheet(
+                        isDismissible: false,
+                        context: Get.context!,
+                        builder: (context) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              controller.buildTimePickerMulai(),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: const Text('Pilih Jam'),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  child: Cntr(
+                    // padding: const EdgeInsets.symmetric(horizontal: 10),
+                    width: Get.width,
+                    height: 55,
+                    color: AppColor.bgForm,
+                    radius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey[300]!),
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.access_time,
+                        color: Colors.grey,
+                      ),
+                      title: Obx(() => Txt(
                             text: controller.jamTerpilih.isEmpty
                                 ? 'Masukkan jam'
                                 : controller.jamTerpilih.value,
@@ -1852,12 +2569,10 @@ popUpJadwalPengambilanTest() {
                                 ? Colors.grey
                                 : Colors.black,
                           )),
-                          trailing :
-                         const Icon(Icons.arrow_forward_ios),
-                    
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
                   ),
                 ),
-              ),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -1907,7 +2622,7 @@ popUpJadwalPengambilanTest() {
                             radius: const BorderRadius.only(
                                 topLeft: Radius.circular(30),
                                 topRight: Radius.circular(30)),
-                            height: Get.height /2.6,
+                            height: Get.height / 2.6,
                             child: Column(
                               children: [
                                 Cntr(
@@ -1933,7 +2648,9 @@ popUpJadwalPengambilanTest() {
                                 ),
                                 ButtomGradient(
                                   label: 'Oke',
-                                  onTap: () {Get.back();},
+                                  onTap: () {
+                                    Get.back();
+                                  },
                                 )
                               ],
                             )));
@@ -1948,7 +2665,7 @@ popUpJadwalPengambilanTest() {
         ));
   }
 
-Cntr jadwalPengambilanTes() {
+  Cntr jadwalPengambilanTes() {
     return Cntr(
       margin: const EdgeInsets.symmetric(horizontal: 24),
       radius: BorderRadius.circular(10),
@@ -2047,6 +2764,107 @@ Cntr jadwalPengambilanTes() {
       ),
     );
   }
+
+   Cntr detailAmbulance() {
+    return Cntr(
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      radius: BorderRadius.circular(10),
+      width: Get.width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 26),
+      gradient: AppColor.gradient1,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              const SizedBox(
+                height: 16.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: 'Detail Ambulance',
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: dataDetail['plat_no'],
+                        weight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Txt(
+                        text: dataDetail['service_price_ambulance']['type'],
+                        size: 12,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // popUpkirimLaporanSelesaiAmbulance(Get.context!);
+                    },
+                    child: Cntr(
+                      radius: BorderRadius.circular(100),
+                      height: 80,
+                      width: 80,
+                      image:  DecorationImage(
+                          image: NetworkImage(
+                                dataDetail['image_ambulance']),
+                          fit: BoxFit.cover),
+                      border: Border.all(color: Colors.white, width: 4),
+                    ),
+                  ),
+
+                  // const Icon(
+                  //   Icons.access_time_filled_outlined,
+                  //   color: Colors.white,
+                  //   size: 40,
+                  // )
+                ],
+              ),
+              const SizedBox(
+                height: 15.0,
+              ),
+              InkWell(
+                onTap: () {
+                  // popUpLihatGambar(Get.context!);
+                  popUpLihatGambarAmbulance(Get.context!);
+                },
+                child: Cntr(
+                  alignment: Alignment.center,
+                  radius: BorderRadius.circular(10),
+                  color: Colors.transparent,
+                  height: 40,
+                  width: Get.width,
+                  border: Border.all(color: Colors.white),
+                  child: Txt(
+                    text: "Lihat gambar",
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
 }
 
 // ignore: must_be_immutable
@@ -2125,7 +2943,8 @@ class Rating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Get.find<LoginController>().role.value != 'nurse' || Get.find<LoginController>().role.value != 'hospital' ) {
+    if (Get.find<LoginController>().role.value != 'nurse' ||
+        Get.find<LoginController>().role.value != 'hospital') {
       myC.getOrder();
     }
     return Column(

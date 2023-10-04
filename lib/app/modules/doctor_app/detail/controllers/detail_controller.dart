@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../constant/string.dart';
+import 'package:http/http.dart' as http;
+
 class DetailController extends GetxController {
   bool stop = false;
 
@@ -30,6 +33,7 @@ class DetailController extends GetxController {
   DateTime? startTime;
   final lokasiPengambilan = ['Rumah', "Hospital"];
   RxString pilihLokasi = "".obs;
+  TextEditingController platNomerAmbulanceC = TextEditingController();
 
 
 
@@ -113,5 +117,54 @@ class DetailController extends GetxController {
     files = File(image.path);
     imageUrl.value = files.toString();
     return file;
+  }
+
+  Future<bool> updaloadAmbulance(File imageFile, String id) async {
+    // ignore: unused_local_variable
+    // String idDocter = Get.find<LoginController>().doctorIdImage.value;
+    final String url = "${MainUrl.urlApi}ambulance/order/upload/ambulance/$id";
+    // ignore: avoid_print
+    print("cek url : $url");
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files
+        .add(await http.MultipartFile.fromPath('file', imageFile.path));
+    request.fields['plat_no'] = platNomerAmbulanceC.text;
+    var res = await request.send();
+    final respStr = await res.stream.bytesToString();
+    if (res.statusCode == 200) {
+      // setCurrentUser(respStr);
+      // currentUser = authModelFromJson(respStr);
+      return true;
+    } else {
+      // ignore: avoid_print
+      print(respStr);
+      // ignore: avoid_print
+      print('done Bro gagal');
+      return false;
+    }
+  }
+
+  Future<bool> updaloadbuktiPenjemputan(File imageFile, String id) async {
+    // ignore: unused_local_variable
+    // String idDocter = Get.find<LoginController>().doctorIdImage.value;
+    final String url = "${MainUrl.urlApi}ambulance/order/upload/proof/$id";
+    // ignore: avoid_print
+    print("cek url : $url");
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files
+        .add(await http.MultipartFile.fromPath('file', imageFile.path));
+    var res = await request.send();
+    final respStr = await res.stream.bytesToString();
+    if (res.statusCode == 200) {
+      // setCurrentUser(respStr);
+      // currentUser = authModelFromJson(respStr);
+      return true;
+    } else {
+      // ignore: avoid_print
+      print(respStr);
+      // ignore: avoid_print
+      print('done Bro gagal');
+      return false;
+    }
   }
 }

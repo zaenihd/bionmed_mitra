@@ -1,4 +1,5 @@
 import 'package:bionmed/app/modules/doctor_app/home/controllers/home_controller.dart';
+import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/container/container.dart';
@@ -17,10 +18,11 @@ class PesananMasukPerawatView extends GetView<PesananMasukPerawatController> {
   PesananMasukPerawatView({Key? key}) : super(key: key);
 
   final homeC = Get.put(HomeController());
+  final loginC = Get.find<LoginController>();
   @override
   Widget build(BuildContext context) {
     homeC.reminderNurse.value = true;
-    controller.startCountingAcceptOrder();
+    // controller.startCountingAcceptOrder();
     return Scaffold(
       body: Obx(
         () => Center(
@@ -71,212 +73,11 @@ class PesananMasukPerawatView extends GetView<PesananMasukPerawatController> {
                   const SizedBox(
                     height: 20.0,
                   ),
-                  Cntr(
-                    margin: const EdgeInsets.only(bottom: 15),
-                    alignment: Alignment.centerLeft,
-                    // padding: EdgeInsets.symmetric(horizontal: 20),
-                    width: Get.width,
-                    border: Border.all(color: Colors.grey[400]!),
-                    radius: BorderRadius.circular(10),
-                    child: ExpansionTile(
-                      title: Row(
-                        children: [
-                          Image.asset('assets/icon/maps.png'),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
-                          Txt(text: 'Detail Rumah Pasien'),
-                        ],
-                      ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Txt(text: homeC.dataReminderNurse['address']),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            await MapsLauncher.launchCoordinates(
-                                homeC.dataReminderNurse['lat'],
-                                homeC.dataReminderNurse['long'],
-                                homeC.dataReminderNurse['address']);
-                          },
-                          child: Cntr(
-                            radius: BorderRadius.circular(10),
-                            alignment: Alignment.center,
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            height: 30,
-                            width: Get.width,
-                            color: Colors.blue,
-                            child: Txt(
-                              text: 'Lihat Lokasi Maps',
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Cntr(
-                    margin: const EdgeInsets.only(bottom: 15),
-                    alignment: Alignment.centerLeft,
-                    width: Get.width,
-                    border: Border.all(color: Colors.grey[400]!),
-                    radius: BorderRadius.circular(10),
-                    child: ExpansionTile(
-                      title: Row(
-                        children: [
-                          Image.asset('assets/icon/pasien1.png'),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
-                          Txt(text: 'Detail Pasien'),
-                        ],
-                      ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Column(
-                            children: [
-                              Cntr(
-                                height: 200,
-                                width: 200,
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      homeC.dataReminderNurse['patient_image'],
-                                  placeholder: (context, url) => Center(
-                                      child: Transform.scale(
-                                    scale: 0.5,
-                                    child: const CircularProgressIndicator(),
-                                  )),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                ),
-                              ),
-                              // Image.network(
-                              //     homeC.dataReminderNurse['patient_image']),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                      width: 100,
-                                      child: Txt(text: 'Nama Pasien')),
-                                  Txt(text: ':   '),
-                                  SizedBox(
-                                      width: 150,
-                                      child: Txt(
-                                        text: homeC.dataReminderNurse['name'],
-                                        weight: bold,
-                                      )),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                      width: 100,
-                                      child: Txt(text: 'Jenis Kelamin')),
-                                  Txt(text: ':   '),
-                                  SizedBox(
-                                      width: 150,
-                                      child: Txt(
-                                        text: homeC.dataReminderNurse['gender'],
-                                        weight: bold,
-                                      )),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                      width: 100, child: Txt(text: 'Umur')),
-                                  Txt(text: ':   '),
-                                  SizedBox(
-                                      width: 150,
-                                      child: Txt(
-                                        text: homeC.dataReminderNurse['old']
-                                            .toString(),
-                                        weight: bold,
-                                      )),
-                                ],
-                              ),
-                              Cntr(
-                                padding: const EdgeInsets.all(10),
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                radius: BorderRadius.circular(10),
-                                height: 120,
-                                width: Get.width,
-                                color: Colors.grey[200],
-                                child: Txt(
-                                    text:
-                                        homeC.dataReminderNurse['description']),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Cntr(
-                    margin: const EdgeInsets.only(bottom: 15),
-                    alignment: Alignment.centerLeft,
-                    width: Get.width,
-                    border: Border.all(color: Colors.grey[400]!),
-                    radius: BorderRadius.circular(10),
-                    child: ExpansionTile(
-                      title: Row(
-                        children: [
-                          Image.asset('assets/icon/kebutuhan.png'),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
-                          Txt(text: 'Kebutuhan Pasien'),
-                        ],
-                      ),
-                      children: [
-                        Cntr(
-                            margin: const EdgeInsets.only(bottom: 15),
-                            height: 230,
-                            child: ListView.builder(
-                              itemCount: homeC
-                                  .dataReminderNurse['service_price_nurse']
-                                      ['package_nurse_sops']
-                                  .length,
-                              itemBuilder: (context, index) => ListTile(
-                                leading: Cntr(
-                                  height: 50,
-                                  width: 50,
-                                  child: Image.network(homeC.dataReminderNurse[
-                                              'service_price_nurse']
-                                          ['package_nurse_sops'][index]
-                                      ['nurse_work_scope']['icon']),
-                                ),
-                                title: Text(homeC.dataReminderNurse[
-                                            'service_price_nurse']
-                                        ['package_nurse_sops'][index]
-                                    ['nurse_work_scope']['name']),
-                                // leading: Cntr(
-                                //   height: 50,
-                                //   width: 50,
-                                //   image: const DecorationImage(
-                                //       image:
-                                //           AssetImage('assets/images/banner1.png'),
-                                //       fit: BoxFit.cover),
-                                // ),
-                              ),
-                            ))
-                      ],
-                    ),
+                  loginC.role.value == 'ambulance'
+                      ? detailPesananAmbulance()
+                      : detailPesananMasukNurse(),
+                  const SizedBox(
+                    height: 20.0,
                   ),
                   const SizedBox(
                     height: 200.0,
@@ -322,7 +123,11 @@ class PesananMasukPerawatView extends GetView<PesananMasukPerawatController> {
                 onTap: () async {
                   //statusRespone == 1 ? TERIMA ORDER
                   //statusRespone == 2 ? TOLAK  ORDER
-                  await controller.acceptOrderNurse(statusRespone: 1);
+                  if (loginC.role.value == "ambulance") {
+                    await controller.acceptOrderAmbulance(statusRespone: 1);
+                  } else {
+                    await controller.acceptOrderNurse(statusRespone: 1);
+                  }
                   homeC.reminderNurse.value = false;
                   Get.back();
                 }),
@@ -378,8 +183,15 @@ class PesananMasukPerawatView extends GetView<PesananMasukPerawatController> {
                                 onPressed: () async {
                                   //statusRespone == 1 ? TERIMA ORDER
                                   //statusRespone == 2 ? TOLAK  ORDER
-                                  await controller.acceptOrderNurse(
-                                      statusRespone: 2);
+                                  if (loginC.role.value == "ambulance") {
+                                    await controller.acceptOrderAmbulance(
+                                        statusRespone: 2);
+                                  } else {
+                                    await controller.acceptOrderNurse(
+                                        statusRespone: 2);
+                                  }
+                                  // await controller.acceptOrderNurse(
+                                  //     statusRespone: 2);
                                   homeC.reminderNurse.value = false;
 
                                   Get.back();
@@ -406,6 +218,407 @@ class PesananMasukPerawatView extends GetView<PesananMasukPerawatController> {
           ],
         ),
       ),
+    );
+  }
+
+  detailPesananAmbulance() {
+    return Column(
+      children: [
+        Cntr(
+          margin: const EdgeInsets.only(bottom: 15),
+          alignment: Alignment.centerLeft,
+          width: Get.width,
+          border: Border.all(color: Colors.grey[400]!),
+          radius: BorderRadius.circular(10),
+          child: ExpansionTile(
+            title: Row(
+              children: [
+                Image.asset('assets/icon/pasien1.png'),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Txt(text: 'Detail Pesanan'),
+              ],
+            ),
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(width: 100, child: Txt(text: 'Jadwal')),
+                        Txt(text: ':   '),
+                        SizedBox(
+                            width: 150,
+                            child: Txt(
+                              text: homeC
+                                  .dataReminderNurse['startDateAmbulance']
+                                  .toString()
+                                  .substring(0, 10),
+                              weight: bold,
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(width: 100, child: Txt(text: 'Layanan')),
+                        Txt(text: ':   '),
+                        SizedBox(
+                            width: 150,
+                            child: Txt(
+                              text: homeC.dataReminderNurse[
+                                  'service_price_ambulance']['name'],
+                              weight: bold,
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(width: 100, child: Txt(text: 'Tipe')),
+                        Txt(text: ':   '),
+                        SizedBox(
+                            width: 150,
+                            child: Txt(
+                              text: homeC
+                                  .dataReminderNurse['service_price_ambulance']
+                                      ['type']
+                                  .toString(),
+                              weight: bold,
+                            )),
+                      ],
+                    ),
+                    // Cntr(
+                    //   padding: const EdgeInsets.all(10),
+                    //   margin: const EdgeInsets.symmetric(
+                    //       vertical: 16),
+                    //   radius: BorderRadius.circular(10),
+                    //   height: 120,
+                    //   width: Get.width,
+                    //   color: Colors.grey[200],
+                    //   child: Txt(
+                    //       text: homeC.dataReminderNurse[
+                    //           'description']),
+                    // )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        Cntr(
+          margin: const EdgeInsets.only(bottom: 15),
+          alignment: Alignment.centerLeft,
+          // padding: EdgeInsets.symmetric(horizontal: 20),
+          width: Get.width,
+          border: Border.all(color: Colors.grey[400]!),
+          radius: BorderRadius.circular(10),
+          child: ExpansionTile(
+            title: Row(
+              children: [
+                Image.asset('assets/icon/maps.png'),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Txt(text: 'Lokasi Penjemputan'),
+              ],
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Txt(
+                    text:
+                        "${homeC.dataReminderNurse['start_districts']},${homeC.dataReminderNurse['start_city']} ${homeC.dataReminderNurse['start_province']}\n ${homeC.dataReminderNurse['start_address']}"),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              InkWell(
+                onTap: () async {
+                  await MapsLauncher.launchCoordinates(
+                      homeC.dataReminderNurse['start_lat'],
+                      homeC.dataReminderNurse['start_long'],
+                      "${homeC.dataReminderNurse['start_districts']},${homeC.dataReminderNurse['start_city']} ${homeC.dataReminderNurse['start_province']}\n ${homeC.dataReminderNurse['start_address']}");
+                },
+                child: Cntr(
+                  radius: BorderRadius.circular(10),
+                  alignment: Alignment.center,
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  height: 30,
+                  width: Get.width,
+                  color: Colors.blue,
+                  child: Txt(
+                    text: 'Lihat Lokasi Maps',
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Cntr(
+          margin: const EdgeInsets.only(bottom: 15),
+          alignment: Alignment.centerLeft,
+          // padding: EdgeInsets.symmetric(horizontal: 20),
+          width: Get.width,
+          border: Border.all(color: Colors.grey[400]!),
+          radius: BorderRadius.circular(10),
+          child: ExpansionTile(
+            title: Row(
+              children: [
+                Image.asset('assets/icon/maps.png'),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Txt(text: 'Lokasi Tujuan'),
+              ],
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Txt(
+                    text:
+                        "${homeC.dataReminderNurse['end_districts']},${homeC.dataReminderNurse['end_city']} ${homeC.dataReminderNurse['end_province']}\n ${homeC.dataReminderNurse['end_address']}"),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              InkWell(
+                onTap: () async {
+                  await MapsLauncher.launchCoordinates(
+                      homeC.dataReminderNurse['end_lat'],
+                      homeC.dataReminderNurse['end_long'],
+                      "${homeC.dataReminderNurse['end_districts']},${homeC.dataReminderNurse['end_city']} ${homeC.dataReminderNurse['end_province']}\n ${homeC.dataReminderNurse['end_address']}");
+                },
+                child: Cntr(
+                  radius: BorderRadius.circular(10),
+                  alignment: Alignment.center,
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  height: 30,
+                  width: Get.width,
+                  color: Colors.blue,
+                  child: Txt(
+                    text: 'Lihat Lokasi Maps',
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  detailPesananMasukNurse() {
+    return Column(
+      children: [
+        Cntr(
+          margin: const EdgeInsets.only(bottom: 15),
+          alignment: Alignment.centerLeft,
+          // padding: EdgeInsets.symmetric(horizontal: 20),
+          width: Get.width,
+          border: Border.all(color: Colors.grey[400]!),
+          radius: BorderRadius.circular(10),
+          child: ExpansionTile(
+            title: Row(
+              children: [
+                Image.asset('assets/icon/maps.png'),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Txt(text: 'Detail Rumah Pasien'),
+              ],
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Txt(text: homeC.dataReminderNurse['address']),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              InkWell(
+                onTap: () async {
+                  await MapsLauncher.launchCoordinates(
+                      homeC.dataReminderNurse['lat'],
+                      homeC.dataReminderNurse['long'],
+                      homeC.dataReminderNurse['address']);
+                },
+                child: Cntr(
+                  radius: BorderRadius.circular(10),
+                  alignment: Alignment.center,
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  height: 30,
+                  width: Get.width,
+                  color: Colors.blue,
+                  child: Txt(
+                    text: 'Lihat Lokasi Maps',
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Cntr(
+          margin: const EdgeInsets.only(bottom: 15),
+          alignment: Alignment.centerLeft,
+          width: Get.width,
+          border: Border.all(color: Colors.grey[400]!),
+          radius: BorderRadius.circular(10),
+          child: ExpansionTile(
+            title: Row(
+              children: [
+                Image.asset('assets/icon/pasien1.png'),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Txt(text: 'Detail Pasien'),
+              ],
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: [
+                    Cntr(
+                      height: 200,
+                      width: 200,
+                      child: CachedNetworkImage(
+                        imageUrl: homeC.dataReminderNurse['patient_image'],
+                        placeholder: (context, url) => Center(
+                            child: Transform.scale(
+                          scale: 0.5,
+                          child: const CircularProgressIndicator(),
+                        )),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                    ),
+                    // Image.network(
+                    //     homeC.dataReminderNurse['patient_image']),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(width: 100, child: Txt(text: 'Nama Pasien')),
+                        Txt(text: ':   '),
+                        SizedBox(
+                            width: 150,
+                            child: Txt(
+                              text: homeC.dataReminderNurse['name'],
+                              weight: bold,
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(width: 100, child: Txt(text: 'Jenis Kelamin')),
+                        Txt(text: ':   '),
+                        SizedBox(
+                            width: 150,
+                            child: Txt(
+                              text: homeC.dataReminderNurse['gender'],
+                              weight: bold,
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(width: 100, child: Txt(text: 'Umur')),
+                        Txt(text: ':   '),
+                        SizedBox(
+                            width: 150,
+                            child: Txt(
+                              text: homeC.dataReminderNurse['old'].toString(),
+                              weight: bold,
+                            )),
+                      ],
+                    ),
+                    Cntr(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      radius: BorderRadius.circular(10),
+                      height: 120,
+                      width: Get.width,
+                      color: Colors.grey[200],
+                      child: Txt(text: homeC.dataReminderNurse['description']),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        Cntr(
+          margin: const EdgeInsets.only(bottom: 15),
+          alignment: Alignment.centerLeft,
+          width: Get.width,
+          border: Border.all(color: Colors.grey[400]!),
+          radius: BorderRadius.circular(10),
+          child: ExpansionTile(
+            title: Row(
+              children: [
+                Image.asset('assets/icon/kebutuhan.png'),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Txt(text: 'Kebutuhan Pasien'),
+              ],
+            ),
+            children: [
+              Cntr(
+                  margin: const EdgeInsets.only(bottom: 15),
+                  height: 230,
+                  child: ListView.builder(
+                    itemCount: homeC
+                        .dataReminderNurse['service_price_nurse']
+                            ['package_nurse_sops']
+                        .length,
+                    itemBuilder: (context, index) => ListTile(
+                      leading: Cntr(
+                        height: 50,
+                        width: 50,
+                        child: Image.network(
+                            homeC.dataReminderNurse['service_price_nurse']
+                                    ['package_nurse_sops'][index]
+                                ['nurse_work_scope']['icon']),
+                      ),
+                      title: Text(homeC.dataReminderNurse['service_price_nurse']
+                              ['package_nurse_sops'][index]['nurse_work_scope']
+                          ['name']),
+                      // leading: Cntr(
+                      //   height: 50,
+                      //   width: 50,
+                      //   image: const DecorationImage(
+                      //       image:
+                      //           AssetImage('assets/images/banner1.png'),
+                      //       fit: BoxFit.cover),
+                      // ),
+                    ),
+                  ))
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

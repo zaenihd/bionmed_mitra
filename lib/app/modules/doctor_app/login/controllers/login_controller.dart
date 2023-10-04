@@ -438,23 +438,25 @@ class LoginController extends GetxController {
             dataAmbulance['data']['ambulance']['hospital'] == null ? "0" : '';
         var setuju = await box.read('rememberme');
 
-        if (setuju == true) {
-          if (dataAmbulance['data']['ambulance']['verifiedStatus'] == 0) {
-            Get.to(() => MenungguKonfirmasi());
-          } else {
+        // if (setuju == true) {
+        //   if (dataAmbulance['data']['ambulance']['verifiedStatus'] == 0) {
+        //     Get.to(() => MenungguKonfirmasi());
+        //   } else {
             box.write('phone', phoneNumber);
+        //     Get.toNamed(Routes.BOTTOM_NAVIGATION);
+        //   }
+        // } else {
+        //   if (dataAmbulance['data']['ambulance']['hospital']['verifiedStatus'] == 0) {
+        //     Get.to(() => MenungguKonfirmasi());
+        //   } else if (dataAmbulance['data']['ambulance']['hospital']['verifiedStatus'] == 1) {
+        //     box.write('phone', phoneNumber);
+        //     Get.to(() => Disclamer());
+        //   } else {
+        //     Get.to(() => Ditolak());
+        //   }
+        // }
             Get.toNamed(Routes.BOTTOM_NAVIGATION);
-          }
-        } else {
-          if (dataAmbulance['data']['ambulance']['hospital']['verifiedStatus'] == 0) {
-            Get.to(() => MenungguKonfirmasi());
-          } else if (dataAmbulance['data']['ambulance']['hospital']['verifiedStatus'] == 1) {
-            box.write('phone', phoneNumber);
-            Get.to(() => Disclamer());
-          } else {
-            Get.to(() => Ditolak());
-          }
-        }
+
         // if (dataAmbulance['data']['ambulance']['hospital_services'].toString() !=
         //     "[]") {
         //   lengkapiProfil(Get.context!);

@@ -50,12 +50,31 @@ class PesananMasukPerawatController extends GetxController {
       final order = json.decode(result.toString());
       stopTime.value = true;
 
-      log('zaee $order');
+      log('zaeenn $order');
 
       // ignore: empty_catches, unused_catch_clause
     } on Exception catch (e) {
       // ignore: avoid_print
       print('zaee $e');
+    }
+  }
+  Future<dynamic> acceptOrderAmbulance({required int statusRespone}) async {
+    final params = <String, dynamic>{"ambulance_receive_status": statusRespone};
+
+    try {
+      final result = await RestClient().request(
+          '${MainUrl.urlApi}ambulance/update/order/${Get.find<HomeController>().dataReminderNurse['id']}',
+          Method.POST,
+          params);
+      final order = json.decode(result.toString());
+      stopTime.value = true;
+
+      log('zaeehahaa $order');
+
+      // ignore: empty_catches, unused_catch_clause
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print('zaeejaja $e');
     }
   }
 
