@@ -246,6 +246,33 @@ class JadwalSayaController extends GetxController {
     } on Exception catch (e) {}
   }
 
+  Future<dynamic> loginDataAmbulance({required String phoneNumber}) async {
+    // ignore: unused_local_variable
+    final map = <String, dynamic>{};
+    isloading(true);
+
+    final params = <String, dynamic>{"phoneNumber": phoneNumber};
+    try {
+      var result = await RestClient()
+          .request('${MainUrl.urlApi}login/ambulance', Method.POST, params);
+      final donors = json.decode(result.toString());
+      // if (donors['code'] == 200)
+      if (donors['data']['ambulance'] != null) {
+        dataHospital.value = donors['data']['ambulance'];
+        // dataDokter.value = donors['data']['ambulance']['ambulance_schedules'];
+        name.value = donors['data']['ambulance']['name'];
+        profileImage.value = donors['data']['ambulance']['image'];
+        profileImagePic.value = donors['data']['ambulance']['hospital']['picImage'] ?? "";
+        namePic.value = donors['data']['ambulance']['hospital']['picName'] ?? "null"; 
+
+        log(codeAccess.toString());
+      }
+
+      isloading(false);
+      // ignore: unused_catch_clause
+    } on Exception catch (e) {}
+  }
+
   Future<dynamic> checkPengalaman() async {
     isloading(true);
     final result = await RestClient().request(

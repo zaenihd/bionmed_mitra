@@ -258,7 +258,7 @@ class MapSampleState extends State<MapSample> {
               country: "ID",
               language: "id",
               hasClearButton: true,
-              placeType: PlaceType.address,
+              placeType: PlaceType.establishment,
               placeholder: "Masukkan Nama Kota Terlebih Dahulu",
               apiKey: "AIzaSyDFEfnWAt9nwFFb8fJXy3USgo94KgnTLSo",
               onSelected: (Place place) async {
@@ -269,22 +269,18 @@ class MapSampleState extends State<MapSample> {
                 controller.animateCamera(
                   CameraUpdate.newLatLng(
                     LatLng(
-                        geolocation!.fullJSON['geometry']['bounds']['northeast']
-                            ['lat'],
-                        geolocation.fullJSON['geometry']['bounds']['northeast']
-                            ['lng']),
+                       geolocation!.fullJSON['geometry']['location']
+                                ['lat'],
+                            geolocation.fullJSON['geometry']['location']
+                                ['lng']),
                   ),
                 );
                 if (registerC.isHospital.isFalse) {
-                  registerC.lat.value = geolocation.fullJSON['geometry']
-                      ['bounds']['northeast']['lat'];
-                  registerC.long.value = geolocation.fullJSON['geometry']
-                      ['bounds']['northeast']['lng'];
+                  registerC.lat.value = geolocation.fullJSON['geometry']['location']['lat'];
+                  registerC.long.value = geolocation.fullJSON['geometry']['location']['lng'];
                 } else {
-                  registerC.latHospital.value = geolocation.fullJSON['geometry']
-                      ['bounds']['northeast']['lat'];
-                  registerC.longHospital.value = geolocation
-                      .fullJSON['geometry']['bounds']['northeast']['lng'];
+                  registerC.latHospital.value = geolocation.fullJSON['geometry']['location']['lat'];
+                  registerC.longHospital.value = geolocation.fullJSON['geometry']['location']['lng'];
                 }
                 // await registerC.getUserLocationSearch();
                 await registerC.getUserLocation();

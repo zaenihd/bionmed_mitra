@@ -104,14 +104,16 @@ class CardServiceNurse extends StatelessWidget {
                                     Get.find<LoginController>().role.value !=
                                             'nurse'
                                         ? ""
-                                        : myC.dataListOrder[index]['order']['service']
-                                            ['name'];
+                                        : "";
+                                        // myC.dataListOrder[index]['order']['service']
+                                        //     ['name'];
                                 var layanan =
                                     Get.find<LoginController>().role.value !=
                                             'nurse'
                                         ? ""
-                                        : myC.dataListOrder[index]['order']
-                                            ['service_price_nurse']['name'];
+                                        : "";
+                                        // myC.dataListOrder[index]['order']
+                                        //     ['service_price_nurse']['name'];
 
 
                     // var layanan = myC.dataListOrder[index]['order']

@@ -24,6 +24,7 @@ import '../../../../../theme.dart';
 import '../../../../widget/button/button_gradien.dart';
 import '../../../../widget/button/button_primary_withtext.dart';
 import '../../../../widget/card/card_layanan.dart';
+import '../../../hospital_app/pendapatan_tim_hospital/controllers/pendapatan_tim_hospital_controller.dart';
 import '../../connection/views/call/voice_screen.dart';
 import '../../connection/views/videocall_screen.dart';
 import '../../detail/views/detail_view.dart';
@@ -35,6 +36,8 @@ class HomeView extends GetView<HomeController> {
   final myC = Get.put(HomeController());
   final loginC = Get.find<LoginController>();
   final layananHomeC = Get.put(LayananHomeController());
+  final pendapatanTimC = Get.put(PendapatanTimHospitalController());
+
   DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
   final _ctrl = ScrollController(initialScrollOffset: 5000000 * 100.0);
   notif() {
@@ -52,6 +55,13 @@ class HomeView extends GetView<HomeController> {
   HomeView({super.key});
   @override
   Widget build(BuildContext context) {
+     if(Get.find<LoginController>().role.value == "nurse"){
+      pendapatanTimC.pendapatanNurse();
+
+    }else{
+
+    pendapatanTimC.pendapatanAmbulance();
+    }
     // ignore: unused_local_variable
     var reverselist = layananHomeC.dataListOrder.reversed.toList();
     layananHomeC.addOrder();
@@ -204,7 +214,13 @@ class HomeView extends GetView<HomeController> {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    Get.to(() => PendapatanView());
+                                     if (loginC.role.value == "ambulance") {
+                                        } else if (loginC.inHospital.value ==
+                                            "") {
+                                        } else {
+                                          Get.to(() => PendapatanView());
+                                        }
+                                    // Get.to(() => PendapatanView());
                                   },
                                   child: SizedBox(
                                       width: 120,
@@ -212,7 +228,9 @@ class HomeView extends GetView<HomeController> {
                                         () => AutoSizeText(
                                           maxLines: 1,
                                           CurrencyFormat.convertToIdr(
-                                              controller.pendapatan.value, 0),
+                                            Get.find<LoginController>().role.value == "ambulance" || loginC.inHospital.value == "" ? pendapatanTimC.incomeDay.value :
+                                              controller.pendapatan.value
+                                              , 0),
                                           style: greenTextStyle.copyWith(
                                               fontWeight: bold, fontSize: 24),
                                         ),
@@ -305,10 +323,10 @@ class HomeView extends GetView<HomeController> {
                                 () => layananHomeC.dataListOrder.isNotEmpty ||
                                         myC.listOrderHospital.isNotEmpty
                                     ? ListView.builder(
-                                        controller: loginC.role.value == 'nurse'
+                                        controller: loginC.role.value == 'nurse' || loginC.role.value == 'ambulance'
                                             ? _ctrl
                                             : null,
-                                        reverse: loginC.role.value == 'nurse'
+                                        reverse: loginC.role.value == 'nurse' || loginC.role.value == 'ambulance'
                                             ? layananHomeC
                                                         .dataListOrder.length ==
                                                     1
@@ -386,10 +404,11 @@ class HomeView extends GetView<HomeController> {
                                                   : loginC.role.value ==
                                                           'hospital'
                                                       ? ""
-                                                      : layananHomeC
-                                                                  .dataListOrder[
-                                                              index]['order']
-                                                          ['service']['name'];
+                                                      : "";
+                                                      // layananHomeC
+                                                      //             .dataListOrder[
+                                                      //         index]['order']
+                                                      //     ['service']['name'];
                                           var servicePriceName = loginC
                                                       .role.value !=
                                                   'nurse'
@@ -399,15 +418,16 @@ class HomeView extends GetView<HomeController> {
                                                   : loginC.role.value ==
                                                           'ambulance'
                                                       ? ""
-                                                      : layananHomeC.dataListOrder[
-                                                                      index]
-                                                                  ['order']
-                                                              [
-                                                              'service_price_nurse']
-                                                          ['name'];
+                                                      : "";
+                                                      // layananHomeC.dataListOrder[
+                                                      //                 index]
+                                                      //             ['order']
+                                                      //         [
+                                                      //         'service_price_nurse']
+                                                      //     ['name'];
 
                                           return loginC.role.value ==
-                                                  'ambulance'
+                                                  'ambulance' 
                                               ? cardLayananAmbulanceOrder(index,layananHomeC
                                                                       .dataListOrder[
                                                                   index]['order']
@@ -532,69 +552,6 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  // CardOrderAmbulance cardLayananAmbulanceOrder(int index) {
-  //   return CardOrderAmbulance(
-  //     name: layananHomeC.dataListOrder[index]['order']['ambulance']['name'],
-  //     imageUrl: layananHomeC.dataListOrder[index]['order']['service']['image'],
-  //     price: layananHomeC.dataListOrder[index]['order']['totalPrice'],
-  //     service: layananHomeC.dataListOrder[index]['order']['service']['name'],
-  //     status: layananHomeC.dataListOrder[index]['order']['status'],
-  //     onTap: () async {
-  //       if (layananHomeC.dataListOrder[index]["payment"] != null) {
-  //         Get.put(DetailController()).paymentName.value =
-  //             layananHomeC.dataListOrder[index]["payment"]['debit_from_bank'];
-  //         Get.put(DetailController()).bankName.value =
-  //             layananHomeC.dataListOrder[index]["payment"]['product_code'];
-  //       } else {}
-  //       // Get.find<LayananHomeController>().idOrder.value =
-  //       //     layananHomeC.dataListOrder[index]['order']['id'];
-
-  //       Get.find<LayananHomeController>().idOrder.value =
-  //           layananHomeC.dataListOrder[index]['order']['id'];
-  //       // myC.lat.value = layananHomeC.dataListOrder[index]['order']['lat'];
-  //       // myC.long.value = layananHomeC.dataListOrder[index]['order']['long'];
-  //       // if (layanan == 'Home Visit') {
-  //       //   myC.address.value =
-  //       //       layananHomeC.dataListOrder[index]['order']['address'];
-  //       // }
-  //       // myC.statusOrderDetail.value = Get.find<LayananHomeController>()
-  //       //     .dataListOrder[index]['order']['statusOrder'];
-  //       // // myC.timePeriodic.value = false;
-  //       // // myC.realtimeApiGet.value = false;
-  //       // // if (myC.realtimeApiGet.isFalse) {
-  //       // //  await myC.realtimeApi();
-  //       // // }
-  //       // Get.put(DetailController()).stop = false;
-  //       // final detailC = Get.put(DetailController());
-  //       // detailC.paymentName.value =
-  //       //     layananHomeC.dataListOrder[index]["payment"]['product_code'];
-  //       // detailC.imageRecipe.value =
-  //       //     layananHomeC.dataListOrder[index]["order"]['image_recipe'] ?? "";
-  //       // await layananHomeC.startTime();
-  //       // Get.find<LayananHomeController>().idOrder.value =
-  //       //     layananHomeC.dataListOrder[index]['order']['id'];
-  //       // myC.orderMinute.value = layananHomeC.dataListOrder[index]['order']
-  //       // ['service_price']['minute'];
-  //       //  await layananHomeC.getOrder();
-  //       myC.lat.value = layananHomeC.dataListOrder[index]['order']['start_lat'];
-  //       myC.long.value = layananHomeC.dataListOrder[index]['order']['start_long'];
-  //       myC.address.value = layananHomeC.dataListOrder[index]['order']['start_address'];
-  //       // layananHomeC.statusOrderDetail.value = 5;
-
-  //       // Get.toNamed(Routes.DETAIL);
-  //       // print('zaza ' + layananHomeC.dataListOrder[index]['id'].toString());
-  //       log(layananHomeC.dataListOrder.toString());
-  //       Get.to(
-  //         () => navigationDetailOrderAmbulance(
-  //             layananHomeC.dataListOrder[index]['order']['status'],
-  //             layananHomeC.dataListOrder[index]['order']['service']['name'],
-  //             index,
-  //             Get.context!),
-  //       );
-  //     },
-  //   );
-  // }
-
   CardLayanan cardLayananAmbulanceOrder(
       int index, dataLayanan) {
     return CardLayanan(
@@ -647,58 +604,35 @@ class HomeView extends GetView<HomeController> {
                                         ? "Sudah bayar"
                                         : 'Dibatalkan',
         // '${dataLayanan} ',
-        imageUrl: layananHomeC.dataListOrder[index]['order']['customer']
-                ['image'] ??
-            "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg",
-        name: layananHomeC.dataListOrder[index]['order']['customer']['name'],
+        imageUrl: 
+        layananHomeC.dataListOrder[index]['order']['customer'] 
+                ['image'] ?? "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg",
+            //     ['image'] ??
+            // "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg",
+        name: 
+        layananHomeC.dataListOrder[index]['order']['customer'] == null ? "null" : layananHomeC.dataListOrder[index]['order']['customer'] 
+                ['name'],
+        // "layananHomeC.dataListOrder[index]['order']['customer']['name']",
         // layananHomeC.dataListOrder[index]['order']['name'] != null
         //     ? "${layananHomeC.dataListOrder[index]['order']['customer']['name']}"
         //     : "Tidak Ditemukan",
         onTap: () async {
-           if (layananHomeC.dataListOrder[index]["payment"] != null) {
+          if(layananHomeC.isToday.value == false){
+            //============================
+             if (layananHomeC.dataListOrder[index]["payment"] != null) {
           Get.put(DetailController()).paymentName.value =
               layananHomeC.dataListOrder[index]["payment"]['debit_from_bank'];
           Get.put(DetailController()).bankName.value =
               layananHomeC.dataListOrder[index]["payment"]['product_code'];
         } else {}
-        // Get.find<LayananHomeController>().idOrder.value =
-        //     layananHomeC.dataListOrder[index]['order']['id'];
-
         Get.find<LayananHomeController>().idOrder.value =
             layananHomeC.dataListOrder[index]['order']['id'];
-        // myC.lat.value = layananHomeC.dataListOrder[index]['order']['lat'];
-        // myC.long.value = layananHomeC.dataListOrder[index]['order']['long'];
-        // if (layanan == 'Home Visit') {
-        //   myC.address.value =
-        //       layananHomeC.dataListOrder[index]['order']['address'];
-        // }
-        // myC.statusOrderDetail.value = Get.find<LayananHomeController>()
-        //     .dataListOrder[index]['order']['statusOrder'];
-        // // myC.timePeriodic.value = false;
-        // // myC.realtimeApiGet.value = false;
-        // // if (myC.realtimeApiGet.isFalse) {
-        // //  await myC.realtimeApi();
-        // // }
-        // Get.put(DetailController()).stop = false;
-        // final detailC = Get.put(DetailController());
-        // detailC.paymentName.value =
-        //     layananHomeC.dataListOrder[index]["payment"]['product_code'];
-        // detailC.imageRecipe.value =
-        //     layananHomeC.dataListOrder[index]["order"]['image_recipe'] ?? "";
-        // await layananHomeC.startTime();
-        // Get.find<LayananHomeController>().idOrder.value =
-        //     layananHomeC.dataListOrder[index]['order']['id'];
-        // myC.orderMinute.value = layananHomeC.dataListOrder[index]['order']
-        // ['service_price']['minute'];
-        //  await layananHomeC.getOrder();
         myC.lat.value = layananHomeC.dataListOrder[index]['order']['start_lat'];
         myC.long.value = layananHomeC.dataListOrder[index]['order']['start_long'];
         myC.address.value = layananHomeC.dataListOrder[index]['order']['start_address'];
         layananHomeC.statusOrderDetail.value = layananHomeC.dataListOrder[index]['order']['status'];
-
-        // Get.toNamed(Routes.DETAIL);
-        // print('zaza ' + layananHomeC.dataListOrder[index]['id'].toString());
         log(layananHomeC.dataListOrder.toString());
+        if(layananHomeC.dataListOrder[index]['order']['status'] != 0){
         Get.to(
           () => navigationDetailOrderAmbulance(
               layananHomeC.dataListOrder[index]['order']['status'],
@@ -706,6 +640,36 @@ class HomeView extends GetView<HomeController> {
               index,
               Get.context!),
         );
+        }
+
+          }else{
+             if (layananHomeC.dataListOrderToday[index]["payment"] != null) {
+          Get.put(DetailController()).paymentName.value =
+              layananHomeC.dataListOrderToday[index]["payment"]['debit_from_bank'];
+          Get.put(DetailController()).bankName.value =
+              layananHomeC.dataListOrderToday[index]["payment"]['product_code'];
+        } else {}
+        Get.find<LayananHomeController>().idOrder.value =
+            layananHomeC.dataListOrderToday[index]['order']['id'];
+        myC.lat.value = layananHomeC.dataListOrderToday[index]['order']['start_lat'];
+        myC.long.value = layananHomeC.dataListOrderToday[index]['order']['start_long'];
+        myC.address.value = layananHomeC.dataListOrderToday[index]['order']['start_address'];
+        layananHomeC.statusOrderDetail.value = layananHomeC.dataListOrderToday[index]['order']['status'];
+        log(layananHomeC.dataListOrderToday.toString());
+        if(layananHomeC.dataListOrderToday[index]['order']['status'] != 0){
+        Get.to(
+          () => navigationDetailOrderAmbulance(
+              layananHomeC.dataListOrderToday[index]['order']['status'],
+              layananHomeC.dataListOrderToday[index]['order']['service']['name'],
+              index,
+              Get.context!),
+        );
+        }
+            // Get.defaultDialog();
+            
+            
+          }
+          
         },
         price: layananHomeC.dataListOrder[index]['order']['totalPrice']);
   }
@@ -989,6 +953,8 @@ class HomeView extends GetView<HomeController> {
             ? "${layananHomeC.dataListOrder[index]['order']['customer']['name']}"
             : "Tidak Ditemukan",
         onTap: () async {
+          if(layananHomeC.isToday.value == false){
+
           if (layananHomeC.dataListOrder[index]["payment"] != null) {
             Get.put(DetailController()).paymentName.value =
                 layananHomeC.dataListOrder[index]["payment"]['debit_from_bank'];
@@ -997,47 +963,35 @@ class HomeView extends GetView<HomeController> {
           } else {}
           Get.find<LayananHomeController>().idOrder.value =
               layananHomeC.dataListOrder[index]['order']['id'];
-
-          // Get.find<LayananHomeController>().idOrder.value =
-          //     layananHomeC.dataListOrder[index]['order']['id'];
-          // myC.lat.value = layananHomeC.dataListOrder[index]['order']['lat'];
-          // myC.long.value = layananHomeC.dataListOrder[index]['order']['long'];
-          // if (layanan == 'Home Visit') {
-          //   myC.address.value =
-          //       layananHomeC.dataListOrder[index]['order']['address'];
-          // }
-          // myC.statusOrderDetail.value = Get.find<LayananHomeController>()
-          //     .dataListOrder[index]['order']['statusOrder'];
-          // // myC.timePeriodic.value = false;
-          // // myC.realtimeApiGet.value = false;
-          // // if (myC.realtimeApiGet.isFalse) {
-          // //  await myC.realtimeApi();
-          // // }
-          // Get.put(DetailController()).stop = false;
-          // final detailC = Get.put(DetailController());
-          // detailC.paymentName.value =
-          //     layananHomeC.dataListOrder[index]["payment"]['product_code'];
-          // detailC.imageRecipe.value =
-          //     layananHomeC.dataListOrder[index]["order"]['image_recipe'] ?? "";
-          // await layananHomeC.startTime();
-          // Get.find<LayananHomeController>().idOrder.value =
-          //     layananHomeC.dataListOrder[index]['order']['id'];
-          // myC.orderMinute.value = layananHomeC.dataListOrder[index]['order']
-          // ['service_price']['minute'];
-          //  await layananHomeC.getOrder();
           myC.lat.value = layananHomeC.dataListOrder[index]['order']['lat'];
           myC.long.value = layananHomeC.dataListOrder[index]['order']['long'];
           myC.address.value =
               layananHomeC.dataListOrder[index]['order']['address'];
-          // layananHomeC.statusOrderDetail.value = 5;
-
-          // Get.toNamed(Routes.DETAIL);
-          // print('zaza ' + layananHomeC.dataListOrder[index]['id'].toString());
           log(layananHomeC.dataListOrder.toString());
           Get.to(
             () => navigationDetailOrderNurse(
                 dataLayanan, dataService, index, context, layanan),
           );
+          }else{
+              if (layananHomeC.dataListOrderToday[index]["payment"] != null) {
+            Get.put(DetailController()).paymentName.value =
+                layananHomeC.dataListOrderToday[index]["payment"]['debit_from_bank'];
+            Get.put(DetailController()).bankName.value =
+                layananHomeC.dataListOrderToday[index]["payment"]['product_code'];
+          } else {}
+          Get.find<LayananHomeController>().idOrder.value =
+              layananHomeC.dataListOrderToday[index]['order']['id'];
+          myC.lat.value = layananHomeC.dataListOrderToday[index]['order']['lat'];
+          myC.long.value = layananHomeC.dataListOrderToday[index]['order']['long'];
+          myC.address.value =
+              layananHomeC.dataListOrderToday[index]['order']['address'];
+          log(layananHomeC.dataListOrderToday.toString());
+          Get.to(
+            () => navigationDetailOrderNurse(
+                dataLayanan, dataService, index, context, layanan),
+          );
+
+          }
         },
         price: layananHomeC.dataListOrder[index]['order']['totalPrice']);
   }
@@ -1820,7 +1774,10 @@ class HomeView extends GetView<HomeController> {
   DetailView navigationDetailOrderNurse(
       dataLayanan, dataService, int index, BuildContext context, layanan) {
     return DetailView(
-      dataDetail: layananHomeC.dataListOrder[index]['order'],
+      dataDetail: 
+      layananHomeC.isToday.isTrue ?
+      layananHomeC.dataListOrderToday[index]['order'] :
+      layananHomeC.dataListOrder[index]['order'],
       iconPembayaran: Obx(
         () => layananHomeC.statusOrderDetail.value == 0
             ? const Icon(Icons.cancel)
@@ -2103,9 +2060,16 @@ class HomeView extends GetView<HomeController> {
                                               ),
       ),
       // discount: layananHomeC.dataListOrder[index]['order']['discount'],
-      iconService: layananHomeC.dataListOrder[index]['order']['service']
+      iconService: 
+      layananHomeC.isToday.isTrue ?
+      layananHomeC.dataListOrderToday[index]['order']['service']
+          ['image'] :
+      layananHomeC.dataListOrder[index]['order']['service']
           ['image'],
-      service: layananHomeC.dataListOrder[index]['order']['service']['name'],
+      service: 
+      layananHomeC.isToday.isTrue ?
+      layananHomeC.dataListOrderToday[index]['order']['service']['name'] :
+      layananHomeC.dataListOrder[index]['order']['service']['name'],
       // time: layananHomeC.dataListOrder[index]
       //     ['order']['date'],
       buttonGradientfinish: dataLayanan == 6
@@ -2116,7 +2080,12 @@ class HomeView extends GetView<HomeController> {
       rating: Obx(
         () => layananHomeC.statusOrderDetail.value == 5
             ? Rating(
-                rating: double.parse(layananHomeC.dataListOrder[index]['order']
+                rating: double.parse(
+                  layananHomeC.isToday.isTrue ?
+                  layananHomeC.dataListOrderToday[index]['order']
+                        ['rating']
+                    .toString() :
+                  layananHomeC.dataListOrder[index]['order']
                         ['rating']
                     .toString()),
               )
@@ -3001,7 +2970,9 @@ class HomeView extends GetView<HomeController> {
     BuildContext context,
   ) {
     return DetailView(
-      dataDetail: layananHomeC.dataListOrder[index]['order'],
+      dataDetail:
+      layananHomeC.isToday.isTrue ? layananHomeC.dataListOrderToday[index]['order'] :
+       layananHomeC.dataListOrder[index]['order'],
       iconPembayaran: Obx(
         () => layananHomeC.statusOrderDetail.value == 0
             ? const Icon(Icons.cancel)
@@ -3285,8 +3256,17 @@ class HomeView extends GetView<HomeController> {
                                               ),
       ),
       // discount: myC.listOrderHospital[index]['order']['discount'],
-      iconService: layananHomeC.dataListOrder[index]['order']['service']['image'],
-      service: layananHomeC.dataListOrder[index]['order']['service']['name'],
+      iconService: 
+      layananHomeC.isToday.isFalse ? 
+      layananHomeC.dataListOrder[index]['order']['service']['image'] :
+
+      layananHomeC.dataListOrderToday[index]['order']['service']['image'],
+      service: 
+      layananHomeC.isToday.isFalse ? 
+
+      layananHomeC.dataListOrder[index]['order']['service']['name'] :
+      layananHomeC.dataListOrderToday[index]['order']['service']['name'],
+
       // time: layananHomeC.dataListOrder[index]
       //     ['order']['date'],
       buttonGradientfinish: dataLayanan == 6
@@ -3298,7 +3278,13 @@ class HomeView extends GetView<HomeController> {
         () => layananHomeC.statusOrderDetail.value == 5
             ? Rating(
                 rating: double.parse(
-                    layananHomeC.dataListOrder[index]['order']['rating'].toString()),
+                    
+                    layananHomeC.isToday.isFalse ? 
+
+                    layananHomeC.dataListOrder[index]['order']['rating'].toString() :
+                    layananHomeC.dataListOrderToday[index]['order']['rating'].toString() 
+
+                    ),
               )
             : const SizedBox(),
       ),
@@ -3568,10 +3554,16 @@ class HomeView extends GetView<HomeController> {
       //     : myC.listOrderHospital[index]['order']['status'] == 1
       //         ? 'Ter-verifikasi sudah bayar'
       //         : "Ter-verifikasi sudah bayar",
-      imageUrl: layananHomeC.dataListOrder[index]['order']['customer']['image'] ??
-          "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg",
+      imageUrl: 
+      layananHomeC.dataListOrder[index]['order']['customer'] 
+                ['image'] ?? "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg",
+      // layananHomeC.dataListOrder[index]['order']['customer']['image'] ??
+      //     "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg",
       name:
-          layananHomeC.dataListOrder[index]['order']['customer']['name'].toString(),
+      layananHomeC.dataListOrder[index]['order']['customer'] == null ? "null" : layananHomeC.dataListOrder[index]['order']['customer'] 
+                ['name'],
+      
+          // layananHomeC.dataListOrder[index]['order']['customer']['name'].toString(),
       totalPrice: layananHomeC.dataListOrder[index]['order']['totalPrice'],
       //  -
       //     layananHomeC.dataListOrder[index]['order']['discount'],

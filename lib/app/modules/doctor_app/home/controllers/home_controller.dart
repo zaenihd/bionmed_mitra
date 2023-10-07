@@ -382,6 +382,8 @@ class HomeController extends GetxController {
         }
         if (Get.find<LoginController>().role.value == 'nurse') {
           await Get.find<LayananHomeController>().listOrderNurse();
+          await Get.find<LayananHomeController>().listOrderNurseToday();
+          
           if (reminderNurse.isFalse) {
             if (Get.find<LoginController>().role.value == 'nurse') {
               await reminderOrderNurse();
@@ -397,6 +399,8 @@ class HomeController extends GetxController {
           getDetailNurse();
         } else if (Get.find<LoginController>().role.value == 'ambulance') {
           await Get.find<LayananHomeController>().listOrderAmbulance();
+          await Get.find<LayananHomeController>().listOrderAmbulanceToday();
+
           await reminderOrderAmbulance();
           if (dataReminderNurse['ambulance_receive_status'] == 0 &&
               reminderNurse.isFalse) {
@@ -942,8 +946,8 @@ class HomeController extends GetxController {
         // ignore: prefer_interpolation_to_compose_strings
       }
       timePeriodic.value = false;
-      // await realtimeApi();
-      // await trimUpdateStatus();
+      await realtimeApi();
+      await trimUpdateStatus();
     });
   }
 

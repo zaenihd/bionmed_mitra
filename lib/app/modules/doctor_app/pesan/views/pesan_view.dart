@@ -466,8 +466,12 @@ class PesanView extends GetView<PesanController> {
                                             : "Lihat Pesanan Detail",
                                         onTap: () async {
                                           log('zezen h');
-
-                                          // await Get.find<
+                                          if(
+                                            controller.dataPesan[index]
+                                                    ['title'] !=
+                                                "Pesanan Diterima"
+                                          ){
+                                             // await Get.find<
                                           //         LayananHomeController>()
                                           //     .getOrder();
                                           // Get.put(DetailController())
@@ -524,6 +528,11 @@ class PesanView extends GetView<PesanController> {
                                             //       context,
                                             //       layanan),
                                             // );
+                                          }
+
+                                         
+                                          }else{
+                                            Get.back();
                                           }
                                         }),
                                   );
@@ -900,11 +909,22 @@ class PesanView extends GetView<PesanController> {
                                             Get.find<LoginController>()
                                                         .role
                                                         .value !=
-                                                    "nurse"
+                                                    "nurse" && Get.find<LoginController>()
+                                                        .role
+                                                        .value !=
+                                                    "ambulance"
                                                 ? controller.dataPesan[index]
                                                         ['order']['rating']
                                                     .toString()
-                                                : controller.dataPesan[index]
+                                                : 
+                                                 Get.find<LoginController>()
+                                                        .role
+                                                        .value ==
+                                                    "ambulance"
+                                                ? controller.dataPesan[index]
+                                                        ['ambulance_order']
+                                                        ['rating'].toString() :
+                                                controller.dataPesan[index]
                                                         ['nurse_order']
                                                         ['rating']
                                                     .toString()),
@@ -2808,9 +2828,9 @@ class PesanView extends GetView<PesanController> {
                                               ),
       ),
       // discount: myC.listOrderHospital[index]['order']['discount'],
-      iconService: layananHomeC.dataListOrder[index]['order']['service']
+      iconService: layananHomeC.dataDetail['data']['service']
           ['image'],
-      service: layananHomeC.dataListOrder[index]['order']['service']['name'],
+      service: layananHomeC.dataDetail['data']['service']['name'],
       // time: layananHomeC.dataListOrder[index]
       //     ['order']['date'],
       buttonGradientfinish: dataLayanan == 6
@@ -2821,7 +2841,7 @@ class PesanView extends GetView<PesanController> {
       rating: Obx(
         () => controller.statusLayanan.value == 5
             ? Rating(
-                rating: double.parse(layananHomeC.dataListOrder[index]['order']
+                rating: double.parse(layananHomeC.dataDetail['data']
                         ['rating']
                     .toString()),
               )
@@ -3080,19 +3100,19 @@ class PesanView extends GetView<PesanController> {
       //     : myC.listOrderHospital[index]['order']['status'] == 1
       //         ? 'Ter-verifikasi sudah bayar'
       //         : "Ter-verifikasi sudah bayar",
-      imageUrl: layananHomeC.dataListOrder[index]['order']['customer']
+      imageUrl: layananHomeC.dataDetail['data']['customer']
               ['image'] ??
           "https://i.pinimg.com/564x/e1/77/47/e17747c78dd89a1d9522c5da154128b2.jpg",
-      name: layananHomeC.dataListOrder[index]['order']['customer']['name']
+      name: layananHomeC.dataDetail['data']['customer']['name']
           .toString(),
-      totalPrice: layananHomeC.dataListOrder[index]['order']['totalPrice'],
+      totalPrice: layananHomeC.dataDetail['data']['totalPrice'],
       //  -
-      //     layananHomeC.dataListOrder[index]['order']['discount'],
-      tanggal: layananHomeC.dataListOrder[index]['order']['date'],
-      codeOrder: layananHomeC.dataListOrder[index]['order']['code'],
-      jamMulai: layananHomeC.dataListOrder[index]['order']
+      //     layananHomeC.dataDetail['data']['discount'],
+      tanggal: layananHomeC.dataDetail['data']['date'],
+      codeOrder: layananHomeC.dataDetail['data']['code'],
+      jamMulai: layananHomeC.dataDetail['data']
           ['startDateAmbulance'],
-      jamSelesai: layananHomeC.dataListOrder[index]['order']
+      jamSelesai: layananHomeC.dataDetail['data']
           ['endDateAmbulance'],
 
       // layanan: layananHomeC.dataListOrder[index]['order']['service_price']['name'].toString()
@@ -3214,9 +3234,11 @@ class DetailPesan extends StatelessWidget {
                       : dataPesan['order']['customer']['name'] ?? "null",
               dataPesan['order'] == null && dataPesan['ambulance_order'] == null
                   ? dataPesan['nurse_order']['customer']['image'] ?? "null"
-                  : dataPesan['ambulance_order'] != null
-                      ? dataPesan['ambulance_order']['customer']['image']
-                      : dataPesan['order']['customer']['image'] ?? "null"),
+                  : dataPesan['ambulance_order'] != null 
+                      ? 
+                      dataPesan['ambulance_order']['customer']['image'] ?? ''
+                      : 
+                      dataPesan['order']['customer']['image'] ?? "null"),
           const SizedBox(
             height: 20.0,
           ),

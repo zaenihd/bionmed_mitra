@@ -110,7 +110,10 @@ class PesananMasukPerawatView extends GetView<PesananMasukPerawatController> {
                     ],
                   ),
                   Txt(
-                      text: CurrencyFormat.convertToIdr(
+                      text:
+                      Get.find<LoginController>().role.value == "ambulance" &&
+                          homeC.dataReminderNurse['is_csr'] == 1 ? "Gratis" :
+                       CurrencyFormat.convertToIdr(
                           homeC.dataReminderNurse['totalPrice'], 0),
                       weight: bold,
                       size: 20,
@@ -233,7 +236,7 @@ class PesananMasukPerawatView extends GetView<PesananMasukPerawatController> {
           child: ExpansionTile(
             title: Row(
               children: [
-                Image.asset('assets/icon/pasien1.png'),
+                Image.asset('assets/icon/icon_pesanbig.png', width: 40,height: 40,),
                 const SizedBox(
                   width: 10.0,
                 ),

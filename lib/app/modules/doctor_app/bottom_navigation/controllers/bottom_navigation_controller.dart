@@ -31,6 +31,7 @@ class BottomNavigationController extends GetxController {
         } else {
           await Get.find<PesanController>().notification();
         }
+     
 
         //  Get.find<PesanController>().dataPesan[index]['orderId'];
         // homeC.timePeriodic.value = false;
@@ -42,9 +43,15 @@ class BottomNavigationController extends GetxController {
         layananHomeC.addOrder();
         layananHomeC.orderListToday();
       }
+       
       // loginC.loginV2(phoneNumber: loginC.phoneNumberUser.value);
 
       // layananHomeC.updateStatus();
     }
+      if(index == 1){
+        layananHomeC.isToday.value = true;
+        }else{
+        layananHomeC.isToday.value = false;
+        }
   }
 }

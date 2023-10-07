@@ -10,6 +10,7 @@ import 'package:bionmed/app/modules/doctor_app/profile/views/paket_layanan.dart'
 import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_view.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/profil_login_required.dart';
 import 'package:bionmed/app/modules/hospital_app/lengkapi_data_hospital/controllers/lengkapi_data_hospital_controller.dart';
+import 'package:bionmed/app/modules/hospital_app/pendapatan_tim_hospital/controllers/pendapatan_tim_hospital_controller.dart';
 import 'package:bionmed/app/modules/hospital_app/profile/pengaturan%20akun/pengaturan_akun_hospital.dart';
 import 'package:bionmed/app/modules/perawat_app/list_service_nurse/controllers/list_service_nurse_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
@@ -41,6 +42,10 @@ class ProfileView extends GetView<ProfileController> {
       Get.find<JadwalSayaController>().getLocation();
     } else if (loginC.role.value == 'hospital') {
       Get.find<JadwalSayaController>().loginDataHospital(
+          phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
+      Get.find<JadwalSayaController>().getLocation();
+    } else if (loginC.role.value == 'ambulance') {
+      Get.find<JadwalSayaController>().loginDataAmbulance(
           phoneNumber: Get.find<LoginController>().phoneNumberUser.value);
       Get.find<JadwalSayaController>().getLocation();
     } else {
@@ -153,7 +158,12 @@ class ProfileView extends GetView<ProfileController> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        Get.to(() => PendapatanView());
+                                        if (loginC.role.value == "ambulance") {
+                                        } else if (loginC.inHospital.value ==
+                                            "") {
+                                        } else {
+                                          Get.to(() => PendapatanView());
+                                        }
                                       },
                                       child: Container(
                                         height: 35,
@@ -174,6 +184,7 @@ class ProfileView extends GetView<ProfileController> {
                                     AutoSizeText(
                                       maxLines: 1,
                                       CurrencyFormat.convertToIdr(
+                                         Get.find<LoginController>().role.value == "ambulance" || loginC.inHospital.value == "" ? Get.find<PendapatanTimHospitalController>().incomeDay.value :
                                           Get.find<HomeController>()
                                               .pendapatan
                                               .value,

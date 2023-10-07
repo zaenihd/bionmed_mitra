@@ -14,6 +14,7 @@ class LayananHomeController extends GetxController {
   RxList order = [].obs;
   RxBool isloading = false.obs;
   RxBool isloadingResep = false.obs;
+  RxBool isToday = false.obs;
   RxInt statusTransaksi = 0.obs;
   RxInt statusOrderChat = 0.obs;
   RxInt startRingging = 0.obs;
@@ -155,9 +156,9 @@ class LayananHomeController extends GetxController {
 
       // statusOrderChat.value = servis['data']['statusOrder'];
       // startRingging.value = servis['data']['statusPayment'];
-      // nameCostumer = servis['data']['customer']['name'];
+      nameCostumer = servis['data']['customer']['name'];
       // starRating.value = servis['data']['rating'] ?? 0;
-      // deskripsiRating.value = servis['data']['description_rating'] ?? "";
+      deskripsiRating.value = servis['data']['description_rating'] ?? "";
       // statusOrderDetail.value = servis['data']['status'];
 
       log('Id Order == $dataDetail');
@@ -212,7 +213,7 @@ class LayananHomeController extends GetxController {
       deskripsiRating.value = servis['data']['description_rating'] ?? "";
       statusOrderDetail.value = servis['data']['status'];
       orderIdNurse.value = servis['data']['id'];
-      packageNurseSops.value = servis['data']['service_price_nurse']['package_nurse_sops'];
+      packageNurseSops.value = servis['data']['service_price_nurse'] == null ?[] : servis['data']['service_price_nurse']['package_nurse_sops'];
       }else{
       statusOrderChat.value = servis['data']['status_order'];
       startRingging.value = servis['data']['status_payment'];
@@ -352,6 +353,34 @@ class LayananHomeController extends GetxController {
       print(e.toString());
     }
   }
+  Future<dynamic> listOrderNurseToday() async {
+    final params = <String, dynamic>{
+      // "serviceId": serviceId,
+    };
+    isloading(true);
+
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}nurse/order?nurseId=${loginC.idLogin}&today=true', Method.GET, params);
+      final order = json.decode(result.toString());
+      if (order['code'] == 200) {
+        dataListOrderToday.value = order['data'];
+        // ignore: invalid_use_of_protected_member
+        log('object ${dataListOrder.value}' );
+        // statusOrder.value = order['data']['order']['statusOrder'];
+      } else {
+        // dataListOrder.clear();
+      }
+
+      // ignore: avoid_print, invalid_use_of_protected_member
+      print("List Order == ${dataListOrder.value}");
+      // }
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
 
   Future<dynamic> listOrderAmbulance() async {
     final params = <String, dynamic>{
@@ -366,7 +395,36 @@ class LayananHomeController extends GetxController {
       if (order['code'] == 200) {
         dataListOrder.value = order['data'];
         // ignore: invalid_use_of_protected_member
-        log('object ${dataListOrder.value}' );
+        log('zen zen ${dataListOrder.value}' );
+        // statusOrder.value = order['data']['order']['statusOrder'];
+      } else {
+        // dataListOrder.clear();
+      }
+
+      // ignore: avoid_print, invalid_use_of_protected_member
+      // print("List Order == ${dataListOrder.value}");
+      // }
+      isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
+  Future<dynamic> listOrderAmbulanceToday() async {
+    final params = <String, dynamic>{
+      // "serviceId": serviceId,
+    };
+    isloading(true);
+
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}ambulance/order?ambulanceId=${loginC.idLogin}&today=true', Method.GET, params);
+      final order = json.decode(result.toString());
+      if (order['code'] == 200) {
+        dataListOrderToday.value = order['data'];
+        // ignore: invalid_use_of_protected_member
+        log('zen zen ${dataListOrderToday.value}' );
         // statusOrder.value = order['data']['order']['statusOrder'];
       } else {
         // dataListOrder.clear();
@@ -417,6 +475,7 @@ class LayananHomeController extends GetxController {
       print(e.toString());
     }
   }
+  
 
   Future<dynamic> updateStatus(
       {required int status, required int orderId}) async {

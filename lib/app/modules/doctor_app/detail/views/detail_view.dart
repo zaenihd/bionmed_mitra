@@ -5,7 +5,6 @@ import 'package:bionmed/app/modules/doctor_app/layanan_home/controllers/layanan_
 import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
-import 'package:bionmed/app/widget/card/card_layanan.dart';
 import 'package:bionmed/app/widget/container/container.dart';
 import 'package:bionmed/app/widget/other/loading_indicator.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
@@ -18,9 +17,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zego_zimkit/services/services.dart';
 
 import '../../../../../theme.dart';
+import '../../../../widget/card/card_layanan.dart';
 import '../../../../widget/other/show_dialog.dart';
+import '../../chat/views/chat_ambulance.dart';
 import '../controllers/detail_controller.dart';
 
 // ignore: must_be_immutable
@@ -196,66 +198,98 @@ class DetailView extends GetView<DetailController> {
   Column detailPesananAmbulance(BuildContext context) {
     return Column(
       children: [
-        dataDetail['status'] != 2 ? const SizedBox(
-        height: 1.0,
-        ) :
-        jadwalPesananAmbulance(),
+        dataDetail['status'] != 2
+            ? const SizedBox(
+                height: 1.0,
+              )
+            : jadwalPesananAmbulance(),
         nameAmbulance(),
-
-          dataDetail['image_ambulance'] == null ||   dataDetail['image_ambulance'] == "" ?const SizedBox(
-        height: 1.0,
-        ) :
-        detailAmbulance(),
+        dataDetail['image_ambulance'] == null ||
+                dataDetail['image_ambulance'] == ""
+            ? const SizedBox(
+                height: 1.0,
+              )
+            : detailAmbulance(),
         const SizedBox(
-        height: 15.0,
+          height: 15.0,
         ),
-        dataDetail['status'] != 6 && dataDetail['status'] != 5 ?
-         Cntr(
-            onTap: () {
-              // popUpLihatGambar(context);
-            },
-          radius: BorderRadius.circular(10),
-          alignment: Alignment.center,
-          margin: const EdgeInsets.symmetric(horizontal:  24),
-          width: Get.width,
-          border: Border.all(color: Colors.blue),
-          padding: const EdgeInsets.all(15),child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.chat, color: Colors.blue,), const SizedBox(
-              width: 20.0,
-              ),
-              Txt(text: 'Forum Chatting', color: Colors.blue,),
-            ],
-          ),) :
+        dataDetail['status'] != 6 && dataDetail['status'] != 5
+            ? Cntr(
+                onTap: () async {
+                  await ZIMKit().connectUser(
+                    // ignore: prefer_interpolation_to_compose_strings
+                    id: dataDetail['ambulance']['userId'].toString(),
+                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ZIMKitMessageListPageChatAmbulance(
+                      conversationID:
+                          dataDetail['customer']['userId'].toString(),
+                    );
+                  }));
+                  //  ZIMKit().showDefaultNewPeerChatDialogChat(
+                  //                                   context,
+                  //                                   dataDetail
+                  //                                         ['customer']['userId']
+                  //                                     .toString(),
+                  //                                 );
 
-        dataDetail['image_proof_travel'] == "" || dataDetail['image_proof_travel'] == null ? const SizedBox(
-        height: 1.0,
-        ) :
-          Cntr(
-            onTap: () {
-              popUpLihatGambar(context);
-            },
-          radius: BorderRadius.circular(10),
-          alignment: Alignment.center,
-          margin: const EdgeInsets.symmetric(horizontal:  24),
-          width: Get.width,
-          border: Border.all(color: Colors.blue),
-          padding: const EdgeInsets.all(15),child: Txt(text: 'Lihat bukti selesai', color: Colors.blue,),),
-          const SizedBox(
+                  // popUpLihatGambar(context);
+                },
+                radius: BorderRadius.circular(10),
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                width: Get.width,
+                border: Border.all(color: Colors.blue),
+                padding: const EdgeInsets.all(15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.chat,
+                      color: Colors.blue,
+                    ),
+                    const SizedBox(
+                      width: 20.0,
+                    ),
+                    Txt(
+                      text: 'Forum Chatting',
+                      color: Colors.blue,
+                    ),
+                  ],
+                ),
+              )
+            : dataDetail['image_proof_travel'] == "" ||
+                    dataDetail['image_proof_travel'] == null
+                ? const SizedBox(
+                    height: 1.0,
+                  )
+                : Cntr(
+                    onTap: () {
+                      popUpLihatGambar(context);
+                    },
+                    radius: BorderRadius.circular(10),
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    width: Get.width,
+                    border: Border.all(color: Colors.blue),
+                    padding: const EdgeInsets.all(15),
+                    child: Txt(
+                      text: 'Lihat bukti selesai',
+                      color: Colors.blue,
+                    ),
+                  ),
+        const SizedBox(
           height: 10.0,
-          ),
+        ),
         dataOrderNurse(),
         const SizedBox(
           height: 10.0,
         ),
-      
         tujuanAmbulance(),
         const SizedBox(
           height: 20.0,
         ),
         Cntr(
-          
           width: Get.width,
           boxShadow: const [
             BoxShadow(blurRadius: 10, spreadRadius: 1, color: Colors.grey)
@@ -332,7 +366,9 @@ class DetailView extends GetView<DetailController> {
                               ? Cntr(
                                   alignment: Alignment.center,
                                   width: Get.width,
-                                  child: Txt(text: 'Pesanan telah selesai, menunggu penilaian dari pemesan'),
+                                  child: Txt(
+                                      text:
+                                          'Pesanan telah selesai, menunggu penilaian dari pemesan'),
                                 )
                               : dataDetail['status'] == 5
                                   ? Padding(
@@ -1044,101 +1080,101 @@ class DetailView extends GetView<DetailController> {
                   const SizedBox(
                     height: 12.0,
                   ),
-                  Get.find<LoginController>().role.value == "ambulance" && dataDetail['is_csr'] == 1 ? const SizedBox(
-                  height: 1.0,
-                  ):
-                  Column(children: [
-                     Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Txt(
-                        text: 'Pembayaran',
-                        size: 12,
-                        color: Colors.grey,
-                      ),
-                      Image.asset(
-                        controller.paymentName.value == "022"
-                            ? 'assets/icon/icon_bankcimb.png'
-                            : controller.paymentName.value == "014"
-                                ? 'assets/icon/icon_bankbca.png'
-                                : controller.paymentName.value == "002"
-                                    ? 'assets/icon/bri.png'
-                                    : controller.paymentName.value == "013"
-                                        ? 'assets/icon/icon_bankpermata.png'
-                                        : controller.paymentName.value == "503"
-                                            ? "assets/icon/logo_ovo.png"
-                                            : controller.paymentName.value ==
-                                                    "016"
-                                                ? "assets/icon/logo_maybank.png"
-                                                : controller.paymentName
-                                                            .value ==
-                                                        "011"
-                                                    ? "assets/icon/logo_danamon.png"
-                                                    : controller.paymentName
-                                                                    .value ==
-                                                                "008" &&
-                                                            controller.bankName
-                                                                    .value ==
-                                                                "MANDIRIATM"
-                                                        ? "assets/icon/logo_mandiri.png"
-                                                        : controller.paymentName
-                                                                        .value ==
-                                                                    "008" &&
-                                                                controller
-                                                                        .bankName
-                                                                        .value ==
-                                                                    "DANAPAY"
-                                                            ? "assets/icon/logo_dana.png"
-                                                            : controller.paymentName
-                                                                        .value ==
-                                                                    "157"
-                                                                ? "assets/icon/logo_maspion.png"
-                                                                : controller.paymentName
-                                                                            .value ==
-                                                                        "037"
-                                                                    ? "assets/icon/logo_artha.png"
-                                                                    : controller.paymentName.value ==
-                                                                            "200"
-                                                                        ? "assets/icon/logo_btn.png"
-                                                                        : controller.paymentName.value ==
-                                                                                "213"
-                                                                            ? "assets/icon/logo_btpn.png"
-                                                                            : controller.bankName.value == "SHOPEEJUMPPAY"
-                                                                                ? "assets/icon/logo_shopeepay.png"
-                                                                                : controller.bankName.value == "LINKAJAAPPLINK"
-                                                                                    ? "assets/icon/logo_linkaja.png"
-                                                                                    : 'assets/icon/bni.png',
-                        height: 20,
-                      ),
-                      // Txt(
-                      //   text: 'alah siaa',
-                      //   size: 10,
-                      //   weight: FontWeight.bold,
-                      // ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Txt(
-                        text: 'Harga',
-                        size: 12,
-                        color: Colors.grey,
-                      ),
-                      Txt(
-                        text: CurrencyFormat.convertToIdr(
-                            dataDetail['totalPrice'], 0),
-                        size: 10,
-                        weight: FontWeight.bold,
-                      ),
-                    ],
-                  ),
-
-                  ],),
-                 
+                  Get.find<LoginController>().role.value == "ambulance" &&
+                          dataDetail['is_csr'] == 1
+                      ? const SizedBox(
+                          height: 1.0,
+                        )
+                      : Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Txt(
+                                  text: 'Pembayaran',
+                                  size: 12,
+                                  color: Colors.grey,
+                                ),
+                                Image.asset(
+                                  controller.paymentName.value == "022"
+                                      ? 'assets/icon/icon_bankcimb.png'
+                                      : controller.paymentName.value == "014"
+                                          ? 'assets/icon/icon_bankbca.png'
+                                          : controller.paymentName.value ==
+                                                  "002"
+                                              ? 'assets/icon/bri.png'
+                                              : controller.paymentName.value ==
+                                                      "013"
+                                                  ? 'assets/icon/icon_bankpermata.png'
+                                                  : controller.paymentName
+                                                              .value ==
+                                                          "503"
+                                                      ? "assets/icon/logo_ovo.png"
+                                                      : controller.paymentName
+                                                                  .value ==
+                                                              "016"
+                                                          ? "assets/icon/logo_maybank.png"
+                                                          : controller.paymentName
+                                                                      .value ==
+                                                                  "011"
+                                                              ? "assets/icon/logo_danamon.png"
+                                                              : controller.paymentName
+                                                                              .value ==
+                                                                          "008" &&
+                                                                      controller
+                                                                              .bankName
+                                                                              .value ==
+                                                                          "MANDIRIATM"
+                                                                  ? "assets/icon/logo_mandiri.png"
+                                                                  : controller.paymentName.value ==
+                                                                              "008" &&
+                                                                          controller.bankName.value ==
+                                                                              "DANAPAY"
+                                                                      ? "assets/icon/logo_dana.png"
+                                                                      : controller.paymentName.value ==
+                                                                              "157"
+                                                                          ? "assets/icon/logo_maspion.png"
+                                                                          : controller.paymentName.value == "037"
+                                                                              ? "assets/icon/logo_artha.png"
+                                                                              : controller.paymentName.value == "200"
+                                                                                  ? "assets/icon/logo_btn.png"
+                                                                                  : controller.paymentName.value == "213"
+                                                                                      ? "assets/icon/logo_btpn.png"
+                                                                                      : controller.bankName.value == "SHOPEEJUMPPAY"
+                                                                                          ? "assets/icon/logo_shopeepay.png"
+                                                                                          : controller.bankName.value == "LINKAJAAPPLINK"
+                                                                                              ? "assets/icon/logo_linkaja.png"
+                                                                                              : 'assets/icon/bni.png',
+                                  height: 20,
+                                ),
+                                // Txt(
+                                //   text: 'alah siaa',
+                                //   size: 10,
+                                //   weight: FontWeight.bold,
+                                // ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 12.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Txt(
+                                  text: 'Harga',
+                                  size: 12,
+                                  color: Colors.grey,
+                                ),
+                                Txt(
+                                  text: CurrencyFormat.convertToIdr(
+                                      dataDetail['totalPrice'], 0),
+                                  size: 10,
+                                  weight: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                   const SizedBox(
                     height: 5.0,
                   ),
@@ -1657,34 +1693,54 @@ class DetailView extends GetView<DetailController> {
                   const SizedBox(
                     height: 20.0,
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.location_on,
-                        color: Colors.green,
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Txt(text: 'Alamat :'),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Txt(
-                            text:
-                                "${dataDetail['start_districts']}, ${dataDetail['start_city']}, ${dataDetail['start_province']}, ",
-                            weight: bold,
-                          ),
-                        ],
-                      )
-                    ],
+                  InkWell(
+                    onTap: () async{
+                      await MapsLauncher.launchCoordinates(
+                                        dataDetail
+                                            ['start_lat'],
+                                        dataDetail
+                                            ['start_long'],
+                                        "${dataDetail['start_districts']},${dataDetail['start_city']} ${dataDetail['start_province']}\n ${dataDetail['start_address']}");
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Txt(text: 'Alamat :'),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Txt(
+                              text:
+                                  "${dataDetail['start_districts']}, ${dataDetail['start_city']}, ${dataDetail['start_province']}, ",
+                              weight: bold,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 20.0,
                   ),
+                   InkWell(
+                    onTap: () async{
+                      await MapsLauncher.launchCoordinates(
+                                        dataDetail
+                                            ['end_lat'],
+                                        dataDetail
+                                            ['end_long'],
+                                        "${dataDetail['end_districts']},${dataDetail['end_city']} ${dataDetail['end_province']}\n ${dataDetail['end_address']}");
+                    },
+                    child: 
                   Row(
                     children: [
                       const Icon(
@@ -1709,7 +1765,7 @@ class DetailView extends GetView<DetailController> {
                         ],
                       )
                     ],
-                  ),
+                  ),)
                 ],
               ),
             ),
@@ -1912,9 +1968,9 @@ class DetailView extends GetView<DetailController> {
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             height: 260,
                             width: Get.width,
-                            image:  DecorationImage(
+                            image: DecorationImage(
                               image: NetworkImage(
-                                dataDetail['image_proof_travel']),
+                                  dataDetail['image_proof_travel']),
                             ),
                           ),
                           const SizedBox(
@@ -1935,7 +1991,7 @@ class DetailView extends GetView<DetailController> {
         });
   }
 
-   popUpLihatGambarAmbulance(BuildContext context) {
+  popUpLihatGambarAmbulance(BuildContext context) {
     showModalBottomSheet(
         isDismissible: false,
         shape: const RoundedRectangleBorder(
@@ -1966,9 +2022,9 @@ class DetailView extends GetView<DetailController> {
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             height: 260,
                             width: Get.width,
-                            image:  DecorationImage(
-                              image: NetworkImage(
-                                dataDetail['image_ambulance']),
+                            image: DecorationImage(
+                              image:
+                                  NetworkImage(dataDetail['image_ambulance']),
                             ),
                           ),
                           const SizedBox(
@@ -2404,51 +2460,51 @@ class DetailView extends GetView<DetailController> {
                                   .value);
                       Get.back();
                       controller.files = null;
+                      controller.imageUrl.value = '';
                       Get.bottomSheet(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30))),
-                        Cntr(
-                            padding: const EdgeInsets.all(20),
-                            radius: const BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30)),
-                            height: Get.height / 2.6,
-                            child: Column(
-                              children: [
-                                Cntr(
-                                  // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                                  height: 10,
-                                  width: 200,
-                                  color: Colors.grey[300],
-                                  radius: BorderRadius.circular(20),
-                                ),
-                                const SizedBox(
-                                  height: 20.0,
-                                ),
-                                Txt(
-                                    textAlign: TextAlign.center,
-                                    text:
-                                        'Terima kasih, telah mengkonfirmasi'),
-                                const SizedBox(
-                                  height: 20.0,
-                                ),
-                                Image.asset('assets/images/berhasil.png'),
-                                const SizedBox(
-                                  height: 30.0,
-                                ),
-                                ButtomGradient(
-                                  label: 'Oke',
-                                  onTap: () {
-                                    Get.back();
-                                    Get.back();
-                                  },
-                                )
-                              ],
-                            )));
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30))),
+                          Cntr(
+                              padding: const EdgeInsets.all(20),
+                              radius: const BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30)),
+                              height: Get.height / 2.6,
+                              child: Column(
+                                children: [
+                                  Cntr(
+                                    // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                    height: 10,
+                                    width: 200,
+                                    color: Colors.grey[300],
+                                    radius: BorderRadius.circular(20),
+                                  ),
+                                  const SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Txt(
+                                      textAlign: TextAlign.center,
+                                      text:
+                                          'Terima kasih, telah mengkonfirmasi'),
+                                  const SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Image.asset('assets/images/berhasil.png'),
+                                  const SizedBox(
+                                    height: 30.0,
+                                  ),
+                                  ButtomGradient(
+                                    label: 'Oke',
+                                    onTap: () {
+                                      Get.back();
+                                      Get.back();
+                                    },
+                                  )
+                                ],
+                              )));
                     }
-                    
                   },
                 ),
                 const SizedBox(
@@ -2459,7 +2515,6 @@ class DetailView extends GetView<DetailController> {
           ),
         ));
   }
-
 
   popUpJadwalPengambilanTest() {
     Get.bottomSheet(
@@ -2765,7 +2820,7 @@ class DetailView extends GetView<DetailController> {
     );
   }
 
-   Cntr detailAmbulance() {
+  Cntr detailAmbulance() {
     return Cntr(
       margin: const EdgeInsets.symmetric(horizontal: 24),
       radius: BorderRadius.circular(10),
@@ -2822,9 +2877,8 @@ class DetailView extends GetView<DetailController> {
                       radius: BorderRadius.circular(100),
                       height: 80,
                       width: 80,
-                      image:  DecorationImage(
-                          image: NetworkImage(
-                                dataDetail['image_ambulance']),
+                      image: DecorationImage(
+                          image: NetworkImage(dataDetail['image_ambulance']),
                           fit: BoxFit.cover),
                       border: Border.all(color: Colors.white, width: 4),
                     ),
@@ -2864,7 +2918,6 @@ class DetailView extends GetView<DetailController> {
       ),
     );
   }
-
 }
 
 // ignore: must_be_immutable
@@ -2944,7 +2997,7 @@ class Rating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Get.find<LoginController>().role.value != 'nurse' ||
-        Get.find<LoginController>().role.value != 'hospital') {
+        Get.find<LoginController>().role.value != 'hospital' || Get.find<LoginController>().role.value != 'ambulance') {
       myC.getOrder();
     }
     return Column(
