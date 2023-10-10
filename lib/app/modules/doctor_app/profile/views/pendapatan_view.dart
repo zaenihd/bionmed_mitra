@@ -199,6 +199,7 @@ class PendapatanView extends GetView<ProfileController> {
                               children: [
                                 Cntr(
                                   onTap: () {
+                                    loginC.isKodeAkses.value = true;
                                     Get.to(() => BuatKodeAkses());
                                   },
                                   radius: BorderRadius.circular(5),

@@ -747,7 +747,8 @@ class DetailView extends GetView<DetailController> {
                                       ],
                                     ),
                                   )
-                                : buttonGradient)
+                                : 
+                                buttonGradient)
       ],
     );
   }

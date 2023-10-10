@@ -2092,7 +2092,7 @@ class HomeView extends GetView<HomeController> {
             : const SizedBox(),
       ),
       buttonGradient: Obx(
-        () => layananHomeC.statusOrderDetail.value == 3 ||
+        () => layananHomeC.statusOrderDetail.value == 3 || layananHomeC.statusOrderDetail.value == 2 || layananHomeC.statusOrderDetail.value == 4 ||
                 dataService == 1 && layananHomeC.statusOrderDetail.value == 4 ||
                 layananHomeC.statusOrderDetail.value == 6 &&
                     Get.find<DetailController>().imageRecipe.value == "" &&

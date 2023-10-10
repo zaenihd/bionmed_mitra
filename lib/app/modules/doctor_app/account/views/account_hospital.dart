@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bionmed/app/modules/doctor_app/account/controllers/account_controller.dart';
 import 'package:bionmed/app/modules/doctor_app/account/views/account_tim_hospital.dart';
@@ -18,6 +20,7 @@ class AccountHospital extends StatelessWidget {
   AccountHospital({super.key});
   final myC = Get.put(AccountController());
   final loginC = Get.put(LoginController());
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +91,7 @@ class AccountHospital extends StatelessWidget {
                           loginC.idAccount.value = myC.selected.value;
                         }
                         // });
-                        GetStorage().write('idAccount', loginC.idAccount.value);
+                        log('zenn ========================== zen${loginC.idAccount.value}');
                       },
                       child: Obx(
                         () => Container(
@@ -165,6 +168,8 @@ class AccountHospital extends StatelessWidget {
                       label: "Lanjutkan",
                       onTap: () {
                         if (myC.selected.value == 1) {
+                          box.write('idAccount', loginC.idAccount.value);
+
                           Get.toNamed(Routes.LOGIN);
                           // showPopUp(
                           //   onTap: () {
@@ -173,6 +178,7 @@ class AccountHospital extends StatelessWidget {
                           //     imageAction: 'assets/json/eror.json',
                           //     description: "Sedang dalam proses\npengembangan");
                         } else {
+                          box.write('idAccount', loginC.idAccount.value);
                           Get.to(() => AccountTimHospital());
                         }
                         // myC.selected == 2 ? Get.defaultDialog() :

@@ -211,8 +211,8 @@ class JadwalSayaController extends GetxController {
         dataHospital.value = donors['data']['hospital'];
         codeAccess.value = donors['data']['hospital']['codeAccess'] ?? "null";
         // dataDokter.value = donors['data']['hospital']['hospital_schedules'];
-        name.value = donors['data']['hospital']['name'];
-        namePic.value = donors['data']['hospital']['picName'];
+        name.value = donors['data']['hospital']['name'] ?? "";
+        namePic.value = donors['data']['hospital']['picName'] ?? "";
         emailHospital.value = donors['data']['email'];
         // birthDay.value = donors['data']['hospital']['brithday_date'];
         // experience.value = donors['data']['hospital']['experience'];
@@ -222,7 +222,7 @@ class JadwalSayaController extends GetxController {
         addressPicHospital.value =
             donors['data']['hospital']['picAddress'] ?? "alamat";
         tanggalLahirPicHospital.value =
-            donors['data']['hospital']['picBrithday'];
+            donors['data']['hospital']['picBrithday'] ?? "";
         // pengalamanDokter.value = donors['data']['hospital']['hospital_experiences'];
         // pendidikanDokter.value = donors['data']['hospital']['hospital_educations'];
         profileImage.value = donors['data']['hospital']['image'];

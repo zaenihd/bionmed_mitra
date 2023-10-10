@@ -33,8 +33,11 @@ class SplashScreenController extends GetxController {
           .then((value) => Get.to(() => IntroductionScreenView()));
     }
     if (phone != null) {
+      log("id akun ====== $idAccount");
+      log(idAccountFromHospital.toString());
+
       if (idAccount == 1 || idAccountFromHospital == 2) {
-        log('zenenenene$idAccount');
+        log("id akun ====== 12345" 'zenenenene$idAccount');
         // log('zenenenene$idAccountFromHospital');
 
         cLogin.loginV2(phoneNumber: phone, isSplash: true);
@@ -42,10 +45,14 @@ class SplashScreenController extends GetxController {
           idAccountFromHospital == 3 ||
           idAccountFromHospital == 4) {
         cLogin.loginNurse(phoneNumber: phone, isSplash: true);
+        log('zenn ========================== zen');
       } else if (idAccountFromHospital == 6) {
         cLogin.loginAmbulance(phoneNumber: phone, isSplash: true);
-      } else {
+      } else if(idAccount == 3) {
         cLogin.loginHospital(phoneNumber: phone, isSplash: true);
+      }else{
+        cLogin.loginHospital(phoneNumber: phone, isSplash: true);
+
       }
     }
   }

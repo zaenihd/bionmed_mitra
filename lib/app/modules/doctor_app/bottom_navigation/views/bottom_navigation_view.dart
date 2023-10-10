@@ -79,7 +79,7 @@ class BottonNavigationView extends GetView<BottomNavigationController> {
             HomeView(),
             // ignore: prefer_const_constructors
             LayananHomeView(test: false),
-            loginC.role.value == "hospital" ? const PesanHospitalView() :
+            loginC.role.value == "hospital" ?  PesanHospitalView() :
             PesanView(),
             ProfileView()
           ],

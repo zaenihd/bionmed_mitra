@@ -468,7 +468,9 @@ class ProfileView extends GetView<ProfileController> {
                                                       box.remove(
                                                           'dontShowAgain');
                                                       box.remove('idAccount');
+                                                      box.remove('idAccountFromHospital');
                                                       box.remove('popUp');
+                                                      loginC.isKodeAkses.value = false;
                                                     },
                                                     child:
                                                         const Text("Keluar")),

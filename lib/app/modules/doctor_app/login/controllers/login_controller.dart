@@ -8,10 +8,13 @@ import 'package:bionmed/app/modules/doctor_app/jadwal_saya/controllers/jadwal_sa
 import 'package:bionmed/app/modules/doctor_app/login/views/disclamer.dart';
 import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/ditolak.dart';
 import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_akun/menunggu_konfirmasi.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/buat_pin.dart';
+import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/pendapatan_saldo_controller/pendapatan_saldo_controller.dart';
 import 'package:bionmed/app/modules/perawat_app/paket_layanan_nurse/controllers/paket_layanan_nurse_controller.dart';
 import 'package:bionmed/app/routes/app_pages.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/theme.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -19,11 +22,16 @@ import 'package:get_storage/get_storage.dart';
 import '../../../../widget/other/show_dialog.dart';
 import '../../../hospital_app/lengkapi_data_hospital/controllers/lengkapi_data_hospital_controller.dart';
 import '../../home/controllers/home_controller.dart';
+import '../views/verifikasi_view.dart';
+import 'package:http/http.dart' as http;
 
 class LoginController extends GetxController {
   final TextEditingController controllerPhone = TextEditingController();
+  final TextEditingController controllerOtp = TextEditingController();
 
   RxBool isloading = false.obs;
+  RxBool isloadingOtp = false.obs;
+  RxBool isKodeAkses = false.obs;
   RxString name = "".obs;
   RxString image = "".obs;
   RxString birthDay = "".obs;
@@ -53,6 +61,8 @@ class LoginController extends GetxController {
   RxString nameService = ''.obs;
   RxString imageService = ''.obs;
   RxString descriptionNurse = ''.obs;
+  final box = GetStorage();
+
   // ignore: prefer_typing_uninitialized_variables
   var dataUser;
   final donors = [].obs;
@@ -62,6 +72,117 @@ class LoginController extends GetxController {
   var page = 1;
 
   List docterIdI = [];
+
+  
+
+  //===================================FCM===================
+  Future<dynamic> registerTokenFirebase(String token, String id) async {
+    try {
+      final payload = <String, String>{
+        "deviceId": token,
+      };
+      String url = '${MainUrl.urlApi}user-device/$id';
+
+      final response = await http.post(Uri.parse(url),
+          headers: <String, String>{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(payload));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data;
+      } else {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+  //===================================OTP===================
+  Future<dynamic> sendOtp() async {
+    // isloading(true);
+    final params = <String, dynamic>{
+      "phoneNumber": isKodeAkses.isTrue ? Get.put(PendapatanSaldoController()).nomerPhoneCodeAksesC.text : phoneNumberUser.value,
+      "type": role.value
+    };
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}otp/get', Method.POST, params);
+      // ignore: unused_local_variable
+      var sendOtp = json.decode(result.toString());
+      log(sendOtp.toString());
+
+      // }
+      // isloading(false);
+    } on Exception catch (e) {
+      // ignore: avoid_print
+      print("Cek error pesan$e");
+    }
+  }
+
+  Future<dynamic> verifyOtp() async {
+    isloadingOtp(true);
+    final params = <String, dynamic>{
+      "phoneNumber": isKodeAkses.isTrue ? Get.put(PendapatanSaldoController()).nomerPhoneCodeAksesC.text : phoneNumberUser.value,
+      "type": role.value,
+      "otp": controllerOtp.text
+    };
+    try {
+      final result = await RestClient()
+          .request('${MainUrl.urlApi}otp/verify', Method.POST, params);
+      // ignore: unused_local_variable
+      var verifi = json.decode(result.toString());
+      if (verifi['verifyOtp'] == true) {
+        if (isKodeAkses.isFalse) {
+          box.write('phone', phoneNumberUser.value);
+          // Get.toNamed(Routes.BOTTOM_NAVIGATION);
+          Get.to(() => Disclamer());
+          controllerOtp.clear();
+          if (role.value == "hospital") {
+            if (dataUser['hospital']['hospital_services'].toString() == "[]") {
+              lengkapiProfil(Get.context!);
+            }
+          } else if (role.value == "nurse") {
+            if (dataUser['nurse']['nurse_educations'].toString() == "[]" &&
+                    dataUser['nurse']['verifiedStatus'] == 1 ||
+                dataUser['nurse']['nurse_educations'].toString() == "[]" &&
+                    dataUser['nurse']['verifiedStatus'] == 1) {
+              lengkapiProfil(Get.context!);
+            }
+          } else if (role.value == "doctor") {
+            if (isVerifi.value == false) {
+              lengkapiProfil(Get.context!);
+            }
+          }
+        } else {
+          Get.to(() => BuatPinSaldo());
+        }
+      } else {
+        final snackBar = SnackBar(
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+          content: const Text('Kode OTP salah'),
+          backgroundColor: (Colors.red),
+          action: SnackBarAction(
+            label: '',
+            onPressed: () {},
+          ),
+        );
+        ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+      }
+
+      // }
+      isloadingOtp(false);
+    } on Exception catch (e) {
+      isloadingOtp(false);
+
+      // ignore: avoid_print
+      print("Cek error pesan$e");
+    }
+  }
 
   //Login To API
 
@@ -107,6 +228,9 @@ class LoginController extends GetxController {
         print('jauh${dataService.value}');
 
         // print("sasasasas" + idLogin.toString());
+        String? tokens = await FirebaseMessaging.instance.getToken();
+        registerTokenFirebase(tokens!, id.toString());
+
 
         if (donors['data']['doctor']['doctor_services'].toString() == "[]") {
           showPopUp(
@@ -137,21 +261,25 @@ class LoginController extends GetxController {
             if (donors['data']['doctor']['verifiedStatus'] == 0) {
               Get.to(() => MenungguKonfirmasi());
             } else {
-              box.write('phone', phoneNumber);
+              // box.write('phone', phoneNumber);
               Get.toNamed(Routes.BOTTOM_NAVIGATION);
               if (isVerifi.value == false) {
-                lengkapiProfil(Get.context!);
+                // lengkapiProfil(Get.context!);
               }
             }
           } else {
             if (donors['data']['doctor']['verifiedStatus'] == 0) {
               Get.to(() => MenungguKonfirmasi());
             } else if (donors['data']['doctor']['verifiedStatus'] == 1) {
-              box.write('phone', phoneNumber);
-              Get.to(() => Disclamer());
+              await sendOtp();
+              Get.to(() => VerifikasiView());
+              // box.write('phone', phoneNumber);
+
+              // Get.to(() => Disclamer());
+
               if (isVerifi.value == false) {
                 // Get.defaultDialog();
-                lengkapiProfil(Get.context!);
+                // lengkapiProfil(Get.context!);
               }
             } else {
               Get.to(() => Ditolak());
@@ -256,22 +384,25 @@ class LoginController extends GetxController {
                 : dataNurse['data']['nurse']['hospital']['picName'] ?? "";
         log('nurse Hospital $inHospital');
         var setuju = await box.read('rememberme');
+         String? tokens = await FirebaseMessaging.instance.getToken();
+        registerTokenFirebase(tokens!, id.toString());
 
         if (setuju == true) {
           if (dataNurse['data']['nurse']['verifiedStatus'] == 0) {
             Get.to(() => MenungguKonfirmasi());
           } else {
-        log('KOK MASUK SINI SIIH? $inHospital');
-            
-            box.write('phone', phoneNumber);
+            log('KOK MASUK SINI SIIH? $inHospital');
+            // box.write('phone', phoneNumber);
             Get.toNamed(Routes.BOTTOM_NAVIGATION);
           }
         } else {
           if (dataNurse['data']['nurse']['verifiedStatus'] == 0) {
             Get.to(() => MenungguKonfirmasi());
           } else if (dataNurse['data']['nurse']['verifiedStatus'] == 1) {
-            box.write('phone', phoneNumber);
-            Get.to(() => Disclamer());
+            // box.write('phone', phoneNumber);
+            // Get.to(() => Disclamer());
+            await sendOtp();
+            Get.to(() => VerifikasiView());
           } else {
             Get.to(() => Ditolak());
           }
@@ -281,9 +412,10 @@ class LoginController extends GetxController {
           if (dataNurse['data']['nurse']['nurse_educations'].toString() ==
                       "[]" &&
                   dataNurse['data']['nurse']['verifiedStatus'] == 1 ||
-              dataNurse['data']['nurse']['nurse_educations'].toString() == "[]" &&
+              dataNurse['data']['nurse']['nurse_educations'].toString() ==
+                      "[]" &&
                   dataNurse['data']['nurse']['verifiedStatus'] == 1) {
-            lengkapiProfil(Get.context!);
+            // lengkapiProfil(Get.context!);
           }
         }
       } else {}
@@ -348,27 +480,31 @@ class LoginController extends GetxController {
         long.value = dataHospital['data']['hospital']['long'].toString();
         rating = dataHospital['data']['hospital']['rating'];
         var setuju = await box.read('rememberme');
+         String? tokens = await FirebaseMessaging.instance.getToken();
+        registerTokenFirebase(tokens!, id.toString());
 
         if (setuju == true) {
           if (dataHospital['data']['hospital']['verifiedStatus'] == 0) {
             Get.to(() => MenungguKonfirmasi());
           } else {
-            box.write('phone', phoneNumber);
+            // box.write('phone', phoneNumber);
             Get.toNamed(Routes.BOTTOM_NAVIGATION);
           }
         } else {
           if (dataHospital['data']['hospital']['verifiedStatus'] == 0) {
             Get.to(() => MenungguKonfirmasi());
           } else if (dataHospital['data']['hospital']['verifiedStatus'] == 1) {
-            box.write('phone', phoneNumber);
-            Get.to(() => Disclamer());
+            // box.write('phone', phoneNumber);
+            // Get.to(() => Disclamer());
+            await sendOtp();
+            Get.to(() => VerifikasiView());
           } else {
             Get.to(() => Ditolak());
           }
         }
         if (dataHospital['data']['hospital']['hospital_services'].toString() ==
             "[]") {
-          lengkapiProfil(Get.context!);
+          // lengkapiProfil(Get.context!);
         }
       } else {}
       isloading(false);
@@ -417,8 +553,9 @@ class LoginController extends GetxController {
       final dataAmbulance = json.decode(result.toString());
 
       if (dataAmbulance['code'] == 200) {
-        Get.put(JadwalSayaController()).serviceId.value = dataAmbulance['data']['ambulance']['serviceId'];
-         nurseServiceId.value  = dataAmbulance['data']['ambulance']['serviceId'];
+        Get.put(JadwalSayaController()).serviceId.value =
+            dataAmbulance['data']['ambulance']['serviceId'];
+        nurseServiceId.value = dataAmbulance['data']['ambulance']['serviceId'];
         // log('service ID ${Get.put(JadwalSayaController()).serviceId.value}');÷
         log('service ID ${Get.put(PaketLayananNurseController()).serviceIdNurse.value}');
         inHospital.value = "ambulance";
@@ -434,15 +571,16 @@ class LoginController extends GetxController {
         lat.value = dataAmbulance['data']['ambulance']['lat'].toString();
         long.value = dataAmbulance['data']['ambulance']['long'].toString();
         rating = dataAmbulance['data']['ambulance']['rating'];
-         inHospital.value =
+        inHospital.value =
             dataAmbulance['data']['ambulance']['hospital'] == null ? "0" : '';
         var setuju = await box.read('rememberme');
+         String? tokens = await FirebaseMessaging.instance.getToken();
+        registerTokenFirebase(tokens!, id.toString());
 
         // if (setuju == true) {
         //   if (dataAmbulance['data']['ambulance']['verifiedStatus'] == 0) {
         //     Get.to(() => MenungguKonfirmasi());
         //   } else {
-            box.write('phone', phoneNumber);
         //     Get.toNamed(Routes.BOTTOM_NAVIGATION);
         //   }
         // } else {
@@ -455,7 +593,15 @@ class LoginController extends GetxController {
         //     Get.to(() => Ditolak());
         //   }
         // }
-            Get.toNamed(Routes.BOTTOM_NAVIGATION);
+        if (setuju != true) {
+          await sendOtp();
+          Get.to(() => VerifikasiView());
+          // box.write('phone', phoneNumber);
+
+          // Get.toNamed(Routes.BOTTOM_NAVIGATION);
+        } else {
+          Get.toNamed(Routes.BOTTOM_NAVIGATION);
+        }
 
         // if (dataAmbulance['data']['ambulance']['hospital_services'].toString() !=
         //     "[]") {

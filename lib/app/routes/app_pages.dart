@@ -278,7 +278,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.PESAN_HOSPITAL,
-      page: () => const PesanHospitalView(),
+      page: () =>  PesanHospitalView(),
       binding: PesanHospitalBinding(),
     ),
   ];

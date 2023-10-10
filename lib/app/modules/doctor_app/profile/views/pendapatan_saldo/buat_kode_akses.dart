@@ -1,4 +1,5 @@
-import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/buat_pin.dart';
+import 'package:bionmed/app/modules/doctor_app/login/controllers/login_controller.dart';
+import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_view.dart';
 import 'package:bionmed/app/modules/doctor_app/profile/views/pendapatan_saldo/pendapatan_saldo_controller/pendapatan_saldo_controller.dart';
 import 'package:bionmed/app/widget/appbar/appbar_gradient.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
@@ -20,16 +21,18 @@ class BuatKodeAkses extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 20),
         child: ButtomGradient(
             label: 'Lanjutkan',
-            onTap: () {
+            onTap: () async {
               if (controller.nomerPhoneCodeAksesC.text == "") {
                 showPopUp(
-                            onTap: () {
-                            Get.back();
-                          },
-                              imageAction: 'assets/json/eror.json',
-                              description: "Mohon isi nomer Handphone");
+                    onTap: () {
+                      Get.back();
+                    },
+                    imageAction: 'assets/json/eror.json',
+                    description: "Mohon isi nomer Handphone");
               } else {
-                Get.to(() => BuatPinSaldo());
+                // Get.to(() => BuatPinSaldo());
+                await Get.find<LoginController>().sendOtp();
+                Get.to(() => VerifikasiView());
               }
             }),
       ),

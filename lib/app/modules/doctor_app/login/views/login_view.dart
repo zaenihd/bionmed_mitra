@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bionmed/app/modules/doctor_app/account/widget/skpengguna_widget.dart';
+import 'package:bionmed/app/modules/doctor_app/login/views/verifikasi_view.dart';
 import 'package:bionmed/app/widget/button/button_gradien.dart';
 import 'package:bionmed/app/widget/button/button_primary_withtext.dart';
 import 'package:bionmed/app/widget/txt/text.dart';
@@ -85,7 +86,8 @@ class _LoginScreenState extends State<LoginView> {
                     const SizedBox(height: 80),
                     InkWell(
                       onTap: () {
-                        // Get.to(()=>Ditolak());
+                        
+                        Get.to(()=>VerifikasiView());
                       },
                       child: HeaderWidget(
                         title: "Selamat Datang di BIONMED",
