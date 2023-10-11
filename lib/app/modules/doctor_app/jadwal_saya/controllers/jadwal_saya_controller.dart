@@ -225,7 +225,7 @@ class JadwalSayaController extends GetxController {
             donors['data']['hospital']['picBrithday'] ?? "";
         // pengalamanDokter.value = donors['data']['hospital']['hospital_experiences'];
         // pendidikanDokter.value = donors['data']['hospital']['hospital_educations'];
-        profileImage.value = donors['data']['hospital']['image'];
+        profileImage.value = donors['data']['hospital']['image'] ?? "";
         profileImagePic.value = donors['data']['hospital']['picImage'];
         // spesialist.value = donors['data']['hospital']['specialist']['id'];
         // jadwal.value = donors['data']['hospital']['hospital_schedules'];
